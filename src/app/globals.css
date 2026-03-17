@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* ===============================
+   VARIABLES THEME
+================================ */
+:root {
+  --bg: 255 255 255;
+  --fg: 15 23 42;
+  --muted: 100 116 139;
+  --border: 226 232 240;
+  --card: 255 255 255;
+  --brand: 15 23 42;
+  --brand-2: 30 64 175;
+  --ring: 59 130 246;
+}
+
+/* ===============================
+   GLOBAL RESET / FIXES
+================================ */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  color: rgb(var(--fg));
+  background:
+    radial-gradient(900px 500px at 20% 0%, rgba(30, 64, 175, 0.08), transparent 60%),
+    radial-gradient(900px 500px at 80% 10%, rgba(15, 23, 42, 0.06), transparent 55%),
+    rgb(var(--bg));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ===============================
+   COMPONENTS
+================================ */
+@layer components {
+  .container-app {
+    @apply mx-auto w-full min-w-0 max-w-6xl px-4 sm:px-5 lg:px-6;
+  }
+
+  .card {
+    @apply min-w-0 rounded-2xl border border-slate-200/70 bg-white/80
+           shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl
+           px-5 py-3 text-sm font-semibold transition
+           whitespace-nowrap;
+  }
+
+  .btn-primary {
+    @apply bg-slate-900 text-white hover:bg-slate-800;
+  }
+
+  .btn-secondary {
+    @apply border border-slate-200 bg-white hover:bg-slate-50;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full
+           border border-slate-200 bg-white
+           px-2.5 py-1 text-xs font-medium text-slate-700
+           whitespace-nowrap;
+  }
+
+  .h1 {
+    @apply text-4xl font-bold tracking-tight sm:text-5xl;
+  }
+
+  .lead {
+    @apply text-base leading-7 text-slate-600 sm:text-lg;
+  }
+
+  .safe-wrap {
+    @apply min-w-0 overflow-hidden;
+  }
+}
+
+/* ===============================
+   FORMS FIXES
+================================ */
+input,
+select,
+textarea {
+  max-width: 100%;
+}
