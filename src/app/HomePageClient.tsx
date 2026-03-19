@@ -126,39 +126,39 @@ function HomeListingRow({ item }: { item: Listing }) {
                 ) : null}
               </div>
 
-              <h3 className="text-3d-title mt-2 line-clamp-2 text-[16px] font-semibold tracking-tight text-slate-900 sm:text-[18px]">
+              <h3 className="text-3d-title mt-2 line-clamp-2 text-[15px] font-semibold tracking-tight text-slate-900 sm:text-[18px]">
                 {item.title}
               </h3>
 
-              <p className="text-3d-soft mt-1.5 text-sm text-slate-600">
+              <p className="text-3d-soft mt-1.5 text-[13px] text-slate-600 sm:text-sm">
                 {locationText}
               </p>
             </div>
 
-            <div className="shrink-0 sm:text-right">
-              <p className="text-3d-title text-xl font-semibold tracking-tight text-[#162d84] sm:text-2xl">
+            <div className="shrink-0">
+              <p className="text-3d-title text-[20px] font-semibold tracking-tight text-[#162d84] sm:text-2xl">
                 {formatPrice(item.price)}
               </p>
             </div>
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <span className="text-3d-soft inline-flex rounded-full bg-[#eef4ff] px-3 py-1.5 text-[12px] font-medium text-[#2347b7]">
+            <span className="text-3d-soft inline-flex rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11px] font-medium text-[#2347b7] sm:text-[12px]">
               {item.year || "—"}
             </span>
-            <span className="text-3d-soft inline-flex rounded-full bg-[#eef4ff] px-3 py-1.5 text-[12px] font-medium text-[#2347b7]">
+            <span className="text-3d-soft inline-flex rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11px] font-medium text-[#2347b7] sm:text-[12px]">
               {formatKm(item.mileage)}
             </span>
-            <span className="text-3d-soft inline-flex rounded-full bg-[#eef4ff] px-3 py-1.5 text-[12px] font-medium text-[#2347b7]">
+            <span className="text-3d-soft inline-flex rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11px] font-medium text-[#2347b7] sm:text-[12px]">
               {item.fuel || "—"}
             </span>
-            <span className="text-3d-soft inline-flex rounded-full bg-[#eef4ff] px-3 py-1.5 text-[12px] font-medium text-[#2347b7]">
+            <span className="text-3d-soft inline-flex rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11px] font-medium text-[#2347b7] sm:text-[12px]">
               {item.type || "—"}
             </span>
           </div>
 
           <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-3d-soft line-clamp-2 text-sm text-slate-500 sm:line-clamp-1">
+            <p className="text-3d-soft line-clamp-2 text-[13px] text-slate-500 sm:line-clamp-1 sm:text-sm">
               {item.description || "Voir l’annonce complète."}
             </p>
             <span className="text-3d-title shrink-0 text-sm font-semibold text-[#1b2f79]">
@@ -183,7 +183,7 @@ function QuickPreviewCard({ item }: { item: Listing }) {
       href={`/annonces/${item.id}`}
       className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-[#bfd1ff] hover:bg-white hover:shadow-[0_18px_40px_rgba(35,71,183,0.08)]"
     >
-      <div className="grid grid-cols-[110px_minmax(0,1fr)] gap-0 sm:grid-cols-[120px_minmax(0,1fr)]">
+      <div className="grid grid-cols-[96px_minmax(0,1fr)] gap-0 sm:grid-cols-[120px_minmax(0,1fr)]">
         <div className="overflow-hidden bg-slate-100">
           {photo ? (
             <img
@@ -199,13 +199,13 @@ function QuickPreviewCard({ item }: { item: Listing }) {
         </div>
 
         <div className="min-w-0 p-3 sm:p-4">
-          <p className="text-3d-title line-clamp-2 text-sm font-semibold text-slate-900">
+          <p className="text-3d-title line-clamp-2 text-[13px] font-semibold text-slate-900 sm:text-sm">
             {item.title}
           </p>
-          <p className="text-3d-soft mt-1 text-xs text-slate-500">
+          <p className="text-3d-soft mt-1 text-[11px] text-slate-500 sm:text-xs">
             {locationText}
           </p>
-          <p className="text-3d-title mt-2 text-sm font-semibold text-[#162d84]">
+          <p className="text-3d-title mt-2 text-[13px] font-semibold text-[#162d84] sm:text-sm">
             {formatPrice(item.price)}
           </p>
         </div>
@@ -227,13 +227,13 @@ function CategoryLine({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center justify-between gap-4 rounded-2xl px-4 py-4 text-left transition hover:bg-[#f7faff] sm:py-5"
+      className="flex w-full items-center justify-between gap-4 rounded-2xl px-3 py-4 text-left transition hover:bg-[#f7faff] sm:px-4 sm:py-5"
     >
       <div className="min-w-0">
-        <h3 className="text-3d-title text-[15px] font-semibold text-slate-900">
+        <h3 className="text-3d-title text-[14px] font-semibold text-slate-900 sm:text-[15px]">
           {title}
         </h3>
-        <p className="text-3d-soft mt-1 text-sm leading-6 text-slate-600">
+        <p className="text-3d-soft mt-1 text-[13px] leading-6 text-slate-600 sm:text-sm">
           {subtitle}
         </p>
       </div>
@@ -266,10 +266,10 @@ function BrandPill({
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-      <p className="text-3d-soft text-[11px] uppercase tracking-wide text-slate-500">
+      <p className="text-3d-soft text-[10px] uppercase tracking-wide text-slate-500 sm:text-[11px]">
         {label}
       </p>
-      <p className="text-3d-title mt-2 text-2xl font-semibold tracking-tight text-[#162d84]">
+      <p className="text-3d-title mt-2 text-[22px] font-semibold tracking-tight text-[#162d84] sm:text-2xl">
         {value}
       </p>
     </div>
@@ -423,7 +423,7 @@ export default function HomePageClient({
   const isPro = initialAuthStatus === "pro";
 
   return (
-    <div className="space-y-8 sm:space-y-10 lg:space-y-12">
+    <div className="space-y-8 px-0 sm:space-y-10 lg:space-y-12">
       <section className="border-b border-slate-200 pb-8 sm:pb-10">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px]">
           <div className="min-w-0">
@@ -433,14 +433,14 @@ export default function HomePageClient({
               <span className={softPillClass}>Garages vérifiés</span>
             </div>
 
-            <h1 className="text-3d-hero mt-5 max-w-4xl text-[30px] font-semibold leading-[1.04] tracking-[-0.04em] text-[#162d84] sm:text-[40px] lg:text-[56px]">
+            <h1 className="text-3d-hero mt-5 max-w-4xl text-[28px] font-semibold leading-[1.08] tracking-[-0.04em] text-[#162d84] sm:text-[40px] lg:text-[56px]">
               Trouvez votre prochain véhicule pro,
-              <span className="text-3d-hero block text-[#3a63dc]">
+              <span className="text-3d-hero mt-1 block text-[#3a63dc] sm:mt-0">
                 simplement, rapidement, directement.
               </span>
             </h1>
 
-            <p className="text-3d-soft mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-[15px]">
+            <p className="text-3d-soft mt-4 max-w-2xl text-[14px] leading-7 text-slate-600 sm:text-[15px]">
               Cars Go Direct référence les véhicules de professionnels :
               utilitaires, véhicules de société et tourisme.
             </p>
@@ -455,13 +455,16 @@ export default function HomePageClient({
                       setShowSuggestions(true);
                     }}
                     onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => {
+                      setTimeout(() => setShowSuggestions(false), 150);
+                    }}
                     onKeyDown={(e) => e.key === "Enter" && goSearch(q)}
                     className="text-3d-soft w-full rounded-2xl border border-[#d8e3ff] bg-white px-4 py-3.5 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#7f9cff] focus:ring-4 focus:ring-[#dfe8ff]"
                     placeholder="Ex : Audi A3, Golf, Renault Master…"
                   />
 
                   <button
-                    className={`${primaryButtonClass} min-h-[52px] px-5 py-3.5 text-[15px]`}
+                    className={`${primaryButtonClass} min-h-[52px] w-full px-5 py-3.5 text-[15px] sm:w-auto`}
                     onClick={() => goSearch(q)}
                   >
                     Rechercher
@@ -469,7 +472,7 @@ export default function HomePageClient({
                 </div>
 
                 {showSuggestions && suggestions.length > 0 ? (
-                  <div className="mt-2 rounded-2xl border border-[#d8e3ff] bg-white p-2 shadow-[0_14px_40px_rgba(35,71,183,0.08)]">
+                  <div className="absolute left-0 right-0 top-full z-30 mt-2 rounded-2xl border border-[#d8e3ff] bg-white p-2 shadow-[0_14px_40px_rgba(35,71,183,0.08)]">
                     <div className="text-3d-soft px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                       Suggestions
                     </div>
@@ -479,11 +482,12 @@ export default function HomePageClient({
                         <button
                           key={`${suggestion.type}-${suggestion.label}`}
                           type="button"
+                          onMouseDown={(e) => e.preventDefault()}
                           onClick={() => goSuggestion(suggestion)}
-                          className="text-3d-soft flex items-center justify-between rounded-xl px-3 py-3 text-left text-sm text-slate-700 transition hover:bg-[#f5f8ff]"
+                          className="text-3d-soft flex items-center justify-between gap-3 rounded-xl px-3 py-3 text-left text-sm text-slate-700 transition hover:bg-[#f5f8ff]"
                         >
-                          <span className="pr-3">{suggestion.label}</span>
-                          <span className="text-3d-soft shrink-0 text-xs text-slate-400">
+                          <span className="min-w-0 truncate pr-2">{suggestion.label}</span>
+                          <span className="text-3d-soft shrink-0 text-[11px] text-slate-400 sm:text-xs">
                             {suggestion.type === "brand"
                               ? "Marque"
                               : suggestion.type === "vehicleType"
@@ -548,10 +552,10 @@ export default function HomePageClient({
             <div className="mt-6 sm:mt-8">
               <div className="mb-4 flex items-end justify-between gap-3">
                 <div>
-                  <h2 className="text-3d-title text-base font-semibold tracking-tight text-[#162d84] sm:text-lg">
+                  <h2 className="text-3d-title text-[15px] font-semibold tracking-tight text-[#162d84] sm:text-lg">
                     Aperçu rapide
                   </h2>
-                  <p className="text-3d-soft mt-1 text-sm text-slate-600">
+                  <p className="text-3d-soft mt-1 text-[13px] text-slate-600 sm:text-sm">
                     Quelques annonces pour démarrer.
                   </p>
                 </div>
@@ -585,57 +589,57 @@ export default function HomePageClient({
               <StatCard label="Types" value={VEHICLE_TYPES.length} />
             </div>
 
-            <div className="rounded-[28px] border border-[#d8e3ff] bg-white p-5 shadow-[0_14px_40px_rgba(35,71,183,0.06)]">
+            <div className="rounded-[28px] border border-[#d8e3ff] bg-white p-4 shadow-[0_14px_40px_rgba(35,71,183,0.06)] sm:p-5">
               {isGuest ? (
                 <>
-                  <h2 className="text-3d-title text-lg font-semibold tracking-tight text-[#162d84]">
+                  <h2 className="text-3d-title text-[17px] font-semibold tracking-tight text-[#162d84] sm:text-lg">
                     Vous êtes un garage ?
                   </h2>
-                  <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+                  <p className="text-3d-soft mt-2 text-[14px] leading-7 text-slate-600 sm:text-sm">
                     Publiez vos véhicules en quelques minutes et gérez vos contacts.
                   </p>
 
                   <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-                    <Link href="/pro/inscription" className={primaryButtonClass}>
+                    <Link href="/pro/inscription" className={`${primaryButtonClass} w-full`}>
                       Créer un compte pro
                     </Link>
-                    <Link href="/pro/connexion" className={secondaryButtonClass}>
+                    <Link href="/pro/connexion" className={`${secondaryButtonClass} w-full`}>
                       Se connecter
                     </Link>
                   </div>
                 </>
               ) : isPro ? (
                 <>
-                  <h2 className="text-3d-title text-lg font-semibold tracking-tight text-[#162d84]">
+                  <h2 className="text-3d-title text-[17px] font-semibold tracking-tight text-[#162d84] sm:text-lg">
                     Votre espace pro est prêt
                   </h2>
-                  <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+                  <p className="text-3d-soft mt-2 text-[14px] leading-7 text-slate-600 sm:text-sm">
                     Accédez à votre dashboard, publiez vos véhicules et suivez vos messages.
                   </p>
 
                   <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-                    <Link href="/pro/dashboard" className={primaryButtonClass}>
+                    <Link href="/pro/dashboard" className={`${primaryButtonClass} w-full`}>
                       Dashboard pro
                     </Link>
-                    <Link href="/pro/deposer" className={secondaryButtonClass}>
+                    <Link href="/pro/deposer" className={`${secondaryButtonClass} w-full`}>
                       Déposer une annonce
                     </Link>
                   </div>
                 </>
               ) : (
                 <>
-                  <h2 className="text-3d-title text-lg font-semibold tracking-tight text-[#162d84]">
+                  <h2 className="text-3d-title text-[17px] font-semibold tracking-tight text-[#162d84] sm:text-lg">
                     Votre compte est connecté
                   </h2>
-                  <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+                  <p className="text-3d-soft mt-2 text-[14px] leading-7 text-slate-600 sm:text-sm">
                     Consultez votre compte ou passez au compte professionnel.
                   </p>
 
                   <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-                    <Link href="/compte" className={primaryButtonClass}>
+                    <Link href="/compte" className={`${primaryButtonClass} w-full`}>
                       Mon compte
                     </Link>
-                    <Link href="/annonces" className={secondaryButtonClass}>
+                    <Link href="/annonces" className={`${secondaryButtonClass} w-full`}>
                       Voir les annonces
                     </Link>
                   </div>
@@ -643,11 +647,11 @@ export default function HomePageClient({
               )}
             </div>
 
-            <div className="rounded-[28px] border border-[#d8e3ff] bg-white p-5 shadow-[0_14px_40px_rgba(35,71,183,0.06)]">
-              <h2 className="text-3d-title text-lg font-semibold tracking-tight text-[#162d84]">
+            <div className="rounded-[28px] border border-[#d8e3ff] bg-white p-4 shadow-[0_14px_40px_rgba(35,71,183,0.06)] sm:p-5">
+              <h2 className="text-3d-title text-[17px] font-semibold tracking-tight text-[#162d84] sm:text-lg">
                 Pourquoi Cars Go Direct
               </h2>
-              <ul className="mt-4 space-y-2 text-sm leading-7 text-slate-600">
+              <ul className="mt-4 space-y-2 text-[14px] leading-7 text-slate-600 sm:text-sm">
                 <li className="text-3d-soft">Véhicules publiés par des professionnels</li>
                 <li className="text-3d-soft">Recherche par marque, modèle, type ou localisation</li>
                 <li className="text-3d-soft">Contact direct avec le vendeur</li>
@@ -669,10 +673,10 @@ export default function HomePageClient({
 
       <section>
         <div className="border-b border-slate-200 pb-4">
-          <h2 className="text-3d-title text-xl font-semibold tracking-tight text-[#162d84] sm:text-[22px]">
+          <h2 className="text-3d-title text-[20px] font-semibold tracking-tight text-[#162d84] sm:text-[22px]">
             Explorer par catégorie
           </h2>
-          <p className="text-3d-soft mt-1 text-sm text-slate-600">
+          <p className="text-3d-soft mt-1 text-[13px] text-slate-600 sm:text-sm">
             Accédez rapidement aux grands types de véhicules.
           </p>
         </div>
@@ -703,15 +707,15 @@ export default function HomePageClient({
 
       <section>
         <div className="border-b border-slate-200 pb-4">
-          <h2 className="text-3d-title text-xl font-semibold tracking-tight text-[#162d84] sm:text-[22px]">
+          <h2 className="text-3d-title text-[20px] font-semibold tracking-tight text-[#162d84] sm:text-[22px]">
             Marques populaires
           </h2>
-          <p className="text-3d-soft mt-1 text-sm text-slate-600">
+          <p className="text-3d-soft mt-1 text-[13px] text-slate-600 sm:text-sm">
             Recherchez directement par constructeur automobile.
           </p>
         </div>
 
-        <div className="py-6 -mx-1 overflow-x-auto px-1 [scrollbar-width:none] sm:overflow-visible sm:px-0">
+        <div className="-mx-1 overflow-x-auto px-1 py-6 [scrollbar-width:none] sm:overflow-visible sm:px-0">
           <div className="flex w-max gap-3 sm:w-auto sm:flex-wrap">
             {popularBrands.map((brand) => (
               <BrandPill
@@ -727,10 +731,10 @@ export default function HomePageClient({
       <section>
         <div className="flex items-end justify-between gap-3 border-b border-slate-200 pb-4">
           <div>
-            <h2 className="text-3d-title text-xl font-semibold tracking-tight text-[#162d84] sm:text-[22px]">
+            <h2 className="text-3d-title text-[20px] font-semibold tracking-tight text-[#162d84] sm:text-[22px]">
               Dernières annonces
             </h2>
-            <p className="text-3d-soft mt-1 text-sm text-slate-600">
+            <p className="text-3d-soft mt-1 text-[13px] text-slate-600 sm:text-sm">
               Les dernières annonces publiées par les professionnels.
             </p>
           </div>
@@ -764,7 +768,7 @@ export default function HomePageClient({
                 ? "Votre espace professionnel est prêt"
                 : "Développez votre visibilité avec Cars Go Direct"}
             </h3>
-            <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+            <p className="text-3d-soft mt-2 text-[14px] leading-7 text-slate-600 sm:text-sm">
               {isPro
                 ? "Publiez vos annonces, gérez vos messages et développez votre activité locale depuis une seule plateforme."
                 : "Publiez vos véhicules, attirez des acheteurs qualifiés et simplifiez la mise en relation avec votre garage."}
@@ -774,28 +778,28 @@ export default function HomePageClient({
           <div className="grid w-full gap-2 sm:w-auto sm:grid-cols-2">
             {isPro ? (
               <>
-                <Link href="/pro/deposer" className={primaryButtonClass}>
+                <Link href="/pro/deposer" className={`${primaryButtonClass} w-full`}>
                   Déposer une annonce
                 </Link>
-                <Link href="/pro/dashboard" className={secondaryButtonClass}>
+                <Link href="/pro/dashboard" className={`${secondaryButtonClass} w-full`}>
                   Dashboard pro
                 </Link>
               </>
             ) : isUser ? (
               <>
-                <Link href="/annonces" className={primaryButtonClass}>
+                <Link href="/annonces" className={`${primaryButtonClass} w-full`}>
                   Voir les annonces
                 </Link>
-                <Link href="/compte" className={secondaryButtonClass}>
+                <Link href="/compte" className={`${secondaryButtonClass} w-full`}>
                   Mon compte
                 </Link>
               </>
             ) : (
               <>
-                <Link href="/pro/deposer" className={primaryButtonClass}>
+                <Link href="/pro/deposer" className={`${primaryButtonClass} w-full`}>
                   Déposer une annonce
                 </Link>
-                <Link href="/pro/inscription" className={secondaryButtonClass}>
+                <Link href="/pro/inscription" className={`${secondaryButtonClass} w-full`}>
                   Créer un compte pro
                 </Link>
               </>
