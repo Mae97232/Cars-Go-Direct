@@ -7,11 +7,14 @@
   --bg: 255 255 255;
   --fg: 15 23 42;
   --muted: 100 116 139;
-  --border: 226 232 240;
+  --border: 216 227 255;
   --card: 255 255 255;
-  --brand: 15 23 42;
-  --brand-2: 30 64 175;
-  --ring: 59 130 246;
+
+  --brand: 27 47 121;      /* bleu bouton / CTA */
+  --brand-2: 35 71 183;    /* bleu principal */
+  --brand-3: 58 99 220;    /* bleu accent */
+  --brand-soft: 245 248 255;
+  --ring: 127 156 255;
 }
 
 /* ===============================
@@ -33,8 +36,8 @@ body {
 body {
   color: rgb(var(--fg));
   background:
-    radial-gradient(900px 500px at 20% 0%, rgba(30, 64, 175, 0.08), transparent 60%),
-    radial-gradient(900px 500px at 80% 10%, rgba(15, 23, 42, 0.06), transparent 55%),
+    radial-gradient(900px 500px at 18% 0%, rgba(64, 110, 255, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 82% 10%, rgba(27, 47, 121, 0.07), transparent 58%),
     rgb(var(--bg));
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -60,6 +63,37 @@ button {
 }
 
 /* ===============================
+   TEXT 3D / RELIEF
+================================ */
+.text-3d-hero {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 0 rgba(169, 194, 255, 0.78),
+    0 3px 0 rgba(126, 162, 255, 0.42),
+    0 10px 24px rgba(22, 45, 132, 0.16);
+}
+
+.text-3d-title {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.90),
+    0 2px 0 rgba(188, 209, 255, 0.58),
+    0 6px 16px rgba(22, 45, 132, 0.10);
+}
+
+.text-3d-soft {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95),
+    0 2px 0 rgba(190, 210, 255, 0.75),
+    0 3px 6px rgba(22, 45, 132, 0.16);
+}
+
+.text-3d-button {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.10),
+    0 2px 6px rgba(0, 0, 0, 0.16);
+}
+
+/* ===============================
    COMPONENTS
 ================================ */
 @layer components {
@@ -68,33 +102,89 @@ button {
   }
 
   .card {
-    @apply min-w-0 rounded-2xl border border-slate-200/70 bg-white/80
-           shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur;
+    @apply min-w-0 rounded-[28px] border bg-white backdrop-blur;
+    border-color: rgb(var(--border));
+    box-shadow:
+      0 1px 0 rgba(15, 23, 42, 0.03),
+      0 14px 40px rgba(35, 71, 183, 0.06);
+  }
+
+  .card-soft {
+    @apply min-w-0 rounded-[28px] border backdrop-blur;
+    border-color: rgb(var(--border));
+    background: linear-gradient(180deg, rgba(247, 250, 255, 0.95) 0%, rgba(238, 244, 255, 0.95) 100%);
+    box-shadow:
+      0 1px 0 rgba(15, 23, 42, 0.03),
+      0 14px 40px rgba(35, 71, 183, 0.08);
   }
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-xl
-           px-5 py-3 text-sm font-semibold transition
-           whitespace-nowrap;
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-2xl px-5 py-3 text-sm font-semibold transition;
   }
 
   .btn-primary {
-    @apply bg-slate-900 text-white hover:bg-slate-800;
+    @apply text-white;
+    background: rgb(var(--brand));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 10px 24px rgba(0, 0, 0, 0.16);
+  }
+
+  .btn-primary:hover {
+    background: rgb(20, 36, 95);
   }
 
   .btn-secondary {
-    @apply border border-slate-200 bg-white hover:bg-slate-50;
+    @apply border bg-white;
+    border-color: rgb(201, 215, 255);
+    color: rgb(var(--brand));
+  }
+
+  .btn-secondary:hover {
+    background: rgb(var(--brand-soft));
+  }
+
+  .btn-soft {
+    @apply border;
+    border-color: rgb(216, 227, 255);
+    background: rgb(var(--brand-soft));
+    color: rgb(var(--brand-2));
+  }
+
+  .btn-soft:hover {
+    background: rgb(234, 241, 255);
   }
 
   .badge {
-    @apply inline-flex items-center gap-1 rounded-full
-           border border-slate-200 bg-white
-           px-2.5 py-1 text-xs font-medium text-slate-700
-           whitespace-nowrap;
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-medium;
+    border-color: rgb(216, 227, 255);
+    background: rgb(245, 248, 255);
+    color: rgb(var(--brand-2));
+  }
+
+  .pill {
+    @apply inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-medium;
+    border-color: rgb(216, 227, 255);
+    background: rgb(255, 255, 255);
+    color: rgb(var(--brand-2));
+  }
+
+  .pill-active {
+    @apply inline-flex items-center whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-white;
+    background: rgb(var(--brand));
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   }
 
   .h1 {
     @apply text-4xl font-bold tracking-tight sm:text-5xl;
+  }
+
+  .h2 {
+    @apply text-2xl font-semibold tracking-tight sm:text-3xl;
+  }
+
+  .h3 {
+    @apply text-xl font-semibold tracking-tight sm:text-2xl;
   }
 
   .lead {
@@ -104,6 +194,57 @@ button {
   .safe-wrap {
     @apply min-w-0 overflow-hidden;
   }
+
+  .text-link-brand {
+    color: rgb(var(--brand));
+  }
+
+  .text-link-brand:hover {
+    text-decoration: underline;
+  }
+
+  .input-premium {
+    @apply w-full rounded-2xl border bg-white px-4 py-3.5 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400;
+    border-color: rgb(216, 227, 255);
+  }
+
+  .input-premium:focus {
+    border-color: rgb(var(--ring));
+    box-shadow: 0 0 0 4px rgba(223, 232, 255, 1);
+  }
+
+  .section-title {
+    @apply text-xl font-semibold tracking-tight sm:text-[22px];
+    color: rgb(22, 45, 132);
+  }
+
+  .price-brand {
+    @apply font-semibold tracking-tight;
+    color: rgb(22, 45, 132);
+  }
+}
+
+/* ===============================
+   GLOBAL OPTIONAL 3D HELPERS
+================================ */
+h1.relief,
+h2.relief-strong,
+h3.relief-strong {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.92),
+    0 2px 0 rgba(188, 209, 255, 0.60),
+    0 8px 20px rgba(22, 45, 132, 0.12);
+}
+
+p.relief,
+span.relief,
+a.relief,
+button.relief,
+label.relief,
+li.relief {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72),
+    0 1px 2px rgba(22, 45, 132, 0.08);
 }
 
 /* ===============================
