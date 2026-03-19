@@ -68,18 +68,22 @@ export default async function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#203d9b] bg-[linear-gradient(90deg,#162a72_0%,#234ec9_48%,#6b91ff_100%)] text-white shadow-[0_14px_40px_rgba(16,24,40,0.18)]">
       <div className="container-app">
-        <div className="flex min-h-[72px] items-center justify-between gap-3 py-3 sm:min-h-[78px]">
+        <div className="flex min-h-[76px] items-center justify-between gap-3 py-3 sm:min-h-[84px]">
           <div className="flex min-w-0 items-center gap-3 sm:gap-4">
             <Link href="/" className="flex shrink-0 items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[#13245f] text-sm font-extrabold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.18)] sm:h-11 sm:w-11">
-                CGD
+              <span className="flex h-[56px] w-[56px] shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-[0_10px_24px_rgba(0,0,0,0.16)] sm:h-[62px] sm:w-[62px]">
+                <img
+                  src="/logo-cargodirect.jpg"
+                  alt="Cargo Direct"
+                  className="h-full w-full object-cover"
+                />
               </span>
 
               <div className="min-w-0">
-                <span className="block truncate text-[15px] font-semibold tracking-tight text-white sm:text-[17px]">
+                <span className="text-3d-title block truncate text-[15px] font-semibold tracking-tight text-white sm:text-[17px]">
                   Cars Go Direct
                 </span>
-                <span className="hidden text-xs text-blue-100/90 sm:block">
+                <span className="text-3d-soft hidden text-xs text-blue-100/90 sm:block">
                   Marketplace auto pro
                 </span>
               </div>
@@ -88,14 +92,14 @@ export default async function Header() {
             <nav className="hidden items-center gap-1 xl:flex">
               <Link
                 href="/annonces"
-                className="rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
+                className="text-3d-soft rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
               >
                 Annonces
               </Link>
 
               <Link
                 href="/recherche"
-                className="rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
+                className="text-3d-soft rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
               >
                 Rechercher
               </Link>
@@ -104,14 +108,14 @@ export default async function Header() {
                 <>
                   <Link
                     href="/connexion"
-                    className="rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
+                    className="text-3d-soft rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
                   >
                     Connexion
                   </Link>
 
                   <Link
                     href="/inscription"
-                    className="rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
+                    className="text-3d-soft rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
                   >
                     Inscription
                   </Link>
@@ -120,14 +124,14 @@ export default async function Header() {
                 <>
                   <Link
                     href="/pro/dashboard"
-                    className="rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
+                    className="text-3d-soft rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
                   >
                     Dashboard
                   </Link>
 
                   <Link
                     href="/pro/messages"
-                    className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
+                    className="text-3d-soft inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
                   >
                     <span>Messages</span>
                     <MessagesBadge />
@@ -137,14 +141,14 @@ export default async function Header() {
                 <>
                   <Link
                     href="/compte"
-                    className="rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
+                    className="text-3d-soft rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
                   >
                     Mon compte
                   </Link>
 
                   <Link
                     href="/messages"
-                    className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
+                    className="text-3d-soft inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[14px] font-medium text-white/95 transition hover:bg-white/10 hover:text-white"
                   >
                     <span>Messages</span>
                     <MessagesBadge />
@@ -157,12 +161,12 @@ export default async function Header() {
           <div className="flex shrink-0 items-center gap-2">
             {user ? (
               <>
-                <LogoutButton className="hidden rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-[14px] font-medium text-white transition hover:bg-white/18 lg:inline-flex" />
+                <LogoutButton className="text-3d-soft hidden rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-[14px] font-medium text-white transition hover:bg-white/18 lg:inline-flex" />
 
                 {isPro ? (
                   <Link
                     href="/pro/deposer"
-                    className="inline-flex h-11 items-center justify-center rounded-2xl bg-[#1b2f79] px-4 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.20)] transition hover:bg-[#14245f] sm:px-5 sm:text-[14px]"
+                    className="text-3d-button inline-flex h-11 items-center justify-center rounded-2xl bg-[#1b2f79] px-4 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.20)] transition hover:bg-[#14245f] sm:px-5 sm:text-[14px]"
                   >
                     <span className="hidden sm:inline">Déposer une annonce</span>
                     <span className="sm:hidden">Déposer</span>
@@ -170,7 +174,7 @@ export default async function Header() {
                 ) : (
                   <Link
                     href="/compte"
-                    className="inline-flex h-10 items-center justify-center rounded-xl border border-white/15 bg-white/10 px-3 text-[13px] font-medium text-white transition hover:bg-white/18 sm:hidden"
+                    className="text-3d-soft inline-flex h-10 items-center justify-center rounded-xl border border-white/15 bg-white/10 px-3 text-[13px] font-medium text-white transition hover:bg-white/18 sm:hidden"
                   >
                     Compte
                   </Link>
@@ -179,7 +183,7 @@ export default async function Header() {
             ) : (
               <Link
                 href="/pro/inscription"
-                className="inline-flex h-11 items-center justify-center rounded-2xl bg-[#1b2f79] px-4 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.20)] transition hover:bg-[#14245f] sm:px-5 sm:text-[14px]"
+                className="text-3d-button inline-flex h-11 items-center justify-center rounded-2xl bg-[#1b2f79] px-4 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.20)] transition hover:bg-[#14245f] sm:px-5 sm:text-[14px]"
               >
                 <span className="hidden sm:inline">Déposer une annonce</span>
                 <span className="sm:hidden">Déposer</span>
@@ -194,14 +198,14 @@ export default async function Header() {
           <div className="flex gap-2 overflow-x-auto py-2.5 [scrollbar-width:none]">
             <Link
               href="/annonces"
-              className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+              className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
             >
               Annonces
             </Link>
 
             <Link
               href="/recherche"
-              className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+              className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
             >
               Rechercher
             </Link>
@@ -210,59 +214,59 @@ export default async function Header() {
               <>
                 <Link
                   href="/pro/dashboard"
-                  className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+                  className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
                 >
                   Dashboard
                 </Link>
 
                 <Link
                   href="/pro/messages"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+                  className="text-3d-soft inline-flex shrink-0 items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
                 >
                   <span>Messages</span>
                   <MessagesBadge />
                 </Link>
 
-                <LogoutButton className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]" />
+                <LogoutButton className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]" />
               </>
             ) : user ? (
               <>
                 <Link
                   href="/compte"
-                  className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+                  className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
                 >
                   Mon compte
                 </Link>
 
                 <Link
                   href="/messages"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+                  className="text-3d-soft inline-flex shrink-0 items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
                 >
                   <span>Messages</span>
                   <MessagesBadge />
                 </Link>
 
-                <LogoutButton className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]" />
+                <LogoutButton className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]" />
               </>
             ) : (
               <>
                 <Link
                   href="/connexion"
-                  className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+                  className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
                 >
                   Connexion
                 </Link>
 
                 <Link
                   href="/inscription"
-                  className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+                  className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
                 >
                   Inscription
                 </Link>
 
                 <Link
                   href="/pro/connexion"
-                  className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
+                  className="text-3d-soft shrink-0 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-2 text-[13px] font-medium text-[#2347b7]"
                 >
                   Espace pro
                 </Link>
