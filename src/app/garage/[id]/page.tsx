@@ -126,43 +126,43 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
   const publishedListings = (listings || []) as ListingData[];
 
   return (
-    <div className="bg-white">
+    <div className="bg-[#f8f6f3]">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <section className="border-b border-slate-200 pb-8">
+        <section className="animate-fade-up border-b border-[#ece7e0] pb-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex items-start gap-4 sm:gap-5">
               {avatarUrl ? (
                 <img
                   src={avatarUrl}
                   alt={garageName}
-                  className="h-20 w-20 rounded-full object-cover ring-1 ring-slate-200 sm:h-24 sm:w-24"
+                  className="h-20 w-20 rounded-full object-cover ring-1 ring-[#e4ddd4] sm:h-24 sm:w-24"
                 />
               ) : (
-                <div className="grid h-20 w-20 place-items-center rounded-full bg-slate-900 text-3xl font-bold text-white sm:h-24 sm:w-24">
+                <div className="text-3d-button grid h-20 w-20 place-items-center rounded-full bg-[#171311] text-3xl font-bold text-white sm:h-24 sm:w-24">
                   {garageInitial}
                 </div>
               )}
 
               <div className="min-w-0">
-                <p className="text-sm text-slate-500">Le vendeur</p>
+                <p className="text-3d-soft text-sm text-slate-500">Le vendeur</p>
 
-                <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+                <h1 className="text-3d-hero mt-1 text-3xl font-bold tracking-tight text-black">
                   {garageName}
                 </h1>
 
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-slate-600">
-                  <span className="inline-flex items-center gap-1">
+                  <span className="text-3d-soft inline-flex items-center gap-1">
                     <MapPin className="h-4 w-4" />
                     {displayCity}
                   </span>
 
                   {typedGarage.verification_status === "approved" ? (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                    <span className="text-3d-soft inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                       <BadgeCheck className="h-3.5 w-3.5" />
                       Professionnel vérifié
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                    <span className="text-3d-soft inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
                       <ShieldCheck className="h-3.5 w-3.5" />
                       Vérification en attente
                     </span>
@@ -170,8 +170,8 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
-                  {typedGarage.siret ? <p>SIRET : {typedGarage.siret}</p> : null}
-                  <p>
+                  {typedGarage.siret ? <p className="text-3d-soft">SIRET : {typedGarage.siret}</p> : null}
+                  <p className="text-3d-soft">
                     {publishedListings.length} annonce
                     {publishedListings.length > 1 ? "s" : ""} publiée
                     {publishedListings.length > 1 ? "s" : ""}
@@ -184,7 +184,7 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
               {typedGarage.phone ? (
                 <a
                   href={`tel:${typedGarage.phone}`}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+                  className="text-3d-button inline-flex items-center gap-2 rounded-2xl bg-[#171311] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
                 >
                   <Phone className="h-4 w-4" />
                   Appeler le garage
@@ -193,7 +193,7 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
 
               <Link
                 href="/annonces"
-                className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Retour aux annonces
               </Link>
@@ -203,52 +203,53 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
 
         <section className="grid gap-10 py-8 lg:grid-cols-[1.45fr_.95fr]">
           <div className="space-y-8">
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+            <div className="animate-fade-up" style={{ animationDelay: "0.06s" }}>
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Présentation du garage
               </h2>
 
               <div className="mt-4">
                 {typedGarage.description ? (
-                  <p className="whitespace-pre-line text-[15px] leading-8 text-slate-700">
+                  <p className="text-3d-soft whitespace-pre-line text-[15px] leading-8 text-slate-700">
                     {typedGarage.description}
                   </p>
                 ) : (
-                  <p className="text-[15px] leading-8 text-slate-500">
+                  <p className="text-3d-soft text-[15px] leading-8 text-slate-500">
                     Ce garage n’a pas encore ajouté de présentation détaillée.
                   </p>
                 )}
               </div>
             </div>
 
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+            <div className="animate-fade-up" style={{ animationDelay: "0.1s" }}>
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Annonces du garage
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="text-3d-soft mt-1 text-sm text-slate-600">
                 Retrouvez les véhicules actuellement disponibles.
               </p>
 
               {publishedListings.length === 0 ? (
-                <div className="mt-6 border-t border-slate-200 py-10 text-center">
-                  <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-slate-100 text-slate-500">
+                <div className="mt-6 border-t border-[#ece7e0] py-10 text-center">
+                  <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#f5f3ef] text-slate-500">
                     <CarFront className="h-7 w-7" />
                   </div>
 
-                  <h3 className="mt-4 text-lg font-semibold tracking-tight text-slate-900">
+                  <h3 className="text-3d-title mt-4 text-lg font-semibold tracking-tight text-black">
                     Aucune annonce publiée
                   </h3>
 
-                  <p className="mt-2 text-sm text-slate-600">
+                  <p className="text-3d-soft mt-2 text-sm text-slate-600">
                     Ce garage n’a pas encore de véhicule visible pour le moment.
                   </p>
                 </div>
               ) : (
                 <div className="mt-6 space-y-4">
-                  {publishedListings.map((item) => (
+                  {publishedListings.map((item, index) => (
                     <div
                       key={String(item.id)}
-                      className="overflow-hidden rounded-[28px] border border-slate-200 bg-white transition hover:shadow-md"
+                      className="animate-fade-up overflow-hidden rounded-[28px] border border-[#e4ddd4] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:shadow-md"
+                      style={{ animationDelay: `${0.12 + index * 0.04}s` }}
                     >
                       <div className="flex flex-col md:flex-row">
                         <div className="h-52 w-full shrink-0 bg-slate-100 md:h-auto md:w-[280px]">
@@ -268,12 +269,12 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
                         <div className="flex min-w-0 flex-1 flex-col justify-between p-5 sm:p-6">
                           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                             <div className="min-w-0">
-                              <h3 className="line-clamp-2 text-lg font-semibold tracking-tight text-slate-900">
+                              <h3 className="text-3d-title line-clamp-2 text-lg font-semibold tracking-tight text-black">
                                 {item.title || "Annonce sans titre"}
                               </h3>
 
                               <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-600">
-                                <span className="inline-flex items-center gap-1">
+                                <span className="text-3d-soft inline-flex items-center gap-1">
                                   <MapPin className="h-4 w-4" />
                                   {item.city || "Ville non renseignée"}
                                 </span>
@@ -281,7 +282,7 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
                             </div>
 
                             <div className="shrink-0">
-                              <p className="text-2xl font-bold tracking-tight text-slate-900">
+                              <p className="text-3d-title text-2xl font-bold tracking-tight text-black">
                                 {formatPriceEUR(item.price)}
                               </p>
                             </div>
@@ -290,7 +291,7 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
                           <div className="mt-6 flex flex-wrap gap-2">
                             <Link
                               href={`/annonces/${item.id}`}
-                              className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                              className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-2.5 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
                             >
                               <Eye className="h-4 w-4" />
                               Voir l’annonce
@@ -306,28 +307,28 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
           </div>
 
           <aside className="space-y-8">
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+            <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Coordonnées
               </h2>
 
               <div className="mt-5 space-y-4 text-sm text-slate-700">
                 <div className="flex items-start gap-3">
                   <MapPin className="mt-0.5 h-4 w-4 text-slate-400" />
-                  <span>{displayCity}</span>
+                  <span className="text-3d-soft">{displayCity}</span>
                 </div>
 
                 {fullAddress ? (
                   <div className="flex items-start gap-3">
                     <Building2 className="mt-0.5 h-4 w-4 text-slate-400" />
-                    <span>{fullAddress}</span>
+                    <span className="text-3d-soft">{fullAddress}</span>
                   </div>
                 ) : null}
 
                 {typedGarage.phone ? (
                   <div className="flex items-start gap-3">
                     <Phone className="mt-0.5 h-4 w-4 text-slate-400" />
-                    <a href={`tel:${typedGarage.phone}`} className="hover:text-slate-900">
+                    <a href={`tel:${typedGarage.phone}`} className="text-3d-soft hover:text-black">
                       {typedGarage.phone}
                     </a>
                   </div>
@@ -338,7 +339,7 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
                     <Mail className="mt-0.5 h-4 w-4 text-slate-400" />
                     <a
                       href={`mailto:${typedGarage.email}`}
-                      className="break-all hover:text-slate-900"
+                      className="text-3d-soft break-all hover:text-black"
                     >
                       {typedGarage.email}
                     </a>
@@ -352,7 +353,7 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
                       href={websiteUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="break-all hover:text-slate-900"
+                      className="text-3d-soft break-all hover:text-black"
                     >
                       {typedGarage.website}
                     </a>
@@ -362,46 +363,46 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
                 {typedGarage.siret ? (
                   <div className="flex items-start gap-3">
                     <Building2 className="mt-0.5 h-4 w-4 text-slate-400" />
-                    <span>SIRET : {typedGarage.siret}</span>
+                    <span className="text-3d-soft">SIRET : {typedGarage.siret}</span>
                   </div>
                 ) : null}
               </div>
             </div>
 
             {typedGarage.opening_hours ? (
-              <div>
-                <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+              <div className="animate-fade-up" style={{ animationDelay: "0.12s" }}>
+                <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                   Horaires d’ouverture
                 </h2>
 
                 <div className="mt-5 flex items-start gap-3 text-sm leading-7 text-slate-700">
                   <Clock3 className="mt-1 h-4 w-4 text-slate-400" />
-                  <p className="whitespace-pre-line">{typedGarage.opening_hours}</p>
+                  <p className="text-3d-soft whitespace-pre-line">{typedGarage.opening_hours}</p>
                 </div>
               </div>
             ) : null}
 
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+            <div className="animate-fade-up" style={{ animationDelay: "0.16s" }}>
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Acheter en confiance
               </h2>
 
               <div className="mt-5 space-y-4 text-sm leading-6 text-slate-600">
                 <div className="flex gap-3">
                   <ShieldCheck className="mt-0.5 h-4 w-4 text-slate-400" />
-                  <p>Vérifiez les documents et l’état général du véhicule.</p>
+                  <p className="text-3d-soft">Vérifiez les documents et l’état général du véhicule.</p>
                 </div>
                 <div className="flex gap-3">
                   <ShieldCheck className="mt-0.5 h-4 w-4 text-slate-400" />
-                  <p>Demandez les factures, l’entretien et l’historique.</p>
+                  <p className="text-3d-soft">Demandez les factures, l’entretien et l’historique.</p>
                 </div>
                 <div className="flex gap-3">
                   <ShieldCheck className="mt-0.5 h-4 w-4 text-slate-400" />
-                  <p>Essayez toujours le véhicule avant toute décision.</p>
+                  <p className="text-3d-soft">Essayez toujours le véhicule avant toute décision.</p>
                 </div>
                 <div className="flex gap-3">
                   <ShieldCheck className="mt-0.5 h-4 w-4 text-slate-400" />
-                  <p>Confirmez la disponibilité directement avec le garage.</p>
+                  <p className="text-3d-soft">Confirmez la disponibilité directement avec le garage.</p>
                 </div>
               </div>
             </div>

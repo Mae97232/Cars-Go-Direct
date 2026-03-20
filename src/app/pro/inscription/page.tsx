@@ -168,13 +168,13 @@ export default function InscriptionPro() {
   }
 
   return (
-    <div className="max-w-xl mx-auto">
-      <div className="card p-6">
-        <h1 className="text-xl font-bold tracking-tight">
+    <div className="mx-auto max-w-xl">
+      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <h1 className="text-3d-hero text-xl font-bold tracking-tight text-black">
           Créer un compte professionnel
         </h1>
 
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="text-3d-soft mt-2 text-sm text-slate-600">
           Réservé aux garages et professionnels. Vérification SIRET obligatoire.
         </p>
 
@@ -187,18 +187,18 @@ export default function InscriptionPro() {
         </div>
 
         {errorMessage ? (
-          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {errorMessage}
           </div>
         ) : null}
 
-        <form onSubmit={signup} className="grid gap-3 mt-5">
+        <form onSubmit={signup} className="mt-5 grid gap-3">
           <div className="grid gap-2 sm:grid-cols-2">
             <input
               name="garage_name"
               required
               placeholder="Nom du garage"
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
             />
 
             <div className="flex gap-2">
@@ -207,13 +207,13 @@ export default function InscriptionPro() {
                 placeholder="SIRET"
                 value={siret}
                 onChange={(e) => setSiret(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
               />
 
               <button
                 type="button"
                 onClick={verifySiret}
-                className="btn btn-secondary"
+                className="text-3d-soft inline-flex shrink-0 items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Vérifier
               </button>
@@ -221,21 +221,21 @@ export default function InscriptionPro() {
           </div>
 
           {company && (
-            <div className="card p-4 mt-2 text-sm">
-              <p>
-                <b>Entreprise :</b> {company.legal_name}
+            <div className="animate-fade-up mt-2 rounded-[24px] border border-[#e4ddd4] bg-[#faf7f2] p-4 text-sm">
+              <p className="text-3d-soft text-slate-700">
+                <b className="text-black">Entreprise :</b> {company.legal_name}
               </p>
 
-              <p>
-                <b>Ville :</b> {company.city}
+              <p className="text-3d-soft mt-2 text-slate-700">
+                <b className="text-black">Ville :</b> {company.city}
               </p>
 
-              <p>
-                <b>Code activité :</b> {company.ape}
+              <p className="text-3d-soft mt-2 text-slate-700">
+                <b className="text-black">Code activité :</b> {company.ape}
               </p>
 
-              <p className="mt-2">
-                Statut vérification :
+              <p className="mt-3 text-slate-700">
+                <span className="text-3d-soft">Statut vérification :</span>
                 <span className="ml-2 font-semibold text-green-700">
                   validé automatiquement
                 </span>
@@ -249,7 +249,7 @@ export default function InscriptionPro() {
               required
               type="email"
               placeholder="Email"
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
             />
 
             <input
@@ -257,7 +257,7 @@ export default function InscriptionPro() {
               required
               type="tel"
               placeholder="Téléphone"
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
             />
           </div>
 
@@ -266,14 +266,17 @@ export default function InscriptionPro() {
             required
             type="password"
             placeholder="Mot de passe"
-            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
           />
 
-          <button disabled={loading} className="btn btn-primary mt-2">
+          <button
+            disabled={loading}
+            className="text-3d-button mt-2 inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+          >
             {loading ? "Création..." : "Créer le compte"}
           </button>
 
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-3d-soft mt-2 text-xs text-slate-500">
             Une fois le SIRET validé, votre compte professionnel est activé
             automatiquement.
           </p>
@@ -281,7 +284,7 @@ export default function InscriptionPro() {
           <div className="mt-3 text-center text-sm text-slate-600">
             <Link
               href="/pro/connexion"
-              className="font-medium text-slate-900 hover:underline"
+              className="text-3d-soft font-medium text-black hover:underline"
             >
               Déjà un compte ? Se connecter
             </Link>
@@ -290,7 +293,7 @@ export default function InscriptionPro() {
           <div className="mt-3 text-center text-sm text-slate-600">
             <Link
               href="/inscription"
-              className="font-medium text-slate-900 hover:underline"
+              className="text-3d-soft font-medium text-black hover:underline"
             >
               Vous êtes particulier ? Créer un compte particulier
             </Link>

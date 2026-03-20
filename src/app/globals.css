@@ -5,16 +5,16 @@
 ================================ */
 :root {
   --bg: 255 255 255;
-  --fg: 15 23 42;
+  --fg: 24 18 12;
   --muted: 100 116 139;
-  --border: 216 227 255;
+  --border: 228 221 212;
   --card: 255 255 255;
 
-  --brand: 27 47 121;      /* bleu bouton / CTA */
-  --brand-2: 35 71 183;    /* bleu principal */
-  --brand-3: 58 99 220;    /* bleu accent */
-  --brand-soft: 245 248 255;
-  --ring: 127 156 255;
+  --brand: 23 19 17;       /* noir bouton / CTA */
+  --brand-2: 24 18 12;     /* noir principal */
+  --brand-3: 60 52 46;     /* accent foncé */
+  --brand-soft: 247 245 242;
+  --ring: 189 180 168;
 }
 
 /* ===============================
@@ -36,8 +36,8 @@ body {
 body {
   color: rgb(var(--fg));
   background:
-    radial-gradient(900px 500px at 18% 0%, rgba(64, 110, 255, 0.10), transparent 60%),
-    radial-gradient(900px 500px at 82% 10%, rgba(27, 47, 121, 0.07), transparent 58%),
+    radial-gradient(900px 500px at 18% 0%, rgba(201, 178, 142, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 82% 10%, rgba(120, 98, 74, 0.07), transparent 58%),
     rgb(var(--bg));
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -67,30 +67,30 @@ button {
 ================================ */
 .text-3d-hero {
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.96),
-    0 2px 0 rgba(169, 194, 255, 0.78),
-    0 3px 0 rgba(126, 162, 255, 0.42),
-    0 10px 24px rgba(22, 45, 132, 0.16);
+    0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 0 rgba(228, 221, 212, 0.95),
+    0 3px 0 rgba(204, 194, 182, 0.82),
+    0 10px 24px rgba(24, 18, 12, 0.16);
 }
 
 .text-3d-title {
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.90),
-    0 2px 0 rgba(188, 209, 255, 0.58),
-    0 6px 16px rgba(22, 45, 132, 0.10);
+    0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 0 rgba(231, 224, 216, 0.92),
+    0 6px 16px rgba(24, 18, 12, 0.10);
 }
 
 .text-3d-soft {
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.95),
-    0 2px 0 rgba(190, 210, 255, 0.75),
-    0 3px 6px rgba(22, 45, 132, 0.16);
+    0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 0 rgba(238, 234, 228, 0.88),
+    0 3px 6px rgba(24, 18, 12, 0.08);
 }
 
 .text-3d-button {
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.10),
-    0 2px 6px rgba(0, 0, 0, 0.16);
+    0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.22);
 }
 
 /* ===============================
@@ -106,16 +106,16 @@ button {
     border-color: rgb(var(--border));
     box-shadow:
       0 1px 0 rgba(15, 23, 42, 0.03),
-      0 14px 40px rgba(35, 71, 183, 0.06);
+      0 14px 40px rgba(24, 18, 12, 0.06);
   }
 
   .card-soft {
     @apply min-w-0 rounded-[28px] border backdrop-blur;
     border-color: rgb(var(--border));
-    background: linear-gradient(180deg, rgba(247, 250, 255, 0.95) 0%, rgba(238, 244, 255, 0.95) 100%);
+    background: linear-gradient(180deg, rgba(252, 251, 249, 0.96) 0%, rgba(247, 245, 242, 0.96) 100%);
     box-shadow:
       0 1px 0 rgba(15, 23, 42, 0.03),
-      0 14px 40px rgba(35, 71, 183, 0.08);
+      0 14px 40px rgba(24, 18, 12, 0.08);
   }
 
   .btn {
@@ -127,16 +127,16 @@ button {
     background: rgb(var(--brand));
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 10px 24px rgba(0, 0, 0, 0.16);
+      0 10px 24px rgba(0, 0, 0, 0.18);
   }
 
   .btn-primary:hover {
-    background: rgb(20, 36, 95);
+    background: rgb(15, 13, 12);
   }
 
   .btn-secondary {
     @apply border bg-white;
-    border-color: rgb(201, 215, 255);
+    border-color: rgb(228, 221, 212);
     color: rgb(var(--brand));
   }
 
@@ -146,25 +146,25 @@ button {
 
   .btn-soft {
     @apply border;
-    border-color: rgb(216, 227, 255);
+    border-color: rgb(228, 221, 212);
     background: rgb(var(--brand-soft));
     color: rgb(var(--brand-2));
   }
 
   .btn-soft:hover {
-    background: rgb(234, 241, 255);
+    background: rgb(241, 236, 228);
   }
 
   .badge {
     @apply inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-medium;
-    border-color: rgb(216, 227, 255);
-    background: rgb(245, 248, 255);
+    border-color: rgb(228, 221, 212);
+    background: rgb(250, 247, 242);
     color: rgb(var(--brand-2));
   }
 
   .pill {
     @apply inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-medium;
-    border-color: rgb(216, 227, 255);
+    border-color: rgb(228, 221, 212);
     background: rgb(255, 255, 255);
     color: rgb(var(--brand-2));
   }
@@ -172,7 +172,7 @@ button {
   .pill-active {
     @apply inline-flex items-center whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-white;
     background: rgb(var(--brand));
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
   }
 
   .h1 {
@@ -205,22 +205,22 @@ button {
 
   .input-premium {
     @apply w-full rounded-2xl border bg-white px-4 py-3.5 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400;
-    border-color: rgb(216, 227, 255);
+    border-color: rgb(228, 221, 212);
   }
 
   .input-premium:focus {
     border-color: rgb(var(--ring));
-    box-shadow: 0 0 0 4px rgba(223, 232, 255, 1);
+    box-shadow: 0 0 0 4px rgba(241, 236, 228, 1);
   }
 
   .section-title {
     @apply text-xl font-semibold tracking-tight sm:text-[22px];
-    color: rgb(22, 45, 132);
+    color: rgb(24, 18, 12);
   }
 
   .price-brand {
     @apply font-semibold tracking-tight;
-    color: rgb(22, 45, 132);
+    color: rgb(24, 18, 12);
   }
 }
 
@@ -231,9 +231,9 @@ h1.relief,
 h2.relief-strong,
 h3.relief-strong {
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.92),
-    0 2px 0 rgba(188, 209, 255, 0.60),
-    0 8px 20px rgba(22, 45, 132, 0.12);
+    0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 0 rgba(231, 224, 216, 0.90),
+    0 8px 20px rgba(24, 18, 12, 0.12);
 }
 
 p.relief,
@@ -243,8 +243,8 @@ button.relief,
 label.relief,
 li.relief {
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.72),
-    0 1px 2px rgba(22, 45, 132, 0.08);
+    0 1px 0 rgba(255, 255, 255, 0.78),
+    0 1px 2px rgba(24, 18, 12, 0.08);
 }
 
 /* ===============================
@@ -255,6 +255,7 @@ select,
 textarea {
   max-width: 100%;
 }
+
 @keyframes fadeUp {
   0% {
     opacity: 0;

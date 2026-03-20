@@ -62,13 +62,13 @@ export default function ConnexionPro() {
   }
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="card p-6">
-        <h1 className="text-xl font-bold tracking-tight">
+    <div className="mx-auto max-w-md">
+      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <h1 className="text-3d-hero text-xl font-bold tracking-tight text-black">
           Connexion professionnel
         </h1>
 
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="text-3d-soft mt-2 text-sm text-slate-600">
           Accédez à votre espace pro pour gérer vos annonces.
         </p>
 
@@ -80,13 +80,13 @@ export default function ConnexionPro() {
           />
         </div>
 
-        <form onSubmit={login} className="grid gap-3 mt-5">
+        <form onSubmit={login} className="mt-5 grid gap-3">
           <input
             name="email"
             required
             type="email"
             placeholder="Email"
-            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
           />
 
           <input
@@ -94,17 +94,20 @@ export default function ConnexionPro() {
             required
             type="password"
             placeholder="Mot de passe"
-            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
           />
 
-          <button disabled={loading} className="btn btn-primary mt-2">
+          <button
+            disabled={loading}
+            className="text-3d-button mt-2 inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+          >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
 
-          <div className="flex items-center justify-between text-sm mt-2">
+          <div className="mt-2 flex items-center justify-between text-sm">
             <button
               type="button"
-              className="text-slate-600 hover:underline"
+              className="text-3d-soft text-slate-600 hover:underline"
               onClick={resetPassword}
             >
               Mot de passe oublié
@@ -112,7 +115,7 @@ export default function ConnexionPro() {
 
             <Link
               href="/pro/inscription"
-              className="font-semibold hover:underline"
+              className="text-3d-soft font-semibold text-black hover:underline"
             >
               Créer un compte
             </Link>

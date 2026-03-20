@@ -94,10 +94,10 @@ function FilterButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 w-full items-center justify-between rounded-full border border-slate-300 bg-white px-4 text-[14px] font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+      className="text-3d-soft flex h-11 w-full items-center justify-between rounded-full border border-[#e4ddd4] bg-white px-4 text-[14px] font-medium text-[#171311] transition hover:border-[#cfc5b8] hover:bg-[#f7f5f2]"
     >
       <span className="truncate">{value || label}</span>
-      <span className="ml-3 text-slate-500">›</span>
+      <span className="ml-3 text-[#7a6d60]">›</span>
     </button>
   );
 }
@@ -111,10 +111,10 @@ function TopChip({
 }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-3 py-1.5 text-[13px] whitespace-nowrap ${
+      className={`text-3d-soft inline-flex items-center rounded-full border px-3 py-1.5 text-[13px] whitespace-nowrap ${
         active
-          ? "border-slate-800 bg-slate-100 text-slate-900"
-          : "border-slate-300 bg-white text-slate-700"
+          ? "border-[#171311] bg-[#f5f3ef] text-[#171311]"
+          : "border-[#e4ddd4] bg-white text-[#4b4036]"
       }`}
     >
       {children}
@@ -122,7 +122,13 @@ function TopChip({
   );
 }
 
-function SearchListingCard({ item }: { item: Listing }) {
+function SearchListingCard({
+  item,
+  index = 0,
+}: {
+  item: Listing;
+  index?: number;
+}) {
   const photo = item.photos?.[0] || "";
   const locationText =
     item.city && item.department
@@ -132,7 +138,8 @@ function SearchListingCard({ item }: { item: Listing }) {
   return (
     <Link
       href={`/annonces/${item.id}`}
-      className="group block overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:border-slate-300 hover:shadow-sm"
+      className="animate-fade-up group block overflow-hidden rounded-[28px] border border-[#e7e2db] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-[#d4ccc2] hover:shadow-[0_18px_40px_rgba(0,0,0,0.06)]"
+      style={{ animationDelay: `${0.08 * index}s` }}
     >
       <div className="grid gap-0 md:grid-cols-[260px_minmax(0,1fr)] lg:grid-cols-[280px_minmax(0,1fr)]">
         <div className="relative overflow-hidden bg-slate-100">
@@ -140,23 +147,23 @@ function SearchListingCard({ item }: { item: Listing }) {
             <img
               src={photo}
               alt={item.title}
-              className="aspect-[4/3] w-full object-cover md:h-full md:min-h-[220px]"
+              className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.02] md:h-full md:min-h-[220px]"
             />
           ) : (
-            <div className="grid aspect-[4/3] place-items-center text-sm text-slate-500 md:h-full md:min-h-[220px]">
+            <div className="text-3d-soft grid aspect-[4/3] place-items-center text-sm text-slate-500 md:h-full md:min-h-[220px]">
               Photo indisponible
             </div>
           )}
 
           <div className="absolute left-3 top-3">
-            <span className="rounded-full bg-fuchsia-600 px-2.5 py-1 text-[11px] font-semibold text-white">
+            <span className="text-3d-button rounded-full bg-[#171311] px-2.5 py-1 text-[11px] font-semibold text-white shadow-[0_8px_18px_rgba(0,0,0,0.18)]">
               À la une
             </span>
           </div>
 
           <button
             type="button"
-            className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-slate-600 shadow-sm"
+            className="text-3d-soft absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-[#171311] shadow-sm"
           >
             ♡
           </button>
@@ -165,20 +172,20 @@ function SearchListingCard({ item }: { item: Listing }) {
         <div className="min-w-0 p-4 sm:p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="line-clamp-2 text-[15px] font-semibold leading-5 text-slate-900 sm:text-[17px]">
+              <h3 className="text-3d-title line-clamp-2 text-[15px] font-semibold leading-5 text-black sm:text-[17px]">
                 {item.title}
               </h3>
 
-              <div className="mt-2 text-[20px] font-bold leading-none text-emerald-700">
+              <div className="text-3d-title mt-2 text-[20px] font-bold leading-none text-black">
                 {formatPrice(item.price)}
               </div>
 
               <div className="mt-2 flex flex-wrap gap-2">
-                <span className="inline-flex rounded-full border border-sky-300 px-2.5 py-0.5 text-[12px] font-medium text-sky-700">
+                <span className="text-3d-soft inline-flex rounded-full border border-[#171311]/15 bg-[#f5f3ef] px-2.5 py-0.5 text-[12px] font-medium text-[#171311]">
                   Pro
                 </span>
                 {item.vatRecoverable ? (
-                  <span className="inline-flex rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-[12px] font-medium text-slate-700">
+                  <span className="text-3d-soft inline-flex rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-2.5 py-0.5 text-[12px] font-medium text-[#4b4036]">
                     TVA récupérable
                   </span>
                 ) : null}
@@ -188,48 +195,48 @@ function SearchListingCard({ item }: { item: Listing }) {
 
           <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4">
             <div>
-              <div className="text-[12px] text-slate-500">Année</div>
-              <div className="mt-0.5 text-[14px] font-medium text-slate-900">
+              <div className="text-3d-soft text-[12px] text-slate-500">Année</div>
+              <div className="text-3d-title mt-0.5 text-[14px] font-medium text-black">
                 {item.year || "—"}
               </div>
             </div>
 
             <div>
-              <div className="text-[12px] text-slate-500">Kilométrage</div>
-              <div className="mt-0.5 text-[14px] font-medium text-slate-900">
+              <div className="text-3d-soft text-[12px] text-slate-500">Kilométrage</div>
+              <div className="text-3d-title mt-0.5 text-[14px] font-medium text-black">
                 {formatKm(item.mileage)}
               </div>
             </div>
 
             <div>
-              <div className="text-[12px] text-slate-500">Énergie</div>
-              <div className="mt-0.5 text-[14px] font-medium text-slate-900">
+              <div className="text-3d-soft text-[12px] text-slate-500">Énergie</div>
+              <div className="text-3d-title mt-0.5 text-[14px] font-medium text-black">
                 {item.fuel || "—"}
               </div>
             </div>
 
             <div>
-              <div className="text-[12px] text-slate-500">Type</div>
-              <div className="mt-0.5 text-[14px] font-medium text-slate-900">
+              <div className="text-3d-soft text-[12px] text-slate-500">Type</div>
+              <div className="text-3d-title mt-0.5 text-[14px] font-medium text-black">
                 {item.type || "—"}
               </div>
             </div>
           </div>
 
-          <p className="mt-4 line-clamp-2 text-[13px] leading-6 text-slate-600">
+          <p className="text-3d-soft mt-4 line-clamp-2 text-[13px] leading-6 text-slate-600">
             {item.description || "Voir l’annonce complète."}
           </p>
 
-          <div className="mt-4 flex items-start gap-3 border-t border-slate-200 pt-4">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-slate-200 bg-white text-[10px] font-bold text-slate-700">
+          <div className="mt-4 flex items-start gap-3 border-t border-[#ece7e0] pt-4">
+            <div className="text-3d-title grid h-8 w-8 shrink-0 place-items-center rounded-md border border-[#e4ddd4] bg-white text-[10px] font-bold text-[#171311]">
               PRO
             </div>
 
             <div className="min-w-0">
-              <div className="truncate text-[13px] font-medium text-slate-900">
+              <div className="text-3d-title truncate text-[13px] font-medium text-black">
                 Garage partenaire
               </div>
-              <div className="mt-0.5 text-[12px] text-slate-500">{locationText}</div>
+              <div className="text-3d-soft mt-0.5 text-[12px] text-slate-500">{locationText}</div>
             </div>
           </div>
         </div>
@@ -551,9 +558,9 @@ export default function AnnoncesClient({
       : "Année récente";
 
   return (
-    <div className="min-h-screen bg-[#f8f8f8]">
+    <div className="min-h-screen bg-[#f8f6f3]">
       <div className="container-app py-4 sm:py-5 lg:py-6">
-        <div className="rounded-3xl border border-slate-200 bg-[#fffdf9] p-3 sm:p-4">
+        <div className="animate-fade-up rounded-3xl border border-[#e7e2db] bg-[#fffdf9] p-3 shadow-[0_12px_30px_rgba(0,0,0,0.04)] sm:p-4">
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_200px]">
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1.2fr)_repeat(4,minmax(0,1fr))]">
               <input
@@ -561,7 +568,7 @@ export default function AnnoncesClient({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && applyFilters()}
                 placeholder="Rechercher une marque, un modèle..."
-                className="h-11 w-full rounded-full border border-slate-300 bg-white px-4 text-[14px] outline-none"
+                className="text-3d-soft h-11 w-full rounded-full border border-[#e4ddd4] bg-white px-4 text-[14px] text-[#171311] outline-none transition placeholder:text-slate-400 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
               />
 
               <FilterButton
@@ -589,7 +596,7 @@ export default function AnnoncesClient({
               <button
                 type="button"
                 onClick={() => setFiltersOpen(true)}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-4 text-[14px] font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+                className="text-3d-soft flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#e4ddd4] bg-white px-4 text-[14px] font-medium text-[#171311] transition hover:border-[#cfc5b8] hover:bg-[#f7f5f2]"
               >
                 <span>⚙️</span>
                 <span>Filtres{activeFiltersCount ? ` (${activeFiltersCount})` : ""}</span>
@@ -599,14 +606,14 @@ export default function AnnoncesClient({
             <button
               type="button"
               onClick={applyFilters}
-              className="h-11 rounded-full bg-orange-500 px-5 text-[14px] font-semibold text-white transition hover:bg-orange-600"
+              className="text-3d-button h-11 rounded-full bg-[#171311] px-5 text-[14px] font-semibold text-white transition hover:bg-[#0f0d0c]"
             >
               Rechercher
             </button>
           </div>
         </div>
 
-        <div className="mt-4 overflow-x-auto [scrollbar-width:none]">
+        <div className="animate-fade-up mt-4 overflow-x-auto [scrollbar-width:none]" style={{ animationDelay: "0.08s" }}>
           <div className="flex w-max gap-2 pr-2 sm:w-auto sm:flex-wrap">
             <TopChip active>Voitures</TopChip>
             {searchQuery ? <TopChip>Recherche : {searchQuery}</TopChip> : null}
@@ -617,7 +624,7 @@ export default function AnnoncesClient({
             <button
               type="button"
               onClick={() => setFiltersOpen(true)}
-              className="inline-flex items-center rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[13px] text-slate-700 whitespace-nowrap"
+              className="text-3d-soft inline-flex items-center rounded-full border border-[#e4ddd4] bg-white px-3 py-1.5 text-[13px] text-[#4b4036] whitespace-nowrap hover:bg-[#f7f5f2]"
             >
               Tri : {sortLabel}
             </button>
@@ -625,18 +632,18 @@ export default function AnnoncesClient({
         </div>
 
         <div className="mt-6">
-          <h1 className="text-[24px] font-semibold leading-tight text-slate-900 sm:text-[28px]">
+          <h1 className="text-3d-hero animate-fade-up text-[24px] font-semibold leading-tight text-black sm:text-[28px]" style={{ animationDelay: "0.12s" }}>
             {searchQuery
               ? `Résultats pour "${searchQuery}"`
               : "Annonces Voitures d'occasion"}
           </h1>
 
           <div className="mt-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-            <p className="text-[18px] font-semibold text-slate-800">
+            <p className="text-3d-title animate-fade-up text-[18px] font-semibold text-black" style={{ animationDelay: "0.16s" }}>
               {results.length.toLocaleString("fr-FR")} annonces
             </p>
 
-            <p className="text-[12px] text-slate-600 sm:text-right">
+            <p className="text-3d-soft animate-fade-up text-[12px] text-slate-600 sm:text-right" style={{ animationDelay: "0.2s" }}>
               * Un crédit vous engage et doit être remboursé.
             </p>
           </div>
@@ -644,27 +651,27 @@ export default function AnnoncesClient({
 
         <div className="mt-5 space-y-3 sm:space-y-4">
           {results.length ? (
-            paginatedResults.map((item) => (
-              <SearchListingCard key={item.id} item={item} />
+            paginatedResults.map((item, index) => (
+              <SearchListingCard key={item.id} item={item} index={index + 1} />
             ))
           ) : (
-            <div className="rounded-2xl border border-slate-200 bg-white p-8 text-[14px] text-slate-600">
+            <div className="animate-fade-up rounded-2xl border border-[#e7e2db] bg-white p-8 text-[14px] text-slate-600">
               Aucune annonce ne correspond. Essaie d’enlever des filtres.
             </div>
           )}
         </div>
 
         {results.length > 0 && totalPages > 1 && (
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="animate-fade-up mt-6 rounded-2xl border border-[#e7e2db] bg-white p-4 shadow-[0_10px_24px_rgba(0,0,0,0.04)]" style={{ animationDelay: "0.18s" }}>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-[13px] text-slate-600">
-                Page <span className="font-semibold text-slate-900">{page}</span> /{" "}
+              <p className="text-3d-soft text-[13px] text-slate-600">
+                Page <span className="text-3d-title font-semibold text-black">{page}</span> /{" "}
                 {totalPages}
               </p>
 
               <div className="flex flex-wrap gap-2">
                 <button
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="text-3d-soft rounded-xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm text-[#4b4036] disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={() => goToPage(page - 1)}
                   disabled={page <= 1}
                 >
@@ -676,8 +683,8 @@ export default function AnnoncesClient({
                     key={p}
                     className={
                       p === page
-                        ? "rounded-xl border border-slate-900 bg-slate-900 px-4 py-2 text-sm text-white"
-                        : "rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700"
+                        ? "text-3d-button rounded-xl border border-[#171311] bg-[#171311] px-4 py-2 text-sm text-white"
+                        : "text-3d-soft rounded-xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm text-[#4b4036]"
                     }
                     onClick={() => goToPage(p)}
                   >
@@ -686,7 +693,7 @@ export default function AnnoncesClient({
                 ))}
 
                 <button
-                  className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="text-3d-soft rounded-xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm text-[#4b4036] disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={() => goToPage(page + 1)}
                   disabled={page >= totalPages}
                 >
@@ -706,17 +713,17 @@ export default function AnnoncesClient({
             aria-label="Fermer"
           />
 
-          <aside className="fixed right-0 top-0 z-50 h-full w-[min(430px,100vw)] border-l border-slate-200 bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-200 p-5">
+          <aside className="fixed right-0 top-0 z-50 h-full w-[min(430px,100vw)] border-l border-[#e7e2db] bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#ece7e0] p-5">
               <div>
-                <h2 className="text-[18px] font-semibold text-slate-900">Filtres</h2>
-                <p className="mt-1 text-[13px] text-slate-500">
+                <h2 className="text-3d-title text-[18px] font-semibold text-black">Filtres</h2>
+                <p className="text-3d-soft mt-1 text-[13px] text-slate-500">
                   {activeFiltersCount} actif(s)
                 </p>
               </div>
               <button
                 onClick={() => setFiltersOpen(false)}
-                className="rounded-full border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                className="text-3d-soft rounded-full border border-[#e4ddd4] px-3 py-2 text-sm text-[#4b4036] hover:bg-[#f7f5f2]"
               >
                 ✕
               </button>
@@ -726,21 +733,21 @@ export default function AnnoncesClient({
               <div className="overflow-auto p-5">
                 <div className="grid gap-5">
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">Recherche</label>
+                    <label className="text-3d-title text-sm font-semibold text-black">Recherche</label>
                     <input
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Ex : Audi A3, Golf, Vito..."
-                      className="h-12 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">Type</label>
+                    <label className="text-3d-title text-sm font-semibold text-black">Type</label>
                     <select
                       value={type}
                       onChange={(e) => setType(e.target.value as "" | Listing["type"])}
-                      className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-sm outline-none"
+                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                     >
                       <option value="">Tous</option>
                       <option value="Utilitaire">Utilitaire</option>
@@ -750,11 +757,11 @@ export default function AnnoncesClient({
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">Marque</label>
+                    <label className="text-3d-title text-sm font-semibold text-black">Marque</label>
                     <select
                       value={brand}
                       onChange={(e) => setBrand(e.target.value)}
-                      className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-sm outline-none"
+                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                     >
                       <option value="">Toutes</option>
                       {brandOptions.map((b) => (
@@ -766,11 +773,11 @@ export default function AnnoncesClient({
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">Énergie</label>
+                    <label className="text-3d-title text-sm font-semibold text-black">Énergie</label>
                     <select
                       value={fuel}
                       onChange={(e) => setFuel(e.target.value as "" | Listing["fuel"])}
-                      className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-sm outline-none"
+                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                     >
                       <option value="">Toutes</option>
                       <option value="Diesel">Diesel</option>
@@ -780,10 +787,10 @@ export default function AnnoncesClient({
                     </select>
                   </div>
 
-                  <div className="flex items-center justify-between rounded-2xl border border-slate-300 p-4">
+                  <div className="flex items-center justify-between rounded-2xl border border-[#e4ddd4] p-4">
                     <div>
-                      <p className="text-sm font-semibold">TVA récupérable</p>
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="text-3d-title text-sm font-semibold text-black">TVA récupérable</p>
+                      <p className="text-3d-soft mt-1 text-xs text-slate-500">
                         Afficher uniquement les annonces TVA
                       </p>
                     </div>
@@ -791,12 +798,12 @@ export default function AnnoncesClient({
                       type="checkbox"
                       checked={vatOnly}
                       onChange={(e) => setVatOnly(e.target.checked)}
-                      className="h-5 w-5"
+                      className="h-5 w-5 accent-black"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">Prix (€)</label>
+                    <label className="text-3d-title text-sm font-semibold text-black">Prix (€)</label>
                     <div className="grid grid-cols-2 gap-2">
                       <input
                         inputMode="numeric"
@@ -805,7 +812,7 @@ export default function AnnoncesClient({
                           setPriceMin(e.target.value === "" ? "" : Number(e.target.value))
                         }
                         placeholder="Min"
-                        className="h-12 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                        className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                       />
                       <input
                         inputMode="numeric"
@@ -814,13 +821,13 @@ export default function AnnoncesClient({
                           setPriceMax(e.target.value === "" ? "" : Number(e.target.value))
                         }
                         placeholder="Max"
-                        className="h-12 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                        className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                       />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">Kilométrage max</label>
+                    <label className="text-3d-title text-sm font-semibold text-black">Kilométrage max</label>
                     <input
                       inputMode="numeric"
                       value={kmMax}
@@ -828,12 +835,12 @@ export default function AnnoncesClient({
                         setKmMax(e.target.value === "" ? "" : Number(e.target.value))
                       }
                       placeholder="Ex : 100000"
-                      className="h-12 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">Année</label>
+                    <label className="text-3d-title text-sm font-semibold text-black">Année</label>
                     <div className="grid grid-cols-2 gap-2">
                       <input
                         inputMode="numeric"
@@ -842,7 +849,7 @@ export default function AnnoncesClient({
                           setYearMin(e.target.value === "" ? "" : Number(e.target.value))
                         }
                         placeholder="Min"
-                        className="h-12 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                        className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                       />
                       <input
                         inputMode="numeric"
@@ -851,29 +858,29 @@ export default function AnnoncesClient({
                           setYearMax(e.target.value === "" ? "" : Number(e.target.value))
                         }
                         placeholder="Max"
-                        className="h-12 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                        className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                       />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">
+                    <label className="text-3d-title text-sm font-semibold text-black">
                       Localisation (ville ou département)
                     </label>
                     <input
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       placeholder="Ex : 76, Le Havre, Rouen"
-                      className="h-12 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-sm font-semibold">Tri</label>
+                    <label className="text-3d-title text-sm font-semibold text-black">Tri</label>
                     <select
                       value={sort}
                       onChange={(e) => setSort(e.target.value as SortKey)}
-                      className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-sm outline-none"
+                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                     >
                       <option value="relevance">Pertinence</option>
                       <option value="priceAsc">Prix croissant</option>
@@ -885,10 +892,10 @@ export default function AnnoncesClient({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 border-t border-slate-200 p-5">
+              <div className="grid grid-cols-2 gap-3 border-t border-[#ece7e0] p-5">
                 <button
                   onClick={clearFilters}
-                  className="h-12 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-700"
+                  className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white text-sm font-medium text-[#4b4036] hover:bg-[#f7f5f2]"
                 >
                   Réinitialiser
                 </button>
@@ -897,7 +904,7 @@ export default function AnnoncesClient({
                     applyFilters();
                     setFiltersOpen(false);
                   }}
-                  className="h-12 rounded-xl bg-orange-500 text-sm font-semibold text-white hover:bg-orange-600"
+                  className="text-3d-button h-12 rounded-xl bg-[#171311] text-sm font-semibold text-white hover:bg-[#0f0d0c]"
                 >
                   Voir {results.length}
                 </button>

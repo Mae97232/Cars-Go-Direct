@@ -66,13 +66,13 @@ function statusClass(status: string | null | undefined) {
     case "pending":
       return "border-amber-200 bg-amber-50 text-amber-700";
     case "draft":
-      return "border-slate-200 bg-slate-50 text-slate-700";
+      return "border-[#e4ddd4] bg-[#faf7f2] text-[#171311]";
     case "rejected":
       return "border-rose-200 bg-rose-50 text-rose-700";
     case "archived":
-      return "border-slate-200 bg-slate-100 text-slate-500";
+      return "border-[#e4ddd4] bg-slate-100 text-slate-500";
     default:
-      return "border-slate-200 bg-slate-50 text-slate-700";
+      return "border-[#e4ddd4] bg-[#faf7f2] text-[#171311]";
   }
 }
 
@@ -206,32 +206,32 @@ export default async function ProDashboardPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6">
-      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="animate-fade-up rounded-[32px] border border-[#e4ddd4] bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-4">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt={garageName}
-                className="h-14 w-14 rounded-full object-cover ring-4 ring-slate-100 sm:h-16 sm:w-16"
+                className="h-14 w-14 rounded-full object-cover ring-4 ring-[#f5f3ef] sm:h-16 sm:w-16"
               />
             ) : (
-              <div className="grid h-14 w-14 place-items-center rounded-full bg-cyan-700 text-xl font-bold text-white ring-4 ring-slate-100 sm:h-16 sm:w-16">
+              <div className="text-3d-button grid h-14 w-14 place-items-center rounded-full bg-[#171311] text-xl font-bold text-white ring-4 ring-[#f5f3ef] sm:h-16 sm:w-16">
                 {garageInitial}
               </div>
             )}
 
             <div className="min-w-0">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-slate-500">
+              <p className="text-3d-soft text-[11px] font-medium uppercase tracking-wide text-slate-500">
                 Espace professionnel
               </p>
 
-              <h1 className="mt-1 text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
+              <h1 className="text-3d-hero mt-1 text-lg font-bold tracking-tight text-black sm:text-xl">
                 {garageName}
               </h1>
 
               <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-600 sm:text-sm">
-                <span className="inline-flex items-center gap-1">
+                <span className="text-3d-soft inline-flex items-center gap-1">
                   <MapPin className="h-3.5 w-3.5" />
                   {proAccount.city || "Ville non renseignée"}
                 </span>
@@ -239,7 +239,7 @@ export default async function ProDashboardPage() {
                 <span className="text-slate-300">•</span>
 
                 <span
-                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+                  className={`text-3d-soft inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
                     proAccount.verification_status === "approved"
                       ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                       : "border-amber-200 bg-amber-50 text-amber-700"
@@ -259,29 +259,38 @@ export default async function ProDashboardPage() {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Link href="/pro/deposer" className="btn btn-primary">
+            <Link
+              href="/pro/deposer"
+              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
+            >
               Déposer une annonce
             </Link>
-            <Link href="/pro/messages" className="btn btn-secondary">
+            <Link
+              href="/pro/messages"
+              className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+            >
               Messages
             </Link>
-            <Link href="/pro/parametres" className="btn btn-secondary">
+            <Link
+              href="/pro/parametres"
+              className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+            >
               Paramètres
             </Link>
           </div>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2 text-xs sm:text-sm">
-          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-slate-700">
+          <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1.5 text-[#171311]">
             {totalListings} annonce{totalListings > 1 ? "s" : ""}
           </span>
-          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-slate-700">
+          <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1.5 text-[#171311]">
             {publishedListings} publiée{publishedListings > 1 ? "s" : ""}
           </span>
-          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-slate-700">
+          <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1.5 text-[#171311]">
             {pendingListings} en attente
           </span>
-          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-slate-700">
+          <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1.5 text-[#171311]">
             {draftListings} brouillon{draftListings > 1 ? "s" : ""}
           </span>
         </div>
@@ -290,7 +299,7 @@ export default async function ProDashboardPage() {
       <section className="mt-4 flex flex-wrap gap-3">
         <Link
           href="/pro/deposer"
-          className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-50"
+          className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] shadow-[0_6px_18px_rgba(0,0,0,0.03)] transition hover:bg-[#f7f5f2]"
         >
           <Plus className="h-4 w-4" />
           Nouvelle annonce
@@ -298,7 +307,7 @@ export default async function ProDashboardPage() {
 
         <Link
           href="/pro/messages"
-          className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-50"
+          className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] shadow-[0_6px_18px_rgba(0,0,0,0.03)] transition hover:bg-[#f7f5f2]"
         >
           <MessageSquare className="h-4 w-4" />
           Messagerie
@@ -306,7 +315,7 @@ export default async function ProDashboardPage() {
 
         <Link
           href="/pro/parametres"
-          className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-50"
+          className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] shadow-[0_6px_18px_rgba(0,0,0,0.03)] transition hover:bg-[#f7f5f2]"
         >
           <Settings className="h-4 w-4" />
           Paramètres
@@ -316,56 +325,63 @@ export default async function ProDashboardPage() {
       <section className="mt-5">
         <div className="mb-3 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-semibold tracking-tight text-slate-900">
+            <h2 className="text-3d-title text-base font-semibold tracking-tight text-black">
               Mes annonces
             </h2>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="text-3d-soft mt-1 text-sm text-slate-600">
               Gérez vos véhicules publiés et en préparation.
             </p>
           </div>
 
           <Link
             href="/annonces"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="text-3d-soft text-sm font-medium text-slate-600 hover:text-black"
           >
             Voir le site public
           </Link>
         </div>
 
         {myListings.length === 0 ? (
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-slate-100 text-slate-600">
+          <div className="animate-fade-up rounded-[32px] border border-[#e4ddd4] bg-white p-8 text-center shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#f5f3ef] text-slate-600">
               <CarFront className="h-6 w-6" />
             </div>
 
-            <h3 className="mt-4 text-lg font-semibold tracking-tight text-slate-900">
+            <h3 className="text-3d-title mt-4 text-lg font-semibold tracking-tight text-black">
               Aucune annonce pour le moment
             </h3>
 
-            <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600">
+            <p className="text-3d-soft mx-auto mt-2 max-w-xl text-sm text-slate-600">
               {profileCompleted
                 ? "Ajoutez votre premier véhicule pour commencer à recevoir des contacts."
                 : "Ajoutez votre premier véhicule et complétez votre profil pour commencer à recevoir des contacts."}
             </p>
 
             <div className="mt-5 flex flex-wrap justify-center gap-2">
-              <Link href="/pro/deposer" className="btn btn-primary">
+              <Link
+                href="/pro/deposer"
+                className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
+              >
                 Déposer ma première annonce
               </Link>
 
               {!profileCompleted ? (
-                <Link href="/pro/parametres" className="btn btn-secondary">
+                <Link
+                  href="/pro/parametres"
+                  className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                >
                   Compléter mon profil
                 </Link>
               ) : null}
             </div>
           </div>
         ) : (
-          <div className="space-y-2">
-            {myListings.map((item) => (
+          <div className="space-y-3">
+            {myListings.map((item, index) => (
               <div
                 key={String(item.id)}
-                className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
+                className="animate-fade-up overflow-hidden rounded-[32px] border border-[#e4ddd4] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:shadow-md"
+                style={{ animationDelay: `${0.04 + index * 0.03}s` }}
               >
                 <div className="flex flex-col sm:flex-row">
                   <div className="h-36 w-full shrink-0 bg-slate-100 sm:h-auto sm:w-[190px]">
@@ -399,12 +415,12 @@ export default async function ProDashboardPage() {
                           </span>
                         </div>
 
-                        <h3 className="mt-2 line-clamp-2 text-sm font-semibold text-slate-900 sm:text-base">
+                        <h3 className="text-3d-title mt-2 line-clamp-2 text-sm font-semibold text-black sm:text-base">
                           {item.title || "Annonce sans titre"}
                         </h3>
 
                         <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-slate-600 sm:text-sm">
-                          <span className="inline-flex items-center gap-1">
+                          <span className="text-3d-soft inline-flex items-center gap-1">
                             <MapPin className="h-3.5 w-3.5" />
                             {item.city || "Ville non renseignée"}
                           </span>
@@ -412,7 +428,7 @@ export default async function ProDashboardPage() {
                       </div>
 
                       <div className="shrink-0">
-                        <p className="text-base font-bold tracking-tight text-slate-900 sm:text-lg">
+                        <p className="text-3d-title text-base font-bold tracking-tight text-black sm:text-lg">
                           {formatPriceEUR(item.price)}
                         </p>
                       </div>
@@ -421,7 +437,7 @@ export default async function ProDashboardPage() {
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Link
                         href={`/annonces/${item.id}`}
-                        className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-50 sm:text-sm"
+                        className="text-3d-soft inline-flex items-center gap-2 rounded-xl border border-[#e4ddd4] bg-white px-3 py-2 text-xs font-medium text-[#171311] transition hover:bg-[#f7f5f2] sm:text-sm"
                       >
                         <Eye className="h-4 w-4" />
                         Voir
@@ -429,7 +445,7 @@ export default async function ProDashboardPage() {
 
                       <Link
                         href={`/pro/annonces/${item.id}/modifier`}
-                        className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-50 sm:text-sm"
+                        className="text-3d-soft inline-flex items-center rounded-xl border border-[#e4ddd4] bg-white px-3 py-2 text-xs font-medium text-[#171311] transition hover:bg-[#f7f5f2] sm:text-sm"
                       >
                         Modifier
                       </Link>
@@ -438,7 +454,7 @@ export default async function ProDashboardPage() {
                         <input type="hidden" name="listingId" value={String(item.id)} />
                         <button
                           type="submit"
-                          className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-50 sm:text-sm"
+                          className="text-3d-soft inline-flex items-center rounded-xl border border-[#e4ddd4] bg-white px-3 py-2 text-xs font-medium text-[#171311] transition hover:bg-[#f7f5f2] sm:text-sm"
                         >
                           Supprimer
                         </button>

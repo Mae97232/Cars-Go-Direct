@@ -121,89 +121,95 @@ export default function SecurityClient({
 
   return (
     <div className="space-y-8">
-      <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="border-b border-slate-200 pb-5">
-          <h1 className="text-[28px] font-semibold tracking-tight text-slate-950">
+      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <div className="border-b border-[#ece7e0] pb-5">
+          <h1 className="text-3d-hero text-[28px] font-semibold tracking-tight text-black">
             Connexion et sécurité
           </h1>
-          <p className="mt-2 text-sm leading-7 text-slate-600">
+          <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
             Gérez les informations de sécurité de votre compte professionnel.
           </p>
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-            <p className="text-xs uppercase tracking-wide text-slate-500">
+          <div className="animate-fade-up rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] p-4">
+            <p className="text-3d-soft text-xs uppercase tracking-wide text-slate-500">
               Adresse email
             </p>
-            <p className="mt-2 text-sm font-medium text-slate-900">{email}</p>
+            <p className="text-3d-title mt-2 text-sm font-medium text-black">{email}</p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-            <p className="text-xs uppercase tracking-wide text-slate-500">
+          <div
+            className="animate-fade-up rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] p-4"
+            style={{ animationDelay: "0.05s" }}
+          >
+            <p className="text-3d-soft text-xs uppercase tracking-wide text-slate-500">
               Méthode de connexion
             </p>
-            <p className="mt-2 text-sm font-medium text-slate-900">{provider}</p>
+            <p className="text-3d-title mt-2 text-sm font-medium text-black">{provider}</p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-            <p className="text-xs uppercase tracking-wide text-slate-500">
+          <div
+            className="animate-fade-up rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] p-4"
+            style={{ animationDelay: "0.1s" }}
+          >
+            <p className="text-3d-soft text-xs uppercase tracking-wide text-slate-500">
               Dernière connexion
             </p>
-            <p className="mt-2 text-sm font-medium text-slate-900">
+            <p className="text-3d-title mt-2 text-sm font-medium text-black">
               {lastLoginFormatted}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="border-b border-slate-200 pb-5">
-          <h2 className="text-xl font-semibold tracking-tight text-slate-950">
+      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <div className="border-b border-[#ece7e0] pb-5">
+          <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
             Modifier le mot de passe
           </h2>
-          <p className="mt-2 text-sm leading-7 text-slate-600">
+          <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
             Utilisez un mot de passe fort pour sécuriser votre espace professionnel.
           </p>
         </div>
 
         <form onSubmit={handleChangePassword} className="mt-6 space-y-5">
           <div className="grid gap-5 md:grid-cols-2">
-            <div className="md:col-span-2">
-              <label className="mb-2 block text-sm font-medium text-slate-800">
+            <div className="animate-fade-up md:col-span-2" style={{ animationDelay: "0.04s" }}>
+              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-800">
                 Mot de passe actuel
               </label>
               <input
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 placeholder="Entrez votre mot de passe actuel"
               />
             </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-800">
+            <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
+              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-800">
                 Nouveau mot de passe
               </label>
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 placeholder="Nouveau mot de passe"
               />
             </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-800">
+            <div className="animate-fade-up" style={{ animationDelay: "0.12s" }}>
+              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-800">
                 Confirmer le nouveau mot de passe
               </label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 placeholder="Confirmez le mot de passe"
               />
             </div>
@@ -225,7 +231,7 @@ export default function SecurityClient({
             <button
               type="submit"
               disabled={isLoading}
-              className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loadingUpdate ? "Mise à jour..." : "Mettre à jour le mot de passe"}
             </button>
@@ -234,7 +240,7 @@ export default function SecurityClient({
               type="button"
               onClick={handleSendResetEmail}
               disabled={isLoading}
-              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+              className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loadingReset ? "Envoi..." : "Envoyer un email de réinitialisation"}
             </button>

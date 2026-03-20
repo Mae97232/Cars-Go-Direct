@@ -40,16 +40,20 @@ function LineLink({
   return (
     <Link
       href={href}
-      className="flex items-center justify-between gap-4 border-b border-slate-100 py-5 transition hover:bg-slate-50/70"
+      className="animate-fade-up flex items-center justify-between gap-4 border-b border-[#f1ece6] py-5 transition hover:bg-[#faf7f2]/70"
     >
       <div className="flex min-w-0 items-start gap-4">
-        <div className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-slate-100 text-slate-700">
+        <div className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#f5f3ef] text-[#171311]">
           {icon}
         </div>
 
         <div className="min-w-0">
-          <h3 className="text-[15px] font-semibold text-slate-900">{title}</h3>
-          <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p>
+          <h3 className="text-3d-title text-[15px] font-semibold text-black">
+            {title}
+          </h3>
+          <p className="text-3d-soft mt-1 text-sm leading-6 text-slate-600">
+            {description}
+          </p>
         </div>
       </div>
 
@@ -106,7 +110,7 @@ export default async function ComptePage() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <section className="border-b border-slate-200 pb-8">
+      <section className="animate-fade-up border-b border-[#ece7e0] pb-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex items-start gap-4 sm:gap-5">
             <div className="relative">
@@ -115,37 +119,37 @@ export default async function ComptePage() {
                   key={avatarUrl}
                   src={avatarUrl}
                   alt={displayName}
-                  className="h-20 w-20 rounded-full object-cover ring-1 ring-slate-200 sm:h-24 sm:w-24"
+                  className="h-20 w-20 rounded-full object-cover ring-1 ring-[#e4ddd4] sm:h-24 sm:w-24"
                 />
               ) : (
-                <div className="grid h-20 w-20 place-items-center rounded-full bg-slate-950 text-3xl font-bold text-white sm:h-24 sm:w-24">
+                <div className="text-3d-button grid h-20 w-20 place-items-center rounded-full bg-[#171311] text-3xl font-bold text-white sm:h-24 sm:w-24">
                   {initial}
                 </div>
               )}
 
-              <div className="absolute -bottom-1 -right-1 grid h-9 w-9 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm">
+              <div className="absolute -bottom-1 -right-1 grid h-9 w-9 place-items-center rounded-full border border-[#e4ddd4] bg-white text-[#171311] shadow-sm">
                 <Camera className="h-4 w-4" />
               </div>
             </div>
 
             <div className="min-w-0">
-              <p className="text-sm text-slate-500">Compte particulier</p>
+              <p className="text-3d-soft text-sm text-slate-500">Compte particulier</p>
 
-              <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              <h1 className="text-3d-hero mt-1 text-3xl font-bold tracking-tight text-black sm:text-4xl">
                 {displayName}
               </h1>
 
               <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
-                <p>{email}</p>
-                <p>{phone}</p>
-                <p>{city}</p>
+                <p className="text-3d-soft">{email}</p>
+                <p className="text-3d-soft">{phone}</p>
+                <p className="text-3d-soft">{city}</p>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                <span className="text-3d-soft inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                   Compte actif
                 </span>
-                <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
+                <span className="text-3d-soft inline-flex items-center rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-xs font-semibold text-[#171311]">
                   Espace personnel
                 </span>
               </div>
@@ -155,14 +159,14 @@ export default async function ComptePage() {
           <div className="flex flex-wrap gap-2">
             <Link
               href="/compte/parametres"
-              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
             >
               Modifier mon profil
             </Link>
 
             <Link
               href="/deconnexion"
-              className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-4 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
             >
               Me déconnecter
             </Link>
@@ -172,46 +176,46 @@ export default async function ComptePage() {
 
       <section className="grid gap-10 py-8 lg:grid-cols-[240px_minmax(0,1fr)]">
         <aside className="h-fit">
-          <div className="rounded-[28px] border border-slate-200 bg-white p-3">
+          <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-3 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
             <nav className="grid">
               <Link
                 href="/compte"
-                className="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white"
+                className="text-3d-button rounded-2xl bg-[#171311] px-4 py-3 text-sm font-semibold text-white"
               >
                 Vue d’ensemble
               </Link>
 
               <Link
                 href="/compte/parametres"
-                className="rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft rounded-2xl px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Paramètres
               </Link>
 
               <Link
                 href="/compte/securite"
-                className="rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft rounded-2xl px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Sécurité
               </Link>
 
               <Link
                 href="/compte/favoris"
-                className="rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft rounded-2xl px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Favoris
               </Link>
 
               <Link
                 href="/messages"
-                className="rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft rounded-2xl px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Messages
               </Link>
 
               <Link
                 href="/compte/facture"
-                className="rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft rounded-2xl px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Facture
               </Link>
@@ -220,45 +224,53 @@ export default async function ComptePage() {
         </aside>
 
         <div className="min-w-0 space-y-10">
-          <section>
-            <div className="border-b border-slate-200 pb-4">
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+          <section className="animate-fade-up" style={{ animationDelay: "0.06s" }}>
+            <div className="border-b border-[#ece7e0] pb-4">
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Informations du compte
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="text-3d-soft mt-1 text-sm text-slate-600">
                 Retrouvez vos informations principales directement depuis votre espace.
               </p>
             </div>
 
             <div className="grid gap-x-10 gap-y-5 py-6 sm:grid-cols-2">
               <div>
-                <p className="text-sm text-slate-500">Nom</p>
-                <p className="mt-1 text-[15px] font-medium text-slate-900">{displayName}</p>
+                <p className="text-3d-soft text-sm text-slate-500">Nom</p>
+                <p className="text-3d-title mt-1 text-[15px] font-medium text-black">
+                  {displayName}
+                </p>
               </div>
 
               <div>
-                <p className="text-sm text-slate-500">Adresse email</p>
-                <p className="mt-1 text-[15px] font-medium text-slate-900">{email}</p>
+                <p className="text-3d-soft text-sm text-slate-500">Adresse email</p>
+                <p className="text-3d-title mt-1 text-[15px] font-medium text-black">
+                  {email}
+                </p>
               </div>
 
               <div>
-                <p className="text-sm text-slate-500">Téléphone</p>
-                <p className="mt-1 text-[15px] font-medium text-slate-900">{phone}</p>
+                <p className="text-3d-soft text-sm text-slate-500">Téléphone</p>
+                <p className="text-3d-title mt-1 text-[15px] font-medium text-black">
+                  {phone}
+                </p>
               </div>
 
               <div>
-                <p className="text-sm text-slate-500">Ville</p>
-                <p className="mt-1 text-[15px] font-medium text-slate-900">{city}</p>
+                <p className="text-3d-soft text-sm text-slate-500">Ville</p>
+                <p className="text-3d-title mt-1 text-[15px] font-medium text-black">
+                  {city}
+                </p>
               </div>
             </div>
           </section>
 
-          <section>
-            <div className="border-b border-slate-200 pb-4">
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+          <section className="animate-fade-up" style={{ animationDelay: "0.1s" }}>
+            <div className="border-b border-[#ece7e0] pb-4">
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Gérer mon compte
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="text-3d-soft mt-1 text-sm text-slate-600">
                 Accédez rapidement aux sections utiles de votre espace personnel.
               </p>
             </div>
@@ -301,12 +313,12 @@ export default async function ComptePage() {
             </div>
           </section>
 
-          <section>
-            <div className="border-b border-slate-200 pb-4">
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+          <section className="animate-fade-up" style={{ animationDelay: "0.14s" }}>
+            <div className="border-b border-[#ece7e0] pb-4">
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Actions rapides
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="text-3d-soft mt-1 text-sm text-slate-600">
                 Les raccourcis essentiels de votre espace.
               </p>
             </div>
@@ -314,33 +326,33 @@ export default async function ComptePage() {
             <div className="flex flex-wrap gap-3 py-6">
               <Link
                 href="/annonces"
-                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Voir les annonces
               </Link>
 
               <Link
                 href="/compte/favoris"
-                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Voir mes favoris
               </Link>
 
               <Link
                 href="/messages"
-                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Ouvrir mes messages
               </Link>
             </div>
           </section>
 
-          <section>
-            <div className="border-b border-slate-200 pb-4">
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+          <section className="animate-fade-up" style={{ animationDelay: "0.18s" }}>
+            <div className="border-b border-[#ece7e0] pb-4">
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Aide et assistance
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="text-3d-soft mt-1 text-sm text-slate-600">
                 Besoin d’aide sur votre compte ou sur la plateforme.
               </p>
             </div>

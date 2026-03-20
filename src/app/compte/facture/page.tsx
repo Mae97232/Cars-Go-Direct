@@ -11,9 +11,11 @@ function SummaryItem({
   value: string;
 }) {
   return (
-    <div>
-      <p className="text-sm text-slate-500">{label}</p>
-      <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">{value}</p>
+    <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+      <p className="text-3d-soft text-sm text-slate-500">{label}</p>
+      <p className="text-3d-title mt-2 text-2xl font-semibold tracking-tight text-black">
+        {value}
+      </p>
     </div>
   );
 }
@@ -32,26 +34,32 @@ function InvoiceRow({
   date: string;
 }) {
   return (
-    <div className="flex flex-col gap-4 border-b border-slate-200 py-6 lg:flex-row lg:items-center lg:justify-between">
+    <div className="animate-fade-up flex flex-col gap-4 border-b border-[#ece7e0] py-6 lg:flex-row lg:items-center lg:justify-between">
       <div className="min-w-0">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{id}</p>
-        <h3 className="mt-2 text-[15px] font-semibold text-slate-900">{label}</h3>
-        <p className="mt-2 text-sm text-slate-600">Date : {date}</p>
+        <p className="text-3d-soft text-xs font-semibold uppercase tracking-wide text-slate-500">
+          {id}
+        </p>
+        <h3 className="text-3d-title mt-2 text-[15px] font-semibold text-black">
+          {label}
+        </h3>
+        <p className="text-3d-soft mt-2 text-sm text-slate-600">Date : {date}</p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="text-left sm:text-right">
-          <p className="text-xs text-slate-500">Montant</p>
-          <p className="mt-1 text-lg font-semibold text-slate-900">{amount}</p>
+          <p className="text-3d-soft text-xs text-slate-500">Montant</p>
+          <p className="text-3d-title mt-1 text-lg font-semibold text-black">
+            {amount}
+          </p>
         </div>
 
-        <span className="inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700">
+        <span className="text-3d-soft inline-flex rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-2 text-xs font-semibold text-[#171311]">
           {status}
         </span>
 
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+          className="text-3d-soft inline-flex items-center justify-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
         >
           <Download className="h-4 w-4" />
           Télécharger
@@ -73,15 +81,19 @@ function SimpleLine({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-4 border-b border-slate-200 py-6 sm:flex-row sm:items-center sm:justify-between">
+    <div className="animate-fade-up flex flex-col gap-4 border-b border-[#ece7e0] py-6 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex min-w-0 items-start gap-4">
-        <div className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-slate-100 text-slate-700">
+        <div className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#f5f3ef] text-[#171311]">
           {icon}
         </div>
 
         <div className="min-w-0">
-          <h3 className="text-[15px] font-semibold text-slate-900">{title}</h3>
-          <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p>
+          <h3 className="text-3d-title text-[15px] font-semibold text-black">
+            {title}
+          </h3>
+          <p className="text-3d-soft mt-1 text-sm leading-6 text-slate-600">
+            {description}
+          </p>
         </div>
       </div>
 
@@ -123,29 +135,30 @@ export default async function CompteFacturesPage() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-        <Link href="/compte" className="font-medium text-slate-700 hover:underline">
+      <div className="animate-fade-up flex flex-wrap items-center gap-2 text-sm text-slate-500">
+        <Link href="/compte" className="text-3d-soft font-medium text-[#171311] hover:underline">
           Mon compte
         </Link>
         <span>›</span>
-        <span>Factures</span>
+        <span className="text-3d-soft">Factures</span>
       </div>
 
-      <section className="mt-5 border-b border-slate-200 pb-6">
+      <section className="mt-5 border-b border-[#ece7e0] pb-6">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-sm text-slate-500">Compte particulier</p>
-            <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+          <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
+            <p className="text-3d-soft text-sm text-slate-500">Compte particulier</p>
+            <h1 className="text-3d-hero mt-1 text-3xl font-bold tracking-tight text-black">
               Factures
             </h1>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="text-3d-soft mt-2 text-sm text-slate-600">
               Retrouvez ici vos documents de facturation, paiements et informations de compte.
             </p>
           </div>
 
           <Link
             href="/compte"
-            className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            className="text-3d-soft animate-fade-up inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+            style={{ animationDelay: "0.12s" }}
           >
             Retour au compte
           </Link>
@@ -153,7 +166,7 @@ export default async function CompteFacturesPage() {
       </section>
 
       <section className="py-8">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           <SummaryItem label="Factures disponibles" value="0" />
           <SummaryItem label="Montant payé" value="0,00 €" />
           <SummaryItem label="Email de facturation" value={email} />
@@ -161,20 +174,21 @@ export default async function CompteFacturesPage() {
       </section>
 
       <section className="py-2">
-        <div className="border-b border-slate-200 pb-4">
+        <div className="border-b border-[#ece7e0] pb-4">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+            <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
+              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
                 Historique
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="text-3d-soft mt-1 text-sm text-slate-600">
                 Les prochaines factures et paiements apparaîtront ici.
               </p>
             </div>
 
             <button
               type="button"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              className="text-3d-soft animate-fade-up inline-flex items-center justify-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+              style={{ animationDelay: "0.12s" }}
             >
               <Download className="h-4 w-4" />
               Télécharger toutes les factures
@@ -197,21 +211,21 @@ export default async function CompteFacturesPage() {
       </section>
 
       <section className="py-2">
-        <div className="border-b border-slate-200 pb-4">
-          <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+        <div className="border-b border-[#ece7e0] pb-4">
+          <h2 className="text-3d-title animate-fade-up text-xl font-semibold tracking-tight text-black">
             Abonnements
           </h2>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="text-3d-soft animate-fade-up mt-1 text-sm text-slate-600" style={{ animationDelay: "0.06s" }}>
             Cette section affichera vos futurs abonnements, renouvellements et options payantes.
           </p>
         </div>
 
         <div className="py-6">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-            <p className="text-sm font-semibold text-slate-900">
+          <div className="animate-fade-up rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] px-4 py-4">
+            <p className="text-3d-title text-sm font-semibold text-black">
               Aucun abonnement actif pour le moment
             </p>
-            <p className="mt-2 text-sm leading-6 text-slate-600">
+            <p className="text-3d-soft mt-2 text-sm leading-6 text-slate-600">
               Quand la facturation sera branchée, votre abonnement apparaîtra ici avec les
               prochaines échéances.
             </p>
@@ -220,11 +234,11 @@ export default async function CompteFacturesPage() {
       </section>
 
       <section className="py-2">
-        <div className="border-b border-slate-200 pb-4">
-          <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+        <div className="border-b border-[#ece7e0] pb-4">
+          <h2 className="text-3d-title animate-fade-up text-xl font-semibold tracking-tight text-black">
             Informations de facturation
           </h2>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="text-3d-soft animate-fade-up mt-1 text-sm text-slate-600" style={{ animationDelay: "0.06s" }}>
             Adresse de facturation, compte utilisé et informations associées.
           </p>
         </div>
@@ -237,7 +251,7 @@ export default async function CompteFacturesPage() {
             action={
               <Link
                 href="/compte/parametres"
-                className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
               >
                 Modifier
                 <ChevronRight className="h-4 w-4" />

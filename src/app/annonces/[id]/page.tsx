@@ -62,6 +62,15 @@ const EQUIPMENT_CATEGORIES = [
   },
 ] as const;
 
+const primaryButtonClass =
+  "text-3d-button inline-flex min-h-[48px] items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.18)] transition hover:bg-[#0f0d0c]";
+
+const secondaryButtonClass =
+  "text-3d-soft inline-flex min-h-[48px] items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]";
+
+const softPillClass =
+  "text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#171311]";
+
 function formatPriceEUR(value: number | null | undefined) {
   if (typeof value !== "number" || Number.isNaN(value)) {
     return "Prix non renseigné";
@@ -152,16 +161,12 @@ function groupEquipmentByCategory(
 }
 
 function ProPill({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-sky-300 bg-white px-3 py-1 text-[12px] font-medium text-sky-700">
-      {children}
-    </span>
-  );
+  return <span className={softPillClass}>{children}</span>;
 }
 
 function SoftTag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-[12px] font-medium text-slate-700">
+    <span className="text-3d-soft inline-flex items-center rounded-full bg-[#f5f3ef] px-3 py-1.5 text-[12px] font-medium text-[#171311]">
       {children}
     </span>
   );
@@ -171,19 +176,26 @@ function DetailSection({
   title,
   subtitle,
   children,
+  delay = 0,
 }: {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  delay?: number;
 }) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 lg:p-6">
+    <section
+      className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-5 lg:p-6"
+      style={{ animationDelay: `${delay}s` }}
+    >
       <div>
-        <h2 className="text-[18px] font-semibold text-slate-900 sm:text-[20px]">
+        <h2 className="text-3d-title text-[18px] font-semibold tracking-tight text-black sm:text-[20px]">
           {title}
         </h2>
         {subtitle ? (
-          <p className="mt-1 text-[14px] text-slate-500">{subtitle}</p>
+          <p className="text-3d-soft mt-1 text-[14px] text-slate-500">
+            {subtitle}
+          </p>
         ) : null}
       </div>
       <div className="mt-5">{children}</div>
@@ -199,9 +211,9 @@ function InfoCard({
   value: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4">
-      <p className="text-[13px] text-slate-500">{label}</p>
-      <p className="mt-1 text-[15px] font-semibold text-slate-900 sm:text-[16px]">
+    <div className="rounded-3xl border border-[#ece7e0] bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.03)]">
+      <p className="text-3d-soft text-[13px] text-slate-500">{label}</p>
+      <p className="text-3d-title mt-1 text-[15px] font-semibold text-black sm:text-[16px]">
         {value}
       </p>
     </div>
@@ -216,9 +228,9 @@ function InfoRow({
   value: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start justify-between gap-5 border-b border-slate-100 py-3 last:border-b-0">
-      <span className="text-[14px] text-slate-500">{label}</span>
-      <span className="text-right text-[14px] font-medium text-slate-900 sm:text-[15px]">
+    <div className="flex items-start justify-between gap-5 border-b border-[#f1ece6] py-3 last:border-b-0">
+      <span className="text-3d-soft text-[14px] text-slate-500">{label}</span>
+      <span className="text-right text-[14px] font-medium text-black sm:text-[15px]">
         {value}
       </span>
     </div>
@@ -235,7 +247,7 @@ function RelatedCard({ item }: { item: RelatedListing }) {
   return (
     <Link
       href={`/annonces/${item.id}`}
-      className="group block overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:border-slate-300 hover:shadow-sm"
+      className="animate-fade-up group block overflow-hidden rounded-3xl border border-[#e7e2db] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-[#d4ccc2] hover:shadow-[0_18px_40px_rgba(0,0,0,0.06)]"
     >
       <div className="overflow-hidden bg-slate-100">
         {photo ? (
@@ -245,30 +257,32 @@ function RelatedCard({ item }: { item: RelatedListing }) {
             className="aspect-[4/3] h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
           />
         ) : (
-          <div className="grid aspect-[4/3] place-items-center text-sm text-slate-500">
+          <div className="text-3d-soft grid aspect-[4/3] place-items-center text-sm text-slate-500">
             Photo indisponible
           </div>
         )}
       </div>
 
       <div className="p-4">
-        <div className="text-[18px] font-bold text-slate-900">
+        <div className="text-3d-title text-[20px] font-semibold tracking-tight text-black">
           {formatPriceEUR(item.price)}
         </div>
 
-        <h3 className="mt-1 line-clamp-2 text-[14px] font-medium leading-5 text-slate-900">
+        <h3 className="text-3d-title mt-1 line-clamp-2 text-[14px] font-semibold leading-5 text-black">
           {item.title}
         </h3>
 
-        <p className="mt-2 text-[13px] text-slate-600">
+        <p className="text-3d-soft mt-2 text-[13px] text-slate-600">
           {item.year || "—"} • {formatNumber(item.mileage, " km")}
         </p>
 
-        <p className="mt-1 text-[13px] text-slate-500">
+        <p className="text-3d-soft mt-1 text-[13px] text-slate-500">
           {item.fuel || "—"} • {item.type || "—"}
         </p>
 
-        <p className="mt-2 text-[13px] text-slate-500">{locationText}</p>
+        <p className="text-3d-soft mt-2 text-[13px] text-slate-500">
+          {locationText}
+        </p>
       </div>
     </Link>
   );
@@ -284,28 +298,22 @@ export default async function AnnonceDetailPage({
 
   if (!item || item.status !== "published") {
     return (
-      <div className="min-h-screen bg-[#f8f8f8]">
+      <div className="min-h-screen bg-[#f8f6f3]">
         <div className="container-app py-6">
-          <div className="rounded-2xl border border-slate-200 bg-white p-8">
-            <h1 className="text-2xl font-semibold text-slate-900">
+          <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-8 shadow-[0_14px_40px_rgba(0,0,0,0.05)]">
+            <h1 className="text-3d-title text-2xl font-semibold tracking-tight text-black">
               Annonce introuvable
             </h1>
-            <p className="mt-2 text-[15px] text-slate-600">
+            <p className="text-3d-soft mt-2 text-[15px] text-slate-600">
               L’annonce n’existe pas, n’est plus disponible ou n’est pas publiée.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/annonces"
-                className="inline-flex items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
-              >
+              <Link href="/annonces" className={primaryButtonClass}>
                 Retour aux annonces
               </Link>
 
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-50"
-              >
+              <Link href="/" className={secondaryButtonClass}>
                 Accueil
               </Link>
             </div>
@@ -375,7 +383,9 @@ export default async function AnnonceDetailPage({
   if (garageId) {
     const { data: fullProAccount } = await supabase
       .from("pro_accounts")
-      .select("id, garage_name, siret, phone, city, verification_status, profile_id")
+      .select(
+        "id, garage_name, siret, phone, city, verification_status, profile_id"
+      )
       .eq("id", garageId)
       .maybeSingle();
 
@@ -552,32 +562,28 @@ export default async function AnnonceDetailPage({
   const similarListings = (similarListingsData ?? []) as RelatedListing[];
 
   return (
-    <div className="min-h-screen bg-[#f8f8f8]">
+    <div className="min-h-screen bg-[#f8f6f3]">
       <div className="container-app py-4 sm:py-5 lg:py-6">
-        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="animate-fade-up mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link
             href="/annonces"
-            className="inline-flex items-center gap-2 text-[14px] font-medium text-slate-700 transition hover:text-slate-950"
+            className="text-3d-soft inline-flex items-center gap-2 text-[14px] font-medium text-[#171311] transition hover:text-black"
           >
             <span>←</span>
             <span>Retour aux annonces</span>
           </Link>
 
           <div className="flex flex-wrap items-center gap-2 text-[13px] text-slate-500">
-            <span className="rounded-full border border-slate-300 bg-white px-3 py-1.5">
-              Réf : {String(item.id)}
-            </span>
-            <span className="rounded-full border border-slate-300 bg-white px-3 py-1.5">
-              {formatStatus(item.status)}
-            </span>
+            <span className={softPillClass}>Réf : {String(item.id)}</span>
+            <span className={softPillClass}>{formatStatus(item.status)}</span>
           </div>
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
           <main className="min-w-0 space-y-5 sm:space-y-6">
-            <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-3">
+            <section className="animate-fade-up overflow-hidden rounded-[28px] border border-[#e4ddd4] bg-white p-3 shadow-[0_14px_40px_rgba(0,0,0,0.05)]">
               <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_320px]">
-                <div className="relative overflow-hidden rounded-2xl bg-slate-100">
+                <div className="relative overflow-hidden rounded-[24px] bg-slate-100">
                   {mainPhoto ? (
                     <img
                       src={mainPhoto}
@@ -585,13 +591,13 @@ export default async function AnnonceDetailPage({
                       className="aspect-[16/10] h-full w-full object-cover sm:aspect-[16/9]"
                     />
                   ) : (
-                    <div className="grid aspect-[16/10] place-items-center text-sm text-slate-500 sm:aspect-[16/9]">
+                    <div className="text-3d-soft grid aspect-[16/10] place-items-center text-sm text-slate-500 sm:aspect-[16/9]">
                       Photo principale indisponible
                     </div>
                   )}
 
                   <div className="absolute left-3 top-3 flex flex-wrap gap-2 sm:left-4 sm:top-4">
-                    <span className="rounded-full bg-fuchsia-600 px-3 py-1 text-[12px] font-semibold text-white">
+                    <span className="text-3d-button rounded-full bg-[#171311] px-3 py-1 text-[12px] font-semibold text-white shadow-[0_8px_20px_rgba(0,0,0,0.14)]">
                       À la une
                     </span>
                     <span className="rounded-full bg-white px-3 py-1 text-[12px] font-medium text-slate-900">
@@ -626,7 +632,7 @@ export default async function AnnonceDetailPage({
                     sidePhotos.map((photo, index) => (
                       <div
                         key={`${photo}-${index}`}
-                        className="overflow-hidden rounded-2xl bg-slate-100"
+                        className="overflow-hidden rounded-[24px] bg-slate-100"
                       >
                         <img
                           src={photo}
@@ -637,16 +643,16 @@ export default async function AnnonceDetailPage({
                     ))
                   ) : (
                     <>
-                      <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-slate-100 text-sm text-slate-500">
+                      <div className="text-3d-soft grid aspect-[4/3] place-items-center rounded-[24px] bg-slate-100 text-sm text-slate-500">
                         Photo
                       </div>
-                      <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-slate-100 text-sm text-slate-500">
+                      <div className="text-3d-soft grid aspect-[4/3] place-items-center rounded-[24px] bg-slate-100 text-sm text-slate-500">
                         Photo
                       </div>
-                      <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-slate-100 text-sm text-slate-500">
+                      <div className="text-3d-soft grid aspect-[4/3] place-items-center rounded-[24px] bg-slate-100 text-sm text-slate-500">
                         Photo
                       </div>
-                      <div className="grid aspect-[4/3] place-items-center rounded-2xl bg-slate-100 text-sm text-slate-500">
+                      <div className="text-3d-soft grid aspect-[4/3] place-items-center rounded-[24px] bg-slate-100 text-sm text-slate-500">
                         Photo
                       </div>
                     </>
@@ -655,7 +661,10 @@ export default async function AnnonceDetailPage({
               </div>
             </section>
 
-            <section className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 lg:p-6">
+            <section
+              className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-4 shadow-[0_14px_40px_rgba(0,0,0,0.05)] sm:p-5 lg:p-6"
+              style={{ animationDelay: "0.08s" }}
+            >
               <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -664,11 +673,11 @@ export default async function AnnonceDetailPage({
                     {item.vat_recoverable ? <SoftTag>TVA récupérable</SoftTag> : null}
                   </div>
 
-                  <h1 className="mt-3 max-w-4xl text-[24px] font-bold leading-8 tracking-[-0.02em] text-slate-900 sm:text-[30px] sm:leading-10 lg:text-[34px] lg:leading-[42px]">
+                  <h1 className="text-3d-hero mt-3 max-w-4xl text-[24px] font-semibold leading-[1.08] tracking-[-0.03em] text-black sm:text-[30px] lg:text-[36px]">
                     {item.title || "Annonce véhicule"}
                   </h1>
 
-                  <p className="mt-3 text-[14px] leading-7 text-slate-600 sm:text-[15px]">
+                  <p className="text-3d-soft mt-3 text-[14px] leading-7 text-slate-600 sm:text-[15px]">
                     {locationText} • {item.year || "—"} • {formatNumber(item.mileage, " km")}
                     {item.fuel ? ` • ${item.fuel}` : ""}
                     {item.transmission ? ` • ${item.transmission}` : ""}
@@ -685,10 +694,10 @@ export default async function AnnonceDetailPage({
                 </div>
 
                 <div className="shrink-0 lg:min-w-[220px]">
-                  <div className="text-[28px] font-bold leading-none text-emerald-700 sm:text-[32px]">
+                  <div className="text-3d-title text-[30px] font-semibold leading-none tracking-tight text-black sm:text-[34px]">
                     {formatPriceEUR(item.price)}
                   </div>
-                  <p className="mt-2 text-[14px] text-slate-500">
+                  <p className="text-3d-soft mt-2 text-[14px] text-slate-500">
                     Vendu par {garageName}
                   </p>
 
@@ -703,7 +712,7 @@ export default async function AnnonceDetailPage({
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-3 grid-cols-2 xl:grid-cols-4">
+              <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
                 <InfoCard label="Année" value={item.year || "—"} />
                 <InfoCard label="Kilométrage" value={formatNumber(item.mileage, " km")} />
                 <InfoCard label="Énergie" value={item.fuel || "—"} />
@@ -714,6 +723,7 @@ export default async function AnnonceDetailPage({
             <DetailSection
               title="Informations clés"
               subtitle="Les principales caractéristiques du véhicule"
+              delay={0.12}
             >
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 {keyInfos.map((info) => (
@@ -726,11 +736,15 @@ export default async function AnnonceDetailPage({
               <DetailSection
                 title="Équipements"
                 subtitle="Les équipements renseignés dans l’annonce"
+                delay={0.16}
               >
                 <div className="grid gap-4 sm:gap-5">
                   {groupedEquipment.map((group) => (
-                    <div key={group.category} className="rounded-2xl border border-slate-200 p-4">
-                      <h3 className="text-[15px] font-semibold text-slate-900">
+                    <div
+                      key={group.category}
+                      className="rounded-3xl border border-[#ece7e0] bg-[#fbf9f6] p-4"
+                    >
+                      <h3 className="text-3d-title text-[15px] font-semibold text-black">
                         {group.category}
                       </h3>
 
@@ -738,7 +752,7 @@ export default async function AnnonceDetailPage({
                         {group.items.map((entry) => (
                           <div
                             key={`${group.category}-${entry}`}
-                            className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[14px] text-slate-700"
+                            className="text-3d-soft rounded-2xl border border-[#ece7e0] bg-white px-4 py-3 text-[14px] text-slate-700"
                           >
                             {entry}
                           </div>
@@ -753,6 +767,7 @@ export default async function AnnonceDetailPage({
             <DetailSection
               title="Historique et entretien"
               subtitle="Informations utiles pour l’achat"
+              delay={0.2}
             >
               <div className="grid gap-x-16 md:grid-cols-2">
                 {extraInfos.map((info) => (
@@ -764,9 +779,10 @@ export default async function AnnonceDetailPage({
             <DetailSection
               title="Description"
               subtitle="Détails complémentaires sur le véhicule"
+              delay={0.24}
             >
               <div className="max-w-5xl">
-                <p className="whitespace-pre-wrap text-[14px] leading-7 text-slate-700 sm:text-[15px] sm:leading-8">
+                <p className="text-3d-soft whitespace-pre-wrap text-[14px] leading-7 text-slate-700 sm:text-[15px] sm:leading-8">
                   {item.description && item.description.trim() !== ""
                     ? item.description
                     : "Aucune description fournie pour le moment."}
@@ -777,6 +793,7 @@ export default async function AnnonceDetailPage({
             <DetailSection
               title="Le vendeur"
               subtitle="Informations sur le professionnel"
+              delay={0.28}
             >
               <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div className="flex items-start gap-4">
@@ -787,17 +804,19 @@ export default async function AnnonceDetailPage({
                       className="h-14 w-14 shrink-0 rounded-full object-cover ring-1 ring-slate-200"
                     />
                   ) : (
-                    <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-slate-950 text-sm font-semibold text-white">
+                    <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#171311] text-sm font-semibold text-white">
                       {garageInitials}
                     </div>
                   )}
 
                   <div>
-                    <p className="text-[18px] font-semibold text-slate-900">
+                    <p className="text-3d-title text-[18px] font-semibold text-black">
                       {garageName}
                     </p>
-                    <p className="mt-1 text-[14px] text-slate-600">{garageLocationText}</p>
-                    <p className="mt-1 text-[14px] text-slate-500">
+                    <p className="text-3d-soft mt-1 text-[14px] text-slate-600">
+                      {garageLocationText}
+                    </p>
+                    <p className="text-3d-soft mt-1 text-[14px] text-slate-500">
                       SIRET : {garageSiret || "Non renseigné"}
                     </p>
 
@@ -815,7 +834,7 @@ export default async function AnnonceDetailPage({
                 <div className="w-full lg:w-auto">
                   <Link
                     href={`/garage/${String(garageId)}`}
-                    className="inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-[14px] font-medium text-slate-900 transition hover:bg-slate-50 lg:w-auto"
+                    className={`${secondaryButtonClass} w-full lg:w-auto`}
                   >
                     Voir le garage
                   </Link>
@@ -827,6 +846,7 @@ export default async function AnnonceDetailPage({
               <DetailSection
                 title="Autres annonces du garage"
                 subtitle={`D’autres véhicules proposés par ${garageName}`}
+                delay={0.32}
               >
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                   {garageListings.map((listing) => (
@@ -840,6 +860,7 @@ export default async function AnnonceDetailPage({
               <DetailSection
                 title="Annonces similaires"
                 subtitle="Des véhicules proches de cette annonce"
+                delay={0.36}
               >
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                   {similarListings.map((listing) => (
@@ -852,8 +873,8 @@ export default async function AnnonceDetailPage({
 
           <aside className="min-w-0">
             <div className="space-y-5 xl:sticky xl:top-24">
-              <div className="rounded-2xl border border-slate-200 bg-white">
-                <div className="border-b border-slate-200 px-4 py-5 sm:px-5">
+              <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white shadow-[0_14px_40px_rgba(0,0,0,0.05)]">
+                <div className="border-b border-[#ece7e0] px-4 py-5 sm:px-5">
                   <div className="flex items-start gap-3">
                     {garageAvatarUrl ? (
                       <img
@@ -862,16 +883,16 @@ export default async function AnnonceDetailPage({
                         className="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-slate-200"
                       />
                     ) : (
-                      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-slate-950 text-sm font-semibold text-white">
+                      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#171311] text-sm font-semibold text-white">
                         {garageInitials}
                       </div>
                     )}
 
                     <div className="min-w-0">
-                      <p className="truncate text-[16px] font-semibold text-slate-900">
+                      <p className="text-3d-title truncate text-[16px] font-semibold text-black">
                         {garageName}
                       </p>
-                      <p className="mt-1 text-[13px] text-slate-500">
+                      <p className="text-3d-soft mt-1 text-[13px] text-slate-500">
                         SIRET : {garageSiret || "Non renseigné"}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-2">
@@ -887,14 +908,14 @@ export default async function AnnonceDetailPage({
                 <div className="px-4 py-5 sm:px-5">
                   {!isOwner ? (
                     <div className="space-y-4">
-                      <div className="rounded-2xl border border-slate-200 p-4">
-                        <p className="text-[11px] uppercase tracking-wide text-slate-500">
+                      <div className="rounded-3xl border border-[#ece7e0] bg-[#faf7f2] p-4">
+                        <p className="text-3d-soft text-[11px] uppercase tracking-wide text-slate-500">
                           Prix affiché
                         </p>
-                        <p className="mt-2 text-[28px] font-bold leading-none text-emerald-700 sm:text-[30px]">
+                        <p className="text-3d-title mt-2 text-[28px] font-semibold leading-none tracking-tight text-black sm:text-[30px]">
                           {formatPriceEUR(item.price)}
                         </p>
-                        <p className="mt-3 text-[13px] text-slate-500">
+                        <p className="text-3d-soft mt-3 text-[13px] text-slate-500">
                           {item.title || "Annonce véhicule"}
                         </p>
                       </div>
@@ -909,11 +930,11 @@ export default async function AnnonceDetailPage({
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      <div className="rounded-2xl border border-slate-200 p-4">
-                        <h3 className="text-[15px] font-semibold text-slate-900">
+                      <div className="rounded-3xl border border-[#ece7e0] bg-[#faf7f2] p-4">
+                        <h3 className="text-3d-title text-[15px] font-semibold text-black">
                           Votre annonce
                         </h3>
-                        <p className="mt-2 text-[14px] leading-7 text-slate-600">
+                        <p className="text-3d-soft mt-2 text-[14px] leading-7 text-slate-600">
                           Vous êtes le propriétaire de cette annonce. Le formulaire
                           de contact est masqué sur votre propre fiche.
                         </p>
@@ -921,7 +942,7 @@ export default async function AnnonceDetailPage({
 
                       <Link
                         href="/pro/dashboard"
-                        className="inline-flex w-full items-center justify-center rounded-xl bg-slate-900 px-4 py-3 text-[14px] font-medium text-white transition hover:bg-slate-800"
+                        className={`${primaryButtonClass} w-full`}
                       >
                         Retour au dashboard
                       </Link>
@@ -930,12 +951,15 @@ export default async function AnnonceDetailPage({
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                <h3 className="text-[15px] font-semibold text-slate-900">
+              <div
+                className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-5 shadow-[0_14px_40px_rgba(0,0,0,0.05)]"
+                style={{ animationDelay: "0.08s" }}
+              >
+                <h3 className="text-3d-title text-[15px] font-semibold text-black">
                   Avant d’acheter
                 </h3>
 
-                <ul className="mt-4 space-y-3 text-[14px] leading-7 text-slate-600">
+                <ul className="text-3d-soft mt-4 space-y-3 text-[14px] leading-7 text-slate-600">
                   <li>Vérifiez les documents et l’état général du véhicule.</li>
                   <li>Demandez l’entretien, les factures et l’historique.</li>
                   <li>Essayez le véhicule avant toute décision d’achat.</li>

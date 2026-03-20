@@ -2,12 +2,9 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-[#1d3a9b] bg-[linear-gradient(90deg,#162a72_0%,#234ec9_48%,#6b91ff_100%)] text-white">
-      
+    <footer className="mt-20 border-t border-[#d2b07a] bg-[linear-gradient(90deg,#a96d2c_0%,#c88a38_48%,#f1c56d_100%)] text-white">
       <div className="mx-auto max-w-6xl px-4 py-14 text-sm">
-
         <div className="grid gap-10 md:grid-cols-4">
-
           {/* Plateforme */}
           <div>
             <h3 className="mb-4 text-[15px] font-semibold text-white">
@@ -107,15 +104,10 @@ export default function Footer() {
               </Link>
             </div>
           </div>
-
         </div>
 
-        {/* Bottom */}
-        <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between text-white/70">
-
-          <p>
-            © {new Date().getFullYear()} Cars Go Direct
-          </p>
+        <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 text-white/70 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} Cars Go Direct</p>
 
           <div className="flex gap-4">
             <Link href="/admin" className="transition hover:text-white">
@@ -126,9 +118,7 @@ export default function Footer() {
               Support
             </Link>
           </div>
-
         </div>
-
       </div>
     </footer>
   );

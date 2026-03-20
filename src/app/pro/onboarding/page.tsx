@@ -76,13 +76,13 @@ export default function ProOnboardingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center px-4">
-      <div className="max-w-md w-full rounded-3xl border border-slate-200 p-8 shadow-sm">
-        <h1 className="text-2xl font-bold text-slate-900">
+    <main className="min-h-screen bg-[#f8f6f3] flex items-center justify-center px-4">
+      <div className="animate-fade-up w-full max-w-md rounded-[32px] border border-[#e4ddd4] bg-white p-8 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <h1 className="text-3d-hero text-2xl font-bold tracking-tight text-black">
           Finaliser votre compte professionnel
         </h1>
 
-        <p className="text-sm text-slate-600 mt-2">
+        <p className="text-3d-soft mt-2 text-sm text-slate-600">
           Complétez les informations de votre garage.
         </p>
 
@@ -92,7 +92,7 @@ export default function ProOnboardingPage() {
             placeholder="Nom du garage"
             value={garageName}
             onChange={(e) => setGarageName(e.target.value)}
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none"
+            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
           />
 
           <input
@@ -101,7 +101,7 @@ export default function ProOnboardingPage() {
             placeholder="Téléphone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none"
+            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
           />
 
           <input
@@ -109,16 +109,18 @@ export default function ProOnboardingPage() {
             placeholder="SIRET (14 chiffres)"
             value={siret}
             onChange={(e) => setSiret(e.target.value)}
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none"
+            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
           />
 
           {errorMessage && (
-            <div className="text-sm text-red-600">{errorMessage}</div>
+            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {errorMessage}
+            </div>
           )}
 
           <button
             disabled={loading}
-            className="w-full rounded-xl bg-slate-900 text-white py-3 text-sm font-medium"
+            className="text-3d-button inline-flex w-full items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Activation..." : "Activer mon compte pro"}
           </button>

@@ -184,22 +184,24 @@ export default function ProAccountSettingsForm({
 
   return (
     <div className="mx-auto grid max-w-5xl gap-6">
-      <section className="card p-6 sm:p-7">
+      <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <Link
               href="/pro/dashboard"
-              className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-900"
+              className="text-3d-soft inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-black"
             >
               <ArrowLeft className="h-4 w-4" />
               Retour au dashboard pro
             </Link>
 
-            <p className="mt-4 text-sm text-slate-500">Paramètres professionnels</p>
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">
+            <p className="text-3d-soft mt-4 text-sm text-slate-500">
+              Paramètres professionnels
+            </p>
+            <h1 className="text-3d-hero mt-1 text-2xl font-extrabold tracking-tight text-black sm:text-3xl">
               Gérer mon compte pro
             </h1>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="text-3d-soft mt-2 text-sm text-slate-600">
               Mets à jour les informations du responsable et la fiche publique du garage.
             </p>
 
@@ -220,36 +222,38 @@ export default function ProAccountSettingsForm({
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-right">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] px-4 py-3 text-right">
+            <p className="text-3d-soft text-xs font-semibold uppercase tracking-wide text-slate-500">
               Garage
             </p>
-            <p className="mt-1 text-sm font-semibold text-slate-900">
+            <p className="text-3d-title mt-1 text-sm font-semibold text-black">
               {garageName || "Nom du garage non renseigné"}
             </p>
-            <p className="mt-1 text-xs text-slate-500">{userEmail}</p>
+            <p className="text-3d-soft mt-1 text-xs text-slate-500">{userEmail}</p>
           </div>
         </div>
       </section>
 
-      <section className="card p-6 sm:p-7">
+      <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt="Photo de profil"
-                className="h-20 w-20 rounded-full object-cover ring-4 ring-slate-100"
+                className="h-20 w-20 rounded-full object-cover ring-4 ring-[#f5f3ef]"
               />
             ) : (
-              <div className="grid h-20 w-20 place-items-center rounded-full bg-cyan-700 text-4xl font-bold text-white ring-4 ring-slate-100">
+              <div className="text-3d-button grid h-20 w-20 place-items-center rounded-full bg-[#171311] text-4xl font-bold text-white ring-4 ring-[#f5f3ef]">
                 {initial}
               </div>
             )}
 
             <div>
-              <h2 className="text-xl font-bold tracking-tight">Photo du compte pro</h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <h2 className="text-3d-title text-xl font-bold tracking-tight text-black">
+                Photo du compte pro
+              </h2>
+              <p className="text-3d-soft mt-1 text-sm text-slate-600">
                 Ajoute ou remplace la photo affichée sur ton espace professionnel.
               </p>
             </div>
@@ -270,7 +274,7 @@ export default function ProAccountSettingsForm({
               }}
             />
             <button
-              className="btn btn-primary"
+              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingPhoto}
@@ -282,17 +286,19 @@ export default function ProAccountSettingsForm({
       </section>
 
       <form onSubmit={handleSubmit} className="grid gap-6">
-        <section className="card p-6 sm:p-7">
+        <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Informations du responsable</h2>
-            <p className="mt-1 text-sm text-slate-600">
+            <h2 className="text-3d-title text-xl font-bold tracking-tight text-black">
+              Informations du responsable
+            </h2>
+            <p className="text-3d-soft mt-1 text-sm text-slate-600">
               Après validation, seul le numéro de téléphone du responsable reste modifiable.
             </p>
           </div>
 
           <div className="mt-6 grid gap-6">
             <div className="grid gap-3">
-              <label className="text-sm font-semibold">Civilité</label>
+              <label className="text-3d-soft text-sm font-semibold">Civilité</label>
               <div className="flex flex-wrap gap-6">
                 <label className="flex items-center gap-2 text-sm text-slate-700">
                   <input
@@ -302,9 +308,9 @@ export default function ProAccountSettingsForm({
                     checked={gender === "female"}
                     onChange={(e) => setGender(e.target.value)}
                     disabled={lockProfileFields}
-                    className="h-5 w-5"
+                    className="h-5 w-5 accent-black"
                   />
-                  <span>Madame</span>
+                  <span className="text-3d-soft">Madame</span>
                 </label>
 
                 <label className="flex items-center gap-2 text-sm text-slate-700">
@@ -315,9 +321,9 @@ export default function ProAccountSettingsForm({
                     checked={gender === "male"}
                     onChange={(e) => setGender(e.target.value)}
                     disabled={lockProfileFields}
-                    className="h-5 w-5"
+                    className="h-5 w-5 accent-black"
                   />
-                  <span>Monsieur</span>
+                  <span className="text-3d-soft">Monsieur</span>
                 </label>
 
                 <label className="flex items-center gap-2 text-sm text-slate-700">
@@ -328,89 +334,89 @@ export default function ProAccountSettingsForm({
                     checked={gender === "unspecified"}
                     onChange={(e) => setGender(e.target.value)}
                     disabled={lockProfileFields}
-                    className="h-5 w-5"
+                    className="h-5 w-5 accent-black"
                   />
-                  <span>Non spécifiée</span>
+                  <span className="text-3d-soft">Non spécifiée</span>
                 </label>
               </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Nom</label>
+                <label className="text-3d-soft text-sm font-semibold">Nom</label>
                 <input
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Nom"
                   readOnly={lockProfileFields}
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none read-only:bg-slate-50 read-only:text-slate-500"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition read-only:bg-[#f8f6f3] read-only:text-slate-500 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
 
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Prénom</label>
+                <label className="text-3d-soft text-sm font-semibold">Prénom</label>
                 <input
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Prénom"
                   readOnly={lockProfileFields}
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none read-only:bg-slate-50 read-only:text-slate-500"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition read-only:bg-[#f8f6f3] read-only:text-slate-500 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Date de naissance</label>
+                <label className="text-3d-soft text-sm font-semibold">Date de naissance</label>
                 <input
                   type="date"
                   value={birthdate}
                   onChange={(e) => setBirthdate(e.target.value)}
                   readOnly={lockProfileFields}
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none read-only:bg-slate-50 read-only:text-slate-500"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition read-only:bg-[#f8f6f3] read-only:text-slate-500 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
 
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Téléphone du responsable</label>
+                <label className="text-3d-soft text-sm font-semibold">Téléphone du responsable</label>
                 <input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="06 00 00 00 00"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-semibold">Adresse personnelle</label>
+              <label className="text-3d-soft text-sm font-semibold">Adresse personnelle</label>
               <input
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Nom de la rue et ville/code postal"
                 readOnly={lockProfileFields}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none read-only:bg-slate-50 read-only:text-slate-500"
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition read-only:bg-[#f8f6f3] read-only:text-slate-500 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Ville</label>
+                <label className="text-3d-soft text-sm font-semibold">Ville</label>
                 <input
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="Le Havre"
                   readOnly={lockProfileFields}
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none read-only:bg-slate-50 read-only:text-slate-500"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition read-only:bg-[#f8f6f3] read-only:text-slate-500 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
 
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">E-mail</label>
-                <div className="flex min-h-[52px] items-center rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                <label className="text-3d-soft text-sm font-semibold">E-mail</label>
+                <div className="flex min-h-[52px] items-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3">
                   <span className="text-sm text-slate-800">{userEmail}</span>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-3d-soft text-xs text-slate-500">
                   L’email du compte professionnel n’est pas affiché publiquement.
                 </p>
               </div>
@@ -418,10 +424,12 @@ export default function ProAccountSettingsForm({
           </div>
         </section>
 
-        <section className="card p-6 sm:p-7">
+        <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Fiche publique du garage</h2>
-            <p className="mt-1 text-sm text-slate-600">
+            <h2 className="text-3d-title text-xl font-bold tracking-tight text-black">
+              Fiche publique du garage
+            </h2>
+            <p className="text-3d-soft mt-1 text-sm text-slate-600">
               Ces informations seront visibles sur la page publique du garage.
             </p>
           </div>
@@ -429,103 +437,107 @@ export default function ProAccountSettingsForm({
           <div className="mt-6 grid gap-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Téléphone du garage</label>
+                <label className="text-3d-soft text-sm font-semibold">Téléphone du garage</label>
                 <input
                   value={garagePhone}
                   onChange={(e) => setGaragePhone(e.target.value)}
                   placeholder="02 00 00 00 00"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
 
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Email professionnel</label>
+                <label className="text-3d-soft text-sm font-semibold">Email professionnel</label>
                 <input
                   value={garageEmail}
                   onChange={(e) => setGarageEmail(e.target.value)}
                   placeholder="contact@garage.fr"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Site web</label>
+                <label className="text-3d-soft text-sm font-semibold">Site web</label>
                 <input
                   value={website}
                   onChange={(e) => setWebsite(e.target.value)}
                   placeholder="https://www.monsite.fr"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
 
               <div className="grid gap-2">
-                <label className="text-sm font-semibold">Code postal</label>
+                <label className="text-3d-soft text-sm font-semibold">Code postal</label>
                 <input
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
                   placeholder="76600"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                 />
               </div>
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-semibold">Adresse du garage</label>
+              <label className="text-3d-soft text-sm font-semibold">Adresse du garage</label>
               <input
                 value={garageAddress}
                 onChange={(e) => setGarageAddress(e.target.value)}
                 placeholder="12 rue Exemple"
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
               />
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-semibold">Horaires d’ouverture</label>
+              <label className="text-3d-soft text-sm font-semibold">Horaires d’ouverture</label>
               <textarea
                 value={openingHours}
                 onChange={(e) => setOpeningHours(e.target.value)}
                 placeholder={"Lundi - Vendredi : 09:00 - 18:00\nSamedi : 09:00 - 12:00\nDimanche : Fermé"}
                 rows={4}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
               />
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-semibold">Présentation du garage</label>
+              <label className="text-3d-soft text-sm font-semibold">Présentation du garage</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Présentez votre garage, vos spécialités, vos services et votre façon de travailler."
                 rows={6}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
               />
             </div>
           </div>
         </section>
 
         <section className="grid gap-4 lg:grid-cols-2">
-          <div className="card p-6 sm:p-7">
-            <h2 className="text-xl font-bold tracking-tight">Moyens de paiement</h2>
+          <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
+            <h2 className="text-3d-title text-xl font-bold tracking-tight text-black">
+              Moyens de paiement
+            </h2>
 
             <div className="mt-5 grid gap-4">
-              <div className="rounded-2xl border border-slate-200 p-5">
-                <h3 className="text-lg font-bold tracking-tight">IBAN</h3>
-                <p className="mt-2 text-sm text-slate-600">
+              <div className="rounded-2xl border border-[#e4ddd4] p-5">
+                <h3 className="text-3d-title text-lg font-bold tracking-tight text-black">
+                  IBAN
+                </h3>
+                <p className="text-3d-soft mt-2 text-sm text-slate-600">
                   Cet IBAN reste privé et n’est jamais affiché publiquement.
                 </p>
 
                 <div className="mt-4 grid gap-2">
-                  <label className="text-sm font-semibold">IBAN</label>
+                  <label className="text-3d-soft text-sm font-semibold">IBAN</label>
                   <input
                     value={iban}
                     onChange={(e) => setIban(e.target.value)}
                     placeholder="FR76..."
-                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                    className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
                   />
                   {iban ? (
-                    <p className="text-xs text-slate-500">
+                    <p className="text-3d-soft text-xs text-slate-500">
                       Aperçu masqué : {maskIban(iban)}
                     </p>
                   ) : null}
@@ -534,17 +546,23 @@ export default function ProAccountSettingsForm({
             </div>
           </div>
 
-          <div className="card p-6 sm:p-7">
-            <h2 className="text-xl font-bold tracking-tight">Notifications</h2>
+          <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
+            <h2 className="text-3d-title text-xl font-bold tracking-tight text-black">
+              Notifications
+            </h2>
 
-            <div className="mt-5 rounded-2xl border border-slate-200 p-5">
-              <h3 className="text-lg font-bold tracking-tight">Messagerie</h3>
+            <div className="mt-5 rounded-2xl border border-[#e4ddd4] p-5">
+              <h3 className="text-3d-title text-lg font-bold tracking-tight text-black">
+                Messagerie
+              </h3>
 
               <div className="mt-5 grid gap-4">
-                <label className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 p-4">
+                <label className="flex items-center justify-between gap-3 rounded-xl border border-[#e4ddd4] p-4">
                   <div>
-                    <p className="text-sm font-semibold">Nouveaux messages</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-3d-title text-sm font-semibold text-black">
+                      Nouveaux messages
+                    </p>
+                    <p className="text-3d-soft text-xs text-slate-500">
                       Être prévenu lorsqu’un nouveau message arrive.
                     </p>
                   </div>
@@ -552,14 +570,16 @@ export default function ProAccountSettingsForm({
                     type="checkbox"
                     checked={notificationsMessages}
                     onChange={(e) => setNotificationsMessages(e.target.checked)}
-                    className="h-5 w-5"
+                    className="h-5 w-5 accent-black"
                   />
                 </label>
 
-                <label className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 p-4">
+                <label className="flex items-center justify-between gap-3 rounded-xl border border-[#e4ddd4] p-4">
                   <div>
-                    <p className="text-sm font-semibold">Emails d’information</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-3d-title text-sm font-semibold text-black">
+                      Emails d’information
+                    </p>
+                    <p className="text-3d-soft text-xs text-slate-500">
                       Recevoir des informations utiles sur votre compte.
                     </p>
                   </div>
@@ -567,7 +587,7 @@ export default function ProAccountSettingsForm({
                     type="checkbox"
                     checked={notificationsEmails}
                     onChange={(e) => setNotificationsEmails(e.target.checked)}
-                    className="h-5 w-5"
+                    className="h-5 w-5 accent-black"
                   />
                 </label>
               </div>
@@ -576,7 +596,7 @@ export default function ProAccountSettingsForm({
         </section>
 
         {(successMessage || errorMessage) && (
-          <section className="card p-5">
+          <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
             {successMessage ? (
               <p className="text-sm font-medium text-green-700">{successMessage}</p>
             ) : null}
@@ -586,16 +606,22 @@ export default function ProAccountSettingsForm({
           </section>
         )}
 
-        <section className="card p-6 sm:p-7">
+        <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl font-bold tracking-tight">Confidentialité</h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <h2 className="text-3d-title text-xl font-bold tracking-tight text-black">
+                Confidentialité
+              </h2>
+              <p className="text-3d-soft mt-1 text-sm text-slate-600">
                 Les informations privées du compte professionnel ne sont pas affichées publiquement.
               </p>
             </div>
 
-            <button type="submit" className="btn btn-primary" disabled={saving}>
+            <button
+              type="submit"
+              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={saving}
+            >
               {saving ? "Enregistrement..." : "Enregistrer les modifications"}
             </button>
           </div>
