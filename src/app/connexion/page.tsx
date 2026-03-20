@@ -72,11 +72,11 @@ export default function ConnexionParticulierPage() {
 
           {/* HEADER */}
           <div className="animate-fade-up mb-10 text-center">
-            <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-[#1b2f79] text-white shadow-lg">
+            <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-black text-white shadow-lg">
               <UserRound className="h-7 w-7" />
             </div>
 
-            <h1 className="text-3d-hero text-3xl font-bold tracking-tight text-[#162d84]">
+            <h1 className="text-3d-hero text-3xl font-bold tracking-tight text-black">
               Connexion particulier
             </h1>
 
@@ -86,7 +86,7 @@ export default function ConnexionParticulierPage() {
           </div>
 
           {/* CARD */}
-          <div className="animate-fade-up rounded-[28px] border border-[#d8e3ff] bg-white p-6 shadow-[0_14px_40px_rgba(35,71,183,0.06)] sm:p-8">
+          <div className="animate-fade-up rounded-[28px] border border-[#d8e3ff] bg-white p-6 shadow-[0_14px_40px_rgba(0,0,0,0.06)] sm:p-8">
 
             {/* SOCIAL */}
             <div className="mb-6">
@@ -114,7 +114,7 @@ export default function ConnexionParticulierPage() {
                     type="email"
                     required
                     placeholder="vous@email.com"
-                    className="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-900 outline-none transition focus:border-[#1b2f79] focus:ring-2 focus:ring-[#1b2f79]/10"
+                    className="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-900 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
                   />
                 </div>
               </div>
@@ -133,7 +133,7 @@ export default function ConnexionParticulierPage() {
                     type="password"
                     required
                     placeholder="Votre mot de passe"
-                    className="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-900 outline-none transition focus:border-[#1b2f79] focus:ring-2 focus:ring-[#1b2f79]/10"
+                    className="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-900 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
                   />
                 </div>
               </div>
@@ -149,7 +149,7 @@ export default function ConnexionParticulierPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="text-3d-button inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#1b2f79] px-5 text-sm font-semibold text-white transition hover:bg-[#14245f] disabled:opacity-60"
+                className="text-3d-button inline-flex h-12 w-full items-center justify-center rounded-2xl bg-black px-5 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(0,0,0,0.25)] transition hover:bg-[#111] hover:shadow-[0_14px_30px_rgba(0,0,0,0.35)] active:scale-[0.98] disabled:opacity-60"
               >
                 {loading ? "Connexion..." : "Se connecter"}
               </button>
@@ -158,14 +158,14 @@ export default function ConnexionParticulierPage() {
             {/* LINKS */}
             <div className="mt-6 text-center text-sm text-slate-600">
               Pas encore de compte ?{" "}
-              <Link href="/inscription" className="font-semibold text-[#162d84] hover:underline">
+              <Link href="/inscription" className="font-semibold text-black hover:underline">
                 Créer un compte particulier
               </Link>
             </div>
 
             <div className="mt-3 text-center text-sm text-slate-600">
               Vous êtes un professionnel ?{" "}
-              <Link href="/pro/connexion" className="font-semibold text-[#162d84] hover:underline">
+              <Link href="/pro/connexion" className="font-semibold text-black hover:underline">
                 Accéder à l’espace pro
               </Link>
             </div>

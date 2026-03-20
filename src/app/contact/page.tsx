@@ -53,7 +53,7 @@ export default function ContactPage() {
         </form>
 
         <div className="mt-8 grid gap-3 text-sm text-slate-600">
-          <p className="text-3d-soft">Email : contact@carsgodirect.fr</p>
+          <p className="text-3d-soft">Email : cargodirect.contact@gmail.com</p>
           <p className="text-3d-soft">Téléphone : 00 00 00 00 00</p>
           <p className="text-3d-soft">Zone de lancement : Normandie / Seine-Maritime</p>
         </div>
