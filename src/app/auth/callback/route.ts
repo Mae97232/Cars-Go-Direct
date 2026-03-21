@@ -9,10 +9,12 @@ export async function GET(request: Request) {
 
   const supabase = await createClient();
 
+  // 1. Échange le code OAuth contre une session
   if (code) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
+  // 2. Récupère l'utilisateur
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -21,19 +23,29 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/connexion`);
   }
 
+  // 3. Cas onboarding pro
   if (next === "/pro/onboarding") {
-    return NextResponse.redirect(`${origin}/pro/onboarding`);
+    return NextResponse.redirect(
+      `${origin}/auth/post-login?next=${encodeURIComponent("/pro/onboarding")}`
+    );
   }
 
+  // 4. Vérifie le rôle
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .maybeSingle();
 
+  // 5. Redirection avec passage par post-login
   if (profile?.role === "pro") {
-    return NextResponse.redirect(`${origin}/pro/dashboard`);
+    return NextResponse.redirect(
+      `${origin}/auth/post-login?next=${encodeURIComponent("/pro/dashboard")}`
+    );
   }
 
-  return NextResponse.redirect(`${origin}/compte`);
+  // 6. Particulier
+  return NextResponse.redirect(
+    `${origin}/auth/post-login?next=${encodeURIComponent("/compte")}`
+  );
 }

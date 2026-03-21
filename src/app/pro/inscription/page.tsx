@@ -1,29 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import AuthProviders from "@/components/AuthProviders";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
+type VerifiedCompany = {
+  success: boolean;
+  siret: string;
+  siren: string | null;
+  legal_name: string | null;
+  city: string | null;
+  ape: string | null;
+  decision: "approved";
+  reason: string;
+};
+
 export default function InscriptionPro() {
   const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const [siret, setSiret] = useState("");
-  const [company, setCompany] = useState<any>(null);
-  const [verificationStatus, setVerificationStatus] = useState<string | null>(null);
+  const [company, setCompany] = useState<VerifiedCompany | null>(null);
+  const [verificationStatus, setVerificationStatus] = useState<
+    "approved" | "idle" | null
+  >(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [verificationMessage, setVerificationMessage] = useState("");
 
   const router = useRouter();
   const supabase = createClient();
 
+  function normalizeSiret(value: string) {
+    return value.replace(/\D/g, "");
+  }
+
+  useEffect(() => {
+    setCompany(null);
+    setVerificationStatus(null);
+    setVerificationMessage("");
+  }, [siret]);
+
   async function verifySiret() {
-    if (!siret || siret.replace(/\D/g, "").length !== 14) {
-      alert("Le SIRET doit contenir 14 chiffres.");
+    const cleanSiret = normalizeSiret(siret);
+
+    if (cleanSiret.length !== 14) {
+      setVerificationStatus(null);
+      setCompany(null);
+      setVerificationMessage("Le SIRET doit contenir exactement 14 chiffres.");
       return;
     }
 
-    setLoading(true);
+    setVerifying(true);
     setErrorMessage("");
+    setVerificationMessage("");
 
     try {
       const res = await fetch("/api/verify-siret", {
@@ -31,36 +61,38 @@ export default function InscriptionPro() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ siret }),
+        body: JSON.stringify({ siret: cleanSiret }),
       });
 
       const data = await res.json();
 
-      if (!data.success) {
-        alert(data.reason || "SIRET invalide.");
+      if (!res.ok || !data.success) {
         setCompany(null);
         setVerificationStatus(null);
-        setLoading(false);
+        setVerificationMessage(data.reason || "SIRET invalide.");
+        setVerifying(false);
         return;
       }
 
       setCompany(data);
       setVerificationStatus("approved");
-      alert("SIRET vérifié. Compte professionnel validable automatiquement.");
+      setVerificationMessage(
+        data.reason || "Entreprise vérifiée avec succès."
+      );
     } catch {
-      alert("Erreur lors de la vérification du SIRET.");
       setCompany(null);
       setVerificationStatus(null);
+      setVerificationMessage("Erreur lors de la vérification du SIRET.");
+    } finally {
+      setVerifying(false);
     }
-
-    setLoading(false);
   }
 
   async function signup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (verificationStatus !== "approved") {
-      alert("Veuillez vérifier un SIRET valide avant de continuer.");
+    if (verificationStatus !== "approved" || !company) {
+      setErrorMessage("Veuillez vérifier un SIRET valide avant de continuer.");
       return;
     }
 
@@ -69,9 +101,9 @@ export default function InscriptionPro() {
 
     const formData = new FormData(e.currentTarget);
 
-    const garageName = String(formData.get("garage_name") ?? "");
-    const email = String(formData.get("email") ?? "");
-    const phone = String(formData.get("phone") ?? "");
+    const garageName = String(formData.get("garage_name") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const phone = String(formData.get("phone") ?? "").trim();
     const password = String(formData.get("password") ?? "");
 
     const { data: signUpData, error } = await supabase.auth.signUp({
@@ -83,17 +115,17 @@ export default function InscriptionPro() {
           role: "pro",
           garage_name: garageName,
           phone,
-          siret: company?.siret ?? siret,
-          legal_name: company?.legal_name ?? null,
-          city: company?.city ?? null,
-          ape: company?.ape ?? null,
+          siret: company.siret,
+          legal_name: company.legal_name,
+          city: company.city,
+          ape: company.ape,
           verification_status: "approved",
         },
       },
     });
 
     if (error) {
-      alert(error.message);
+      setErrorMessage(error.message);
       setLoading(false);
       return;
     }
@@ -101,7 +133,7 @@ export default function InscriptionPro() {
     const userId = signUpData.user?.id;
 
     if (!userId) {
-      alert("Compte créé, mais impossible de récupérer l’utilisateur.");
+      setErrorMessage("Compte créé, mais impossible de récupérer l’utilisateur.");
       setLoading(false);
       return;
     }
@@ -116,7 +148,7 @@ export default function InscriptionPro() {
       .eq("id", userId);
 
     if (profileError) {
-      alert(profileError.message);
+      setErrorMessage(profileError.message);
       setLoading(false);
       return;
     }
@@ -125,10 +157,10 @@ export default function InscriptionPro() {
       {
         profile_id: userId,
         garage_name: garageName,
-        siret: company?.siret ?? siret,
-        legal_name: company?.legal_name ?? null,
-        city: company?.city ?? null,
-        ape_code: company?.ape ?? null,
+        siret: company.siret,
+        legal_name: company.legal_name,
+        city: company.city,
+        ape_code: company.ape,
         verification_status: "approved",
       },
       {
@@ -137,14 +169,10 @@ export default function InscriptionPro() {
     );
 
     if (proError) {
-      alert(proError.message);
+      setErrorMessage(proError.message);
       setLoading(false);
       return;
     }
-
-    alert(
-      "Compte professionnel créé et validé automatiquement. Vous pouvez maintenant vous connecter et déposer des annonces."
-    );
 
     setLoading(false);
     router.push("/pro/connexion");
@@ -169,8 +197,8 @@ export default function InscriptionPro() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-        <h1 className="text-3d-hero text-xl font-bold tracking-tight text-black">
+      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-8">
+        <h1 className="text-3d-hero text-xl font-bold tracking-tight text-black sm:text-2xl">
           Créer un compte professionnel
         </h1>
 
@@ -182,7 +210,7 @@ export default function InscriptionPro() {
           <AuthProviders
             mode="signup"
             onGoogle={signupGoogle}
-            loading={loading}
+            loading={loading || verifying}
           />
         </div>
 
@@ -198,7 +226,7 @@ export default function InscriptionPro() {
               name="garage_name"
               required
               placeholder="Nom du garage"
-              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-black focus:ring-4 focus:ring-black/5"
             />
 
             <div className="flex gap-2">
@@ -206,32 +234,53 @@ export default function InscriptionPro() {
                 required
                 placeholder="SIRET"
                 value={siret}
-                onChange={(e) => setSiret(e.target.value)}
-                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                onChange={(e) => setSiret(normalizeSiret(e.target.value))}
+                inputMode="numeric"
+                maxLength={14}
+                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-black focus:ring-4 focus:ring-black/5"
               />
 
               <button
                 type="button"
                 onClick={verifySiret}
-                className="text-3d-soft inline-flex shrink-0 items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                disabled={verifying || loading}
+                className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-black px-4 py-3 text-sm font-medium text-white transition hover:bg-[#111] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Vérifier
+                {verifying ? "..." : "Vérifier"}
               </button>
             </div>
           </div>
 
-          {company && (
-            <div className="animate-fade-up mt-2 rounded-[24px] border border-[#e4ddd4] bg-[#faf7f2] p-4 text-sm">
+          {verificationMessage ? (
+            <div
+              className={
+                verificationStatus === "approved"
+                  ? "rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700"
+                  : "rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              }
+            >
+              {verificationMessage}
+            </div>
+          ) : null}
+
+          {company && verificationStatus === "approved" ? (
+            <div className="animate-fade-up mt-1 rounded-[24px] border border-[#e4ddd4] bg-[#faf7f2] p-4 text-sm">
               <p className="text-3d-soft text-slate-700">
-                <b className="text-black">Entreprise :</b> {company.legal_name}
+                <b className="text-black">Entreprise :</b>{" "}
+                {company.legal_name || "Non renseigné"}
               </p>
 
               <p className="text-3d-soft mt-2 text-slate-700">
-                <b className="text-black">Ville :</b> {company.city}
+                <b className="text-black">Ville :</b> {company.city || "Non renseignée"}
               </p>
 
               <p className="text-3d-soft mt-2 text-slate-700">
-                <b className="text-black">Code activité :</b> {company.ape}
+                <b className="text-black">Code activité :</b>{" "}
+                {company.ape || "Non renseigné"}
+              </p>
+
+              <p className="text-3d-soft mt-2 text-slate-700">
+                <b className="text-black">SIRET :</b> {company.siret}
               </p>
 
               <p className="mt-3 text-slate-700">
@@ -241,7 +290,7 @@ export default function InscriptionPro() {
                 </span>
               </p>
             </div>
-          )}
+          ) : null}
 
           <div className="grid gap-2 sm:grid-cols-2">
             <input
@@ -249,7 +298,7 @@ export default function InscriptionPro() {
               required
               type="email"
               placeholder="Email"
-              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-black focus:ring-4 focus:ring-black/5"
             />
 
             <input
@@ -257,7 +306,7 @@ export default function InscriptionPro() {
               required
               type="tel"
               placeholder="Téléphone"
-              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-black focus:ring-4 focus:ring-black/5"
             />
           </div>
 
@@ -266,11 +315,11 @@ export default function InscriptionPro() {
             required
             type="password"
             placeholder="Mot de passe"
-            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-black focus:ring-4 focus:ring-black/5"
           />
 
           <button
-            disabled={loading}
+            disabled={loading || verifying || verificationStatus !== "approved"}
             className="text-3d-button mt-2 inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Création..." : "Créer le compte"}

@@ -68,6 +68,9 @@ export default async function Header() {
   const desktopLinkClass =
     "rounded-xl px-4 py-2 text-[15px] font-medium text-[#2a2017] transition duration-200 hover:bg-black/6 hover:text-black";
 
+  const desktopInlineBadgeLinkClass =
+    "inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[15px] font-medium text-[#2a2017] transition duration-200 hover:bg-black/6 hover:text-black";
+
   const mobileLinkClass =
     "shrink-0 rounded-full border border-[#d6c4a9] bg-[#fffaf2] px-3.5 py-2 text-[13px] font-medium text-[#6f4d1f] transition hover:bg-[#f6ead7]";
 
@@ -104,6 +107,10 @@ export default async function Header() {
                 Rechercher
               </Link>
 
+              <Link href="/favoris" className={desktopLinkClass}>
+                Favoris
+              </Link>
+
               {!user ? (
                 <>
                   <Link href="/connexion" className={desktopLinkClass}>
@@ -126,7 +133,7 @@ export default async function Header() {
 
                   <Link
                     href="/pro/messages"
-                    className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[15px] font-medium text-[#2a2017] transition duration-200 hover:bg-black/6 hover:text-black"
+                    className={desktopInlineBadgeLinkClass}
                   >
                     <span>Messages</span>
                     <MessagesBadge />
@@ -140,7 +147,7 @@ export default async function Header() {
 
                   <Link
                     href="/messages"
-                    className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[15px] font-medium text-[#2a2017] transition duration-200 hover:bg-black/6 hover:text-black"
+                    className={desktopInlineBadgeLinkClass}
                   >
                     <span>Messages</span>
                     <MessagesBadge />
@@ -165,10 +172,10 @@ export default async function Header() {
                   </Link>
                 ) : (
                   <Link
-                    href="/compte"
+                    href="/favoris"
                     className="inline-flex h-10 items-center justify-center rounded-xl border border-black/10 bg-white/18 px-3 text-[13px] font-medium text-[#231912] transition hover:bg-white/28 sm:hidden"
                   >
-                    Compte
+                    Favoris
                   </Link>
                 )}
               </>
@@ -194,6 +201,10 @@ export default async function Header() {
 
             <Link href="/recherche" className={mobileLinkClass}>
               Rechercher
+            </Link>
+
+            <Link href="/favoris" className={mobileLinkClass}>
+              Favoris
             </Link>
 
             {user && isPro ? (

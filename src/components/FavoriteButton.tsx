@@ -3,27 +3,63 @@
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
 
 type Props = {
   listingId: string;
   initialIsFavorite?: boolean;
 };
 
+function getGuestFavorites(): string[] {
+  if (typeof window === "undefined") return [];
+
+  try {
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function setGuestFavorites(ids: string[]) {
+  localStorage.setItem("favorites", JSON.stringify(ids));
+}
+
 export default function FavoriteButton({
   listingId,
   initialIsFavorite = false,
 }: Props) {
   const supabase = createClient();
-  const router = useRouter();
 
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setIsFavorite(initialIsFavorite);
-  }, [initialIsFavorite]);
+    let mounted = true;
+
+    async function initFavoriteState() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!mounted) return;
+
+      if (user) {
+        setIsAuthenticated(true);
+        setIsFavorite(initialIsFavorite);
+      } else {
+        setIsAuthenticated(false);
+        const guestFavorites = getGuestFavorites();
+        setIsFavorite(guestFavorites.includes(listingId));
+      }
+    }
+
+    initFavoriteState();
+
+    return () => {
+      mounted = false;
+    };
+  }, [initialIsFavorite, listingId, supabase]);
 
   async function toggleFavorite() {
     if (loading) return;
@@ -37,10 +73,31 @@ export default function FavoriteButton({
         error: userError,
       } = await supabase.auth.getUser();
 
-      if (userError || !user) {
-        router.push("/connexion");
+      if (userError) {
+        setErrorMessage("Impossible de vérifier votre session.");
+        setLoading(false);
         return;
       }
+
+      if (!user) {
+        const guestFavorites = getGuestFavorites();
+
+        if (guestFavorites.includes(listingId)) {
+          const next = guestFavorites.filter((id) => id !== listingId);
+          setGuestFavorites(next);
+          setIsFavorite(false);
+        } else {
+          const next = [...guestFavorites, listingId];
+          setGuestFavorites(next);
+          setIsFavorite(true);
+        }
+
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+
+      setIsAuthenticated(true);
 
       if (isFavorite) {
         const { error } = await supabase
@@ -51,26 +108,32 @@ export default function FavoriteButton({
 
         if (error) {
           setErrorMessage("Impossible de retirer ce favori.");
+          setLoading(false);
           return;
         }
 
         setIsFavorite(false);
-        router.refresh();
+        setLoading(false);
         return;
       }
 
-      const { error } = await supabase.from("favorites").insert({
-        user_id: user.id,
-        listing_id: listingId,
-      });
+      const { error } = await supabase.from("favorites").upsert(
+        {
+          user_id: user.id,
+          listing_id: listingId,
+        },
+        {
+          onConflict: "user_id,listing_id",
+        }
+      );
 
       if (error) {
         setErrorMessage("Impossible d’ajouter cette annonce aux favoris.");
+        setLoading(false);
         return;
       }
 
       setIsFavorite(true);
-      router.refresh();
     } catch {
       setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
     } finally {
@@ -91,7 +154,9 @@ export default function FavoriteButton({
         }
         aria-pressed={isFavorite}
         aria-label={
-          isFavorite ? "Retirer cette annonce des favoris" : "Ajouter cette annonce aux favoris"
+          isFavorite
+            ? "Retirer cette annonce des favoris"
+            : "Ajouter cette annonce aux favoris"
         }
       >
         <Heart
@@ -105,6 +170,12 @@ export default function FavoriteButton({
             : "Ajouter aux favoris"}
         </span>
       </button>
+
+      {!loading && isAuthenticated === false ? (
+        <p className="text-xs text-slate-500 sm:text-[13px]">
+          Favori temporaire enregistré sur cet appareil.
+        </p>
+      ) : null}
 
       {errorMessage ? (
         <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 sm:text-[13px]">

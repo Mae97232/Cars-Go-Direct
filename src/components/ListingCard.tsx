@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Listing } from "@/lib/data";
+import FavoriteButton from "@/components/FavoriteButton";
 
 function formatPriceEUR(value: number) {
   return value.toLocaleString("fr-FR") + " €";
@@ -18,8 +19,12 @@ export default function ListingCard({ item }: ListingCardProps) {
   return (
     <Link
       href={`/annonces/${item.id}`}
-      className="card group block overflow-hidden transition hover:shadow-md"
+      className="card group relative block overflow-hidden transition hover:shadow-md"
     >
+      <div className="absolute right-4 top-4 z-10">
+        <FavoriteButton listingId={item.id} />
+      </div>
+
       <div className="flex gap-4 p-5">
         <div className="relative h-24 w-32 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
           {mainPhoto ? (
@@ -35,7 +40,7 @@ export default function ListingCard({ item }: ListingCardProps) {
           )}
         </div>
 
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 pr-12">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <h3 className="truncate text-base font-semibold tracking-tight text-slate-900">

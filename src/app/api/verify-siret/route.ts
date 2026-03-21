@@ -44,11 +44,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const isDev =
-      process.env.NODE_ENV !== "production" ||
-      process.env.INSEE_BYPASS === "true";
+    const isBypass = process.env.INSEE_BYPASS === "true";
 
-    if (isDev) {
+    if (isBypass) {
       return NextResponse.json({
         success: true,
         siret: cleanSiret,
@@ -57,7 +55,7 @@ export async function POST(req: Request) {
         city: "Le Havre",
         ape: "4520A",
         decision: "approved",
-        reason: "Mode développement : SIRET accepté automatiquement.",
+        reason: "Mode bypass actif : SIRET accepté automatiquement.",
       });
     }
 
@@ -82,7 +80,9 @@ export async function POST(req: Request) {
           "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: "grant_type=client_credentials",
+      body: new URLSearchParams({
+        grant_type: "client_credentials",
+      }).toString(),
       cache: "no-store",
     });
 
@@ -178,6 +178,7 @@ export async function POST(req: Request) {
       null;
 
     const city = etab?.adresseEtablissement?.libelleCommuneEtablissement ?? null;
+
     const ape =
       periode?.activitePrincipaleEtablissement ||
       unite?.activitePrincipaleUniteLegale ||
