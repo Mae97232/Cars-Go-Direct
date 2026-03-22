@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import AuthProviders from "@/components/AuthProviders";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 export default function InscriptionPro() {
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,7 @@ export default function InscriptionPro() {
   const [successMessage, setSuccessMessage] = useState("");
 
   const supabase = createClient();
+  const router = useRouter();
 
   async function signup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,10 +42,10 @@ export default function InscriptionPro() {
       return;
     }
 
-    setSuccessMessage(
-      "Compte créé. Vérifiez votre email puis finalisez votre compte professionnel."
-    );
-    setLoading(false);
+    setSuccessMessage("Compte créé. Redirection en cours...");
+
+    router.push("/pro/onboarding");
+    router.refresh();
   }
 
   async function signupGoogle() {
