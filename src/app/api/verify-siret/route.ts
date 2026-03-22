@@ -72,7 +72,7 @@ export async function POST(req: Request) {
       grant_type: "client_credentials",
     }).toString();
 
-    const tokenRes = await fetch("[api.insee.fr](https://api.insee.fr/oauth2/token)", {
+   const tokenRes = await fetch("https://api.insee.fr/oauth2/token", {
       method: "POST",
       headers: {
         Authorization: `Basic ${basicAuth}`,
