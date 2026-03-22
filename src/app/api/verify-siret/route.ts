@@ -75,20 +75,21 @@ export async function POST(req: Request) {
       );
     }
 
-    const tokenRes = await fetch("https://api.insee.fr/token", {
-      method: "POST",
-      headers: {
-        Authorization:
-          "Basic " +
-          Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-      },
-      body: new URLSearchParams({
-        grant_type: "client_credentials",
-      }).toString(),
-      cache: "no-store",
-    });
+   const tokenUrl = process.env.INSEE_TOKEN_URL;
+
+const tokenRes = await fetch(tokenUrl!, {
+  method: "POST",
+  headers: {
+    Authorization:
+      "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
+    "Content-Type": "application/x-www-form-urlencoded",
+    Accept: "application/json",
+  },
+  body: new URLSearchParams({
+    grant_type: "client_credentials",
+  }).toString(),
+  cache: "no-store",
+});
 
     if (!tokenRes.ok) {
       const text = await tokenRes.text();
