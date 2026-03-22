@@ -46,50 +46,42 @@ export async function POST(req: Request) {
       );
     }
 
-    const isBypass = process.env.INSEE_BYPASS === "true";
-
-    if (isBypass) {
-      return NextResponse.json({
-        success: true,
-        siret: cleanSiret,
-        siren: cleanSiret.slice(0, 9),
-        legal_name: "Garage Test",
-        city: "Le Havre",
-        ape: "4520A",
-        decision: "approved",
-        reason: "Mode bypass actif : SIRET accepté automatiquement.",
-      });
-    }
-
     const clientId = process.env.INSEE_CLIENT_ID;
     const clientSecret = process.env.INSEE_CLIENT_SECRET;
+
+    console.error("INSEE ENV CHECK", {
+      hasClientId: Boolean(clientId),
+      hasClientSecret: Boolean(clientSecret),
+    });
 
     if (!clientId || !clientSecret) {
       return NextResponse.json(
         {
           success: false,
-          reason:
-            "Les identifiants API Insee sont manquants sur le serveur.",
+          reason: "Les identifiants API Insee sont manquants sur le serveur.",
         },
         { status: 500 }
       );
     }
 
-   const tokenUrl = process.env.INSEE_TOKEN_URL;
+    const basicAuth = Buffer.from(`${clientId}:${clientSecret}`, "utf-8").toString(
+      "base64"
+    );
 
-const tokenRes = await fetch(tokenUrl!, {
-  method: "POST",
-  headers: {
-    Authorization:
-      "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
-    "Content-Type": "application/x-www-form-urlencoded",
-    Accept: "application/json",
-  },
-  body: new URLSearchParams({
-    grant_type: "client_credentials",
-  }).toString(),
-  cache: "no-store",
-});
+    const tokenBody = new URLSearchParams({
+      grant_type: "client_credentials",
+    }).toString();
+
+    const tokenRes = await fetch("[api.insee.fr](https://api.insee.fr/oauth2/token)", {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
+      body: tokenBody,
+      cache: "no-store",
+    });
 
     if (!tokenRes.ok) {
       const text = await tokenRes.text();
@@ -114,6 +106,8 @@ const tokenRes = await fetch(tokenUrl!, {
     const accessToken = tokenData.access_token;
 
     if (!accessToken) {
+      console.error("INSEE_TOKEN_MISSING", tokenData);
+
       return NextResponse.json(
         {
           success: false,
@@ -124,7 +118,7 @@ const tokenRes = await fetch(tokenUrl!, {
     }
 
     const sireneRes = await fetch(
-      `https://api.insee.fr/api-sirene/3.11/siret/${cleanSiret}`,
+      `[api.insee.fr](https://api.insee.fr/api-sirene/3.11/siret/${cleanSiret})`,
       {
         method: "GET",
         headers: {
@@ -225,15 +219,15 @@ const tokenRes = await fetch(tokenUrl!, {
       decision: "approved",
       reason: "Entreprise active trouvée. Compte validé automatiquement.",
     });
-   } catch (error) {
-  console.error("INSEE FULL ERROR:", error);
+  } catch (error) {
+    console.error("INSEE FULL ERROR:", error);
 
-  return NextResponse.json(
-    {
-      success: false,
-      reason: "Erreur serveur pendant la vérification du SIRET.",
-    },
-    { status: 500 }
-  );
-}
+    return NextResponse.json(
+      {
+        success: false,
+        reason: "Erreur serveur pendant la vérification du SIRET.",
+      },
+      { status: 500 }
+    );
+  }
 }
