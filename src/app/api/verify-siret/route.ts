@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 type InseeTokenResponse = {
-  access_token: string;
+  access_token?: string;
 };
 
 type InseeEtablissementResponse = {
@@ -67,7 +69,7 @@ export async function POST(req: Request) {
         {
           success: false,
           reason:
-            "Les identifiants API Insee sont manquants dans le serveur (.env.local).",
+            "Les identifiants API Insee sont manquants sur le serveur.",
         },
         { status: 500 }
       );
@@ -77,8 +79,10 @@ export async function POST(req: Request) {
       method: "POST",
       headers: {
         Authorization:
-          "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
+          "Basic " +
+          Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
         "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
       },
       body: new URLSearchParams({
         grant_type: "client_credentials",
@@ -88,6 +92,13 @@ export async function POST(req: Request) {
 
     if (!tokenRes.ok) {
       const text = await tokenRes.text();
+
+      console.error("INSEE_TOKEN_ERROR", {
+        status: tokenRes.status,
+        statusText: tokenRes.statusText,
+        body: text,
+      });
+
       return NextResponse.json(
         {
           success: false,
@@ -99,13 +110,24 @@ export async function POST(req: Request) {
     }
 
     const tokenData = (await tokenRes.json()) as InseeTokenResponse;
+    const accessToken = tokenData.access_token;
+
+    if (!accessToken) {
+      return NextResponse.json(
+        {
+          success: false,
+          reason: "Token Insee introuvable dans la réponse.",
+        },
+        { status: 502 }
+      );
+    }
 
     const sireneRes = await fetch(
       `https://api.insee.fr/api-sirene/3.11/siret/${cleanSiret}`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${tokenData.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
           Accept: "application/json",
         },
         cache: "no-store",
@@ -124,6 +146,13 @@ export async function POST(req: Request) {
 
     if (!sireneRes.ok) {
       const text = await sireneRes.text();
+
+      console.error("INSEE_SIRENE_ERROR", {
+        status: sireneRes.status,
+        statusText: sireneRes.statusText,
+        body: text,
+      });
+
       return NextResponse.json(
         {
           success: false,
@@ -177,7 +206,8 @@ export async function POST(req: Request) {
         .join(" ") ||
       null;
 
-    const city = etab?.adresseEtablissement?.libelleCommuneEtablissement ?? null;
+    const city =
+      etab?.adresseEtablissement?.libelleCommuneEtablissement ?? null;
 
     const ape =
       periode?.activitePrincipaleEtablissement ||
@@ -194,7 +224,9 @@ export async function POST(req: Request) {
       decision: "approved",
       reason: "Entreprise active trouvée. Compte validé automatiquement.",
     });
-  } catch {
+  } catch (error) {
+    console.error("INSEE_ROUTE_ERROR", error);
+
     return NextResponse.json(
       {
         success: false,

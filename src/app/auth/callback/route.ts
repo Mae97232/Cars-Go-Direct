@@ -9,42 +9,57 @@ export async function GET(request: Request) {
 
   const supabase = await createClient();
 
-  // 1. Échange le code OAuth contre une session
   if (code) {
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (error) {
+      return NextResponse.redirect(`${origin}/connexion`);
+    }
   }
 
-  // 2. Récupère l'utilisateur
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (userError || !user) {
     return NextResponse.redirect(`${origin}/connexion`);
   }
 
-  // 3. Cas onboarding pro
   if (next === "/pro/onboarding") {
     return NextResponse.redirect(
       `${origin}/auth/post-login?next=${encodeURIComponent("/pro/onboarding")}`
     );
   }
 
-  // 4. Vérifie le rôle
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .maybeSingle();
 
-  // 5. Redirection avec passage par post-login
+  if (profileError) {
+    return NextResponse.redirect(`${origin}/connexion`);
+  }
+
   if (profile?.role === "pro") {
+    const { data: proAccount } = await supabase
+      .from("pro_accounts")
+      .select("id")
+      .eq("profile_id", user.id)
+      .maybeSingle();
+
+    if (!proAccount) {
+      return NextResponse.redirect(
+        `${origin}/auth/post-login?next=${encodeURIComponent("/pro/onboarding")}`
+      );
+    }
+
     return NextResponse.redirect(
       `${origin}/auth/post-login?next=${encodeURIComponent("/pro/dashboard")}`
     );
   }
 
-  // 6. Particulier
   return NextResponse.redirect(
     `${origin}/auth/post-login?next=${encodeURIComponent("/compte")}`
   );
