@@ -447,9 +447,9 @@ export default function HomePageClient({
             </div>
 
             <h1 className="text-3d-hero animate-fade-up delay-200 mt-5 max-w-4xl text-[30px] font-semibold leading-[1.04] tracking-[-0.04em] text-black sm:text-[40px] lg:text-[56px]">
-              Trouvez votre prochain véhicule pro,
+              Recherchez votre véhicule,
               <span className="text-3d-hero block text-black">
-                simplement, rapidement, directement.
+                simplement, rapidement.
               </span>
             </h1>
 

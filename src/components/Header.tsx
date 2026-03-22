@@ -107,7 +107,7 @@ export default async function Header() {
                 Rechercher
               </Link>
 
-              <Link href="/favoris" className={desktopLinkClass}>
+              <Link href="/compte/favoris" className={desktopLinkClass}>
                 Favoris
               </Link>
 
@@ -167,12 +167,14 @@ export default async function Header() {
                     href="/pro/deposer"
                     className="inline-flex h-11 items-center justify-center rounded-2xl bg-[#171311] px-4 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.22)] transition duration-200 hover:bg-[#0f0d0c] sm:px-5 sm:text-[14px]"
                   >
-                    <span className="hidden sm:inline">Déposer une annonce</span>
+                    <span className="hidden sm:inline">
+                      Déposer une annonce
+                    </span>
                     <span className="sm:hidden">Déposer</span>
                   </Link>
                 ) : (
                   <Link
-                    href="/favoris"
+                    href="/compte/favoris"
                     className="inline-flex h-10 items-center justify-center rounded-xl border border-black/10 bg-white/18 px-3 text-[13px] font-medium text-[#231912] transition hover:bg-white/28 sm:hidden"
                   >
                     Favoris
@@ -184,7 +186,9 @@ export default async function Header() {
                 href="/pro/inscription"
                 className="inline-flex h-11 items-center justify-center rounded-2xl bg-[#171311] px-4 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.22)] transition duration-200 hover:bg-[#0f0d0c] sm:px-5 sm:text-[14px]"
               >
-                <span className="hidden sm:inline">Déposer une annonce</span>
+                <span className="hidden sm:inline">
+                  Déposer une annonce
+                </span>
                 <span className="sm:hidden">Déposer</span>
               </Link>
             )}
@@ -203,7 +207,7 @@ export default async function Header() {
               Rechercher
             </Link>
 
-            <Link href="/favoris" className={mobileLinkClass}>
+            <Link href="/compte/favoris" className={mobileLinkClass}>
               Favoris
             </Link>
 
