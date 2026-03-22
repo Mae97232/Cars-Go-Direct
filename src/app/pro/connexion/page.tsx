@@ -17,21 +17,52 @@ export default function ConnexionPro() {
 
     const formData = new FormData(e.currentTarget);
 
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const email = String(formData.get("email") ?? "");
+    const password = String(formData.get("password") ?? "");
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
-      alert(error.message);
+    if (signInError) {
+      alert(signInError.message);
       setLoading(false);
       return;
     }
 
-    window.location.href = "/pro/dashboard";
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      alert("Impossible de récupérer l’utilisateur connecté.");
+      setLoading(false);
+      return;
+    }
+
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profileError) {
+      alert("Impossible de vérifier le type de compte.");
+      setLoading(false);
+      return;
+    }
+
+    if (profile?.role !== "pro") {
+      await supabase.auth.signOut();
+      alert("Ce compte n’est pas un compte professionnel.");
+      setLoading(false);
+      return;
+    }
+
+    router.push("/pro/dashboard");
+    router.refresh();
   }
 
   async function loginGoogle() {
@@ -40,9 +71,11 @@ export default function ConnexionPro() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/pro/dashboard`,
       },
     });
+
+    setLoading(false);
   }
 
   async function resetPassword() {
@@ -98,6 +131,7 @@ export default function ConnexionPro() {
           />
 
           <button
+            type="submit"
             disabled={loading}
             className="text-3d-button mt-2 inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
           >

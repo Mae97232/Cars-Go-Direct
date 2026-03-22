@@ -81,10 +81,10 @@ function mapListing(item: HomeRawListing): Listing {
 }
 
 const primaryButtonClass =
-  "text-3d-button inline-flex min-h-[48px] items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.18)] transition hover:bg-[#0f0d0c]";
+  "inline-flex min-h-[48px] items-center justify-center rounded-2xl border border-[#d95b00] bg-[linear-gradient(180deg,#ff7a00_0%,#ff5a00_52%,#f24a00_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.22),0_3px_0_#c63f00,0_12px_30px_rgba(242,90,0,0.24)] transition duration-200 hover:brightness-[1.03] hover:shadow-[inset_0_2px_0_rgba(255,255,255,0.25),0_3px_0_#c63f00,0_16px_34px_rgba(242,90,0,0.28)] active:translate-y-[1px]";
 
 const secondaryButtonClass =
-  "text-3d-soft inline-flex min-h-[48px] items-center justify-center rounded-2xl border border-[#d9d4cd] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]";
+  "inline-flex min-h-[48px] items-center justify-center rounded-2xl border border-[#e06600] bg-[linear-gradient(180deg,#ff8a1f_0%,#ff6a00_55%,#f25400_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.22),0_3px_0_#c94700,0_12px_30px_rgba(242,106,0,0.22)] transition duration-200 hover:brightness-[1.03] hover:shadow-[inset_0_2px_0_rgba(255,255,255,0.25),0_3px_0_#c94700,0_16px_34px_rgba(242,106,0,0.26)] active:translate-y-[1px]";
 
 const softPillClass =
   "text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#171311]";
@@ -547,7 +547,7 @@ export default function HomePageClient({
                         }}
                         className={
                           active
-                            ? "text-3d-button animate-fade-up inline-flex items-center whitespace-nowrap rounded-full bg-[#171311] px-4 py-2 text-sm font-medium text-white shadow-[0_8px_20px_rgba(0,0,0,0.14)]"
+                            ? "animate-fade-up inline-flex items-center whitespace-nowrap rounded-full border border-[#d95b00] bg-[linear-gradient(180deg,#ff7a00_0%,#ff5a00_52%,#f24a00_100%)] px-4 py-2 text-sm font-semibold text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.22),0_3px_0_#c63f00,0_10px_24px_rgba(242,90,0,0.22)]"
                             : "text-3d-soft animate-fade-up inline-flex items-center whitespace-nowrap rounded-full border border-[#e4ddd4] bg-white px-4 py-2 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
                         }
                         style={{ animationDelay: `${0.55 + index * 0.05}s` }}

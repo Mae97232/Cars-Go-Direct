@@ -86,7 +86,7 @@ export default async function ComptePage() {
     throw new Error(profileError.message);
   }
 
-  if (profile?.account_type === "pro") {
+  if (profile?.role === "pro") {
     redirect("/pro/dashboard");
   }
 

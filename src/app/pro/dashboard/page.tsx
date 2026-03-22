@@ -91,17 +91,21 @@ export default async function ProDashboardPage() {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    redirect("/connexion");
+    redirect("/pro/connexion");
   }
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("avatar_url, first_name, last_name, phone, city, address")
+    .select("role, avatar_url, first_name, last_name, phone, city, address")
     .eq("id", user.id)
     .maybeSingle();
 
   if (profileError) {
     throw new Error(`Impossible de charger le profil : ${profileError.message}`);
+  }
+
+  if (profile?.role !== "pro") {
+    redirect("/compte");
   }
 
   const avatarUrl = profile?.avatar_url || null;
@@ -140,7 +144,17 @@ export default async function ProDashboardPage() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      redirect("/connexion");
+      redirect("/pro/connexion");
+    }
+
+    const { data: currentProfile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (currentProfile?.role !== "pro") {
+      throw new Error("Accès refusé.");
     }
 
     const { data: currentProAccount, error: currentProAccountError } = await supabase
@@ -194,7 +208,9 @@ export default async function ProDashboardPage() {
     );
   }
 
-  const myListings: DashboardListing[] = Array.isArray(listingsData) ? listingsData : [];
+  const myListings: DashboardListing[] = Array.isArray(listingsData)
+    ? listingsData
+    : [];
 
   const totalListings = myListings.length;
   const publishedListings = myListings.filter((a) => a.status === "published").length;
