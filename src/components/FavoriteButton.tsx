@@ -31,6 +31,7 @@ export default function FavoriteButton({
 
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [loading, setLoading] = useState(false);
+  const [infoMessage, setInfoMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
@@ -38,16 +39,23 @@ export default function FavoriteButton({
     let mounted = true;
 
     async function initFavoriteState() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
 
-      if (!mounted) return;
+        if (!mounted) return;
 
-      if (user) {
-        setIsAuthenticated(true);
-        setIsFavorite(initialIsFavorite);
-      } else {
+        if (user) {
+          setIsAuthenticated(true);
+          setIsFavorite(initialIsFavorite);
+        } else {
+          setIsAuthenticated(false);
+          const guestFavorites = getGuestFavorites();
+          setIsFavorite(guestFavorites.includes(listingId));
+        }
+      } catch {
+        if (!mounted) return;
         setIsAuthenticated(false);
         const guestFavorites = getGuestFavorites();
         setIsFavorite(guestFavorites.includes(listingId));
@@ -66,19 +74,14 @@ export default function FavoriteButton({
 
     setLoading(true);
     setErrorMessage("");
+    setInfoMessage("");
 
     try {
       const {
         data: { user },
-        error: userError,
       } = await supabase.auth.getUser();
 
-      if (userError) {
-        setErrorMessage("Impossible de vérifier votre session.");
-        setLoading(false);
-        return;
-      }
-
+      // MODE VISITEUR NON CONNECTÉ
       if (!user) {
         const guestFavorites = getGuestFavorites();
 
@@ -86,17 +89,23 @@ export default function FavoriteButton({
           const next = guestFavorites.filter((id) => id !== listingId);
           setGuestFavorites(next);
           setIsFavorite(false);
+          setInfoMessage(
+            "Favori temporaire retiré de cet appareil."
+          );
         } else {
           const next = [...guestFavorites, listingId];
           setGuestFavorites(next);
           setIsFavorite(true);
+          setInfoMessage(
+            "Favori temporaire enregistré sur cet appareil. Créez un compte pour le sauvegarder définitivement."
+          );
         }
 
         setIsAuthenticated(false);
-        setLoading(false);
         return;
       }
 
+      // MODE CONNECTÉ
       setIsAuthenticated(true);
 
       if (isFavorite) {
@@ -108,12 +117,11 @@ export default function FavoriteButton({
 
         if (error) {
           setErrorMessage("Impossible de retirer ce favori.");
-          setLoading(false);
           return;
         }
 
         setIsFavorite(false);
-        setLoading(false);
+        setInfoMessage("Annonce retirée de vos favoris.");
         return;
       }
 
@@ -129,13 +137,36 @@ export default function FavoriteButton({
 
       if (error) {
         setErrorMessage("Impossible d’ajouter cette annonce aux favoris.");
-        setLoading(false);
         return;
       }
 
       setIsFavorite(true);
+      setInfoMessage("Annonce ajoutée à vos favoris.");
     } catch {
-      setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
+      // En cas de problème session, on bascule quand même en mode invité
+      try {
+        const guestFavorites = getGuestFavorites();
+
+        if (guestFavorites.includes(listingId)) {
+          const next = guestFavorites.filter((id) => id !== listingId);
+          setGuestFavorites(next);
+          setIsFavorite(false);
+          setInfoMessage(
+            "Favori temporaire retiré de cet appareil."
+          );
+        } else {
+          const next = [...guestFavorites, listingId];
+          setGuestFavorites(next);
+          setIsFavorite(true);
+          setInfoMessage(
+            "Favori temporaire enregistré sur cet appareil. Créez un compte pour le sauvegarder définitivement."
+          );
+        }
+
+        setIsAuthenticated(false);
+      } catch {
+        setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
+      }
     } finally {
       setLoading(false);
     }
@@ -171,10 +202,16 @@ export default function FavoriteButton({
         </span>
       </button>
 
-      {!loading && isAuthenticated === false ? (
+      {!loading && isAuthenticated === false && !infoMessage ? (
         <p className="text-xs text-slate-500 sm:text-[13px]">
-          Favori temporaire enregistré sur cet appareil.
+          Les favoris sont enregistrés temporairement sur cet appareil.
         </p>
+      ) : null}
+
+      {infoMessage ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 sm:text-[13px]">
+          {infoMessage}
+        </div>
       ) : null}
 
       {errorMessage ? (
