@@ -225,15 +225,15 @@ const tokenRes = await fetch(tokenUrl!, {
       decision: "approved",
       reason: "Entreprise active trouvée. Compte validé automatiquement.",
     });
-  } catch (error) {
-    console.error("INSEE_ROUTE_ERROR", error);
+   } catch (error) {
+  console.error("INSEE FULL ERROR:", error);
 
-    return NextResponse.json(
-      {
-        success: false,
-        reason: "Erreur serveur pendant la vérification du SIRET.",
-      },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json(
+    {
+      success: false,
+      reason: "Erreur serveur pendant la vérification du SIRET.",
+    },
+    { status: 500 }
+  );
+}
 }
