@@ -2,10 +2,6 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-type InseeTokenResponse = {
-  access_token?: string;
-};
-
 type InseeEtablissementResponse = {
   etablissement?: {
     siret?: string;
@@ -46,83 +42,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const clientId = process.env.INSEE_CLIENT_ID;
-    const clientSecret = process.env.INSEE_CLIENT_SECRET;
+    const apiKey = process.env.INSEE_API_KEY;
 
     console.error("INSEE ENV CHECK", {
-      hasClientId: Boolean(clientId),
-      hasClientSecret: Boolean(clientSecret),
+      hasApiKey: Boolean(apiKey),
     });
 
-    if (!clientId || !clientSecret) {
+    if (!apiKey) {
       return NextResponse.json(
         {
           success: false,
-          reason: "Les identifiants API Insee sont manquants sur le serveur.",
+          reason: "La clé API Insee est manquante sur le serveur.",
         },
         { status: 500 }
       );
     }
 
-    const basicAuth = Buffer.from(`${clientId}:${clientSecret}`, "utf-8").toString(
-      "base64"
-    );
-
-    const tokenBody = new URLSearchParams({
-      grant_type: "client_credentials",
-    }).toString();
-
-   const tokenRes = await fetch("https://api.insee.fr/oauth2/token", {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${basicAuth}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-      },
-      body: tokenBody,
-      cache: "no-store",
-    });
-
-    if (!tokenRes.ok) {
-      const text = await tokenRes.text();
-
-      console.error("INSEE_TOKEN_ERROR", {
-        status: tokenRes.status,
-        statusText: tokenRes.statusText,
-        body: text,
-      });
-
-      return NextResponse.json(
-        {
-          success: false,
-          reason: "Impossible d’obtenir le token Insee.",
-          details: text,
-        },
-        { status: 502 }
-      );
-    }
-
-    const tokenData = (await tokenRes.json()) as InseeTokenResponse;
-    const accessToken = tokenData.access_token;
-
-    if (!accessToken) {
-      console.error("INSEE_TOKEN_MISSING", tokenData);
-
-      return NextResponse.json(
-        {
-          success: false,
-          reason: "Token Insee introuvable dans la réponse.",
-        },
-        { status: 502 }
-      );
-    }
-
     const sireneRes = await fetch(
-      `[api.insee.fr](https://api.insee.fr/api-sirene/3.11/siret/${cleanSiret})`,
+      `https://api.insee.fr/api-sirene/3.11/siret/${cleanSiret}`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          "X-INSEE-API-KEY": apiKey,
           Accept: "application/json",
         },
         cache: "no-store",
