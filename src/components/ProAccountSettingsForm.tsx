@@ -531,7 +531,9 @@ export default function ProAccountSettingsForm({
               <textarea
                 value={openingHours}
                 onChange={(e) => setOpeningHours(e.target.value)}
-                placeholder={"Lundi - Vendredi : 09:00 - 18:00\nSamedi : 09:00 - 12:00\nDimanche : Fermé"}
+                placeholder={
+                  "Lundi - Vendredi : 09:00 - 18:00\nSamedi : 09:00 - 12:00\nDimanche : Fermé"
+                }
                 rows={4}
                 className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
               />
