@@ -1,0 +1,311 @@
+@import "tailwindcss";
+
+/* ===============================
+   VARIABLES THEME
+================================ */
+:root {
+  --bg: 255 255 255;
+  --fg: 24 18 12;
+  --muted: 100 116 139;
+  --border: 228 221 212;
+  --card: 255 255 255;
+
+  --brand: 23 19 17;       /* noir bouton / CTA */
+  --brand-2: 24 18 12;     /* noir principal */
+  --brand-3: 60 52 46;     /* accent foncé */
+  --brand-soft: 247 245 242;
+  --ring: 189 180 168;
+}
+
+/* ===============================
+   GLOBAL RESET / FIXES
+================================ */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  color: rgb(var(--fg));
+  background:
+    radial-gradient(900px 500px at 18% 0%, rgba(201, 178, 142, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 82% 10%, rgba(120, 98, 74, 0.07), transparent 58%),
+    rgb(var(--bg));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ===============================
+   TEXT 3D / RELIEF
+================================ */
+.text-3d-hero {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 0 rgba(228, 221, 212, 0.95),
+    0 3px 0 rgba(204, 194, 182, 0.82),
+    0 10px 24px rgba(24, 18, 12, 0.16);
+}
+
+.text-3d-title {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 0 rgba(231, 224, 216, 0.92),
+    0 6px 16px rgba(24, 18, 12, 0.10);
+}
+
+.text-3d-soft {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 0 rgba(238, 234, 228, 0.88),
+    0 3px 6px rgba(24, 18, 12, 0.08);
+}
+
+.text-3d-button {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.22);
+}
+
+/* ===============================
+   COMPONENTS
+================================ */
+@layer components {
+  .container-app {
+    @apply mx-auto w-full min-w-0 max-w-6xl px-4 sm:px-5 lg:px-6;
+  }
+
+  .card {
+    @apply min-w-0 rounded-[28px] border bg-white backdrop-blur;
+    border-color: rgb(var(--border));
+    box-shadow:
+      0 1px 0 rgba(15, 23, 42, 0.03),
+      0 14px 40px rgba(24, 18, 12, 0.06);
+  }
+
+  .card-soft {
+    @apply min-w-0 rounded-[28px] border backdrop-blur;
+    border-color: rgb(var(--border));
+    background: linear-gradient(180deg, rgba(252, 251, 249, 0.96) 0%, rgba(247, 245, 242, 0.96) 100%);
+    box-shadow:
+      0 1px 0 rgba(15, 23, 42, 0.03),
+      0 14px 40px rgba(24, 18, 12, 0.08);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-2xl px-5 py-3 text-sm font-semibold transition;
+  }
+
+  .btn-primary {
+    @apply text-white;
+    background: rgb(var(--brand));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 10px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  .btn-primary:hover {
+    background: rgb(15, 13, 12);
+  }
+
+  .btn-secondary {
+    @apply border bg-white;
+    border-color: rgb(228, 221, 212);
+    color: rgb(var(--brand));
+  }
+
+  .btn-secondary:hover {
+    background: rgb(var(--brand-soft));
+  }
+
+  .btn-soft {
+    @apply border;
+    border-color: rgb(228, 221, 212);
+    background: rgb(var(--brand-soft));
+    color: rgb(var(--brand-2));
+  }
+
+  .btn-soft:hover {
+    background: rgb(241, 236, 228);
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-medium;
+    border-color: rgb(228, 221, 212);
+    background: rgb(250, 247, 242);
+    color: rgb(var(--brand-2));
+  }
+
+  .pill {
+    @apply inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-medium;
+    border-color: rgb(228, 221, 212);
+    background: rgb(255, 255, 255);
+    color: rgb(var(--brand-2));
+  }
+
+  .pill-active {
+    @apply inline-flex items-center whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-white;
+    background: rgb(var(--brand));
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+  }
+
+  .h1 {
+    @apply text-4xl font-bold tracking-tight sm:text-5xl;
+  }
+
+  .h2 {
+    @apply text-2xl font-semibold tracking-tight sm:text-3xl;
+  }
+
+  .h3 {
+    @apply text-xl font-semibold tracking-tight sm:text-2xl;
+  }
+
+  .lead {
+    @apply text-base leading-7 text-slate-600 sm:text-lg;
+  }
+
+  .safe-wrap {
+    @apply min-w-0 overflow-hidden;
+  }
+
+  .text-link-brand {
+    color: rgb(var(--brand));
+  }
+
+  .text-link-brand:hover {
+    text-decoration: underline;
+  }
+
+  .input-premium {
+    @apply w-full rounded-2xl border bg-white px-4 py-3.5 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400;
+    border-color: rgb(228, 221, 212);
+  }
+
+  .input-premium:focus {
+    border-color: rgb(var(--ring));
+    box-shadow: 0 0 0 4px rgba(241, 236, 228, 1);
+  }
+
+  .section-title {
+    @apply text-xl font-semibold tracking-tight sm:text-[22px];
+    color: rgb(24, 18, 12);
+  }
+
+  .price-brand {
+    @apply font-semibold tracking-tight;
+    color: rgb(24, 18, 12);
+  }
+}
+
+/* ===============================
+   GLOBAL OPTIONAL 3D HELPERS
+================================ */
+h1.relief,
+h2.relief-strong,
+h3.relief-strong {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 0 rgba(231, 224, 216, 0.90),
+    0 8px 20px rgba(24, 18, 12, 0.12);
+}
+
+p.relief,
+span.relief,
+a.relief,
+button.relief,
+label.relief,
+li.relief {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.78),
+    0 1px 2px rgba(24, 18, 12, 0.08);
+}
+
+/* ===============================
+   FORMS FIXES
+================================ */
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
