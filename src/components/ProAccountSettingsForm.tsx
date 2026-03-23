@@ -87,6 +87,9 @@ export default function ProAccountSettingsForm({
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteStep, setDeleteStep] = useState<1 | 2>(1);
+
   const displayName = garageName?.trim() || `${firstName} ${lastName}`.trim();
   const initial = getInitial(displayName, userEmail);
 
@@ -183,17 +186,12 @@ export default function ProAccountSettingsForm({
     }
   }
 
-  async function handleDeleteAccount() {
-    const firstConfirm = window.confirm(
-      "Voulez-vous vraiment supprimer votre compte professionnel ?"
-    );
-    if (!firstConfirm) return;
+  function handleDeleteAccount() {
+    setShowDeleteModal(true);
+    setDeleteStep(1);
+  }
 
-    const secondConfirm = window.confirm(
-      "Cette action est définitive. Votre compte, votre profil, votre compte pro, vos annonces, vos messages, vos favoris et toutes les données liées seront supprimés. Continuer ?"
-    );
-    if (!secondConfirm) return;
-
+  async function confirmDeleteAccount() {
     setDeletingAccount(true);
     setSuccessMessage("");
     setErrorMessage("");
@@ -207,6 +205,8 @@ export default function ProAccountSettingsForm({
 
       if (!res.ok) {
         setErrorMessage(data?.reason || "Impossible de supprimer le compte.");
+        setShowDeleteModal(false);
+        setDeleteStep(1);
         return;
       }
 
@@ -214,6 +214,8 @@ export default function ProAccountSettingsForm({
       window.location.href = "/";
     } catch {
       setErrorMessage("Erreur réseau pendant la suppression du compte.");
+      setShowDeleteModal(false);
+      setDeleteStep(1);
     } finally {
       setDeletingAccount(false);
     }
@@ -415,7 +417,9 @@ export default function ProAccountSettingsForm({
               </div>
 
               <div className="grid gap-2">
-                <label className="text-3d-soft text-sm font-semibold">Téléphone du responsable</label>
+                <label className="text-3d-soft text-sm font-semibold">
+                  Téléphone du responsable
+                </label>
                 <input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -474,7 +478,9 @@ export default function ProAccountSettingsForm({
           <div className="mt-6 grid gap-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <label className="text-3d-soft text-sm font-semibold">Téléphone du garage</label>
+                <label className="text-3d-soft text-sm font-semibold">
+                  Téléphone du garage
+                </label>
                 <input
                   value={garagePhone}
                   onChange={(e) => setGaragePhone(e.target.value)}
@@ -484,7 +490,9 @@ export default function ProAccountSettingsForm({
               </div>
 
               <div className="grid gap-2">
-                <label className="text-3d-soft text-sm font-semibold">Email professionnel</label>
+                <label className="text-3d-soft text-sm font-semibold">
+                  Email professionnel
+                </label>
                 <input
                   value={garageEmail}
                   onChange={(e) => setGarageEmail(e.target.value)}
@@ -527,7 +535,9 @@ export default function ProAccountSettingsForm({
             </div>
 
             <div className="grid gap-2">
-              <label className="text-3d-soft text-sm font-semibold">Horaires d’ouverture</label>
+              <label className="text-3d-soft text-sm font-semibold">
+                Horaires d’ouverture
+              </label>
               <textarea
                 value={openingHours}
                 onChange={(e) => setOpeningHours(e.target.value)}
@@ -540,7 +550,9 @@ export default function ProAccountSettingsForm({
             </div>
 
             <div className="grid gap-2">
-              <label className="text-3d-soft text-sm font-semibold">Présentation du garage</label>
+              <label className="text-3d-soft text-sm font-semibold">
+                Présentation du garage
+              </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -652,7 +664,8 @@ export default function ProAccountSettingsForm({
                 Confidentialité
               </h2>
               <p className="text-3d-soft mt-1 text-sm text-slate-600">
-                Les informations privées du compte professionnel ne sont pas affichées publiquement.
+                Les informations privées du compte professionnel ne sont pas affichées
+                publiquement.
               </p>
             </div>
 
@@ -666,17 +679,16 @@ export default function ProAccountSettingsForm({
           </div>
         </section>
 
-        <section className="animate-fade-up rounded-[28px] border border-red-200 bg-red-50 p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
-              <h2 className="text-xl font-bold tracking-tight text-red-700">
+              <h2 className="text-lg font-semibold tracking-tight text-black">
                 Supprimer mon compte
               </h2>
-              <p className="mt-2 text-sm leading-6 text-red-700/90">
+              <p className="mt-2 text-sm leading-6 text-slate-600">
                 Cette action est définitive. Votre profil, votre compte professionnel,
                 vos annonces, vos photos d’annonces, vos messages, vos favoris et toutes
-                les données liées à votre compte seront supprimés. Vous pourrez recréer
-                un compte plus tard avec la même adresse email.
+                les données liées à votre compte seront supprimés.
               </p>
             </div>
 
@@ -684,15 +696,71 @@ export default function ProAccountSettingsForm({
               type="button"
               onClick={handleDeleteAccount}
               disabled={deletingAccount}
-              className="inline-flex items-center justify-center rounded-2xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 transition hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {deletingAccount
-                ? "Suppression en cours..."
-                : "Supprimer définitivement mon compte"}
+              {deletingAccount ? "Suppression..." : "Supprimer mon compte"}
             </button>
           </div>
         </section>
       </form>
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4">
+          <div className="w-full max-w-lg rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_25px_80px_rgba(0,0,0,0.22)] sm:p-7">
+            <div className="flex flex-col gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-500">
+                  Confirmation
+                </p>
+
+                <h3 className="mt-2 text-2xl font-bold tracking-tight text-black">
+                  {deleteStep === 1
+                    ? "Supprimer votre compte professionnel ?"
+                    : "Confirmation définitive"}
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  {deleteStep === 1
+                    ? "Voulez-vous vraiment supprimer votre compte professionnel ?"
+                    : "Cette action est définitive. Votre compte, votre profil, votre compte pro, vos annonces, vos messages, vos favoris et toutes les données liées seront supprimés. Continuer ?"}
+                </p>
+              </div>
+
+              <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDeleteStep(1);
+                  }}
+                  className="inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#f8f6f3]"
+                >
+                  Annuler
+                </button>
+
+                {deleteStep === 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => setDeleteStep(2)}
+                    className="inline-flex items-center justify-center rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-[#171311]"
+                  >
+                    Continuer
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={confirmDeleteAccount}
+                    disabled={deletingAccount}
+                    className="inline-flex items-center justify-center rounded-2xl bg-red-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {deletingAccount ? "Suppression..." : "Supprimer définitivement"}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

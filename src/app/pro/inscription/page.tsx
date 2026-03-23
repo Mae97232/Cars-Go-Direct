@@ -25,7 +25,7 @@ export default function InscriptionPro() {
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -36,16 +36,66 @@ export default function InscriptionPro() {
       },
     });
 
+    // 🔴 CAS : COMPTE EXISTE DÉJÀ
     if (error) {
-      setErrorMessage(error.message);
+      const message = error.message?.toLowerCase() || "";
+
+      if (message.includes("already registered")) {
+        // tentative de connexion automatique
+        const { data: loginData, error: loginError } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+        if (loginError || !loginData.user) {
+          setErrorMessage("Ce compte existe déjà, mais le mot de passe est incorrect.");
+          setLoading(false);
+          return;
+        }
+
+        // récupération profil
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("role, onboarding_completed")
+          .eq("id", loginData.user.id)
+          .single();
+
+        if (profileError) {
+          setErrorMessage("Impossible de reprendre votre inscription.");
+          setLoading(false);
+          return;
+        }
+
+        // 🔥 REDIRECTION INTELLIGENTE
+        if (profile?.role === "pro" && !profile?.onboarding_completed) {
+          router.push("/pro/onboarding");
+          return;
+        }
+
+        router.push("/pro/dashboard");
+        return;
+      }
+
+      setErrorMessage(error.message || "Impossible de créer le compte.");
       setLoading(false);
       return;
     }
 
-    setSuccessMessage("Compte créé. Redirection en cours...");
+    // 🟢 NOUVEAU COMPTE
+    const userId = data.user?.id;
 
+    if (userId) {
+      await supabase.from("profiles").upsert({
+        id: userId,
+        email,
+        role: "pro",
+        onboarding_completed: false,
+      });
+    }
+
+    setSuccessMessage("Compte créé. Redirection...");
     router.push("/pro/onboarding");
-    router.refresh();
   }
 
   async function signupGoogle() {
@@ -78,24 +128,20 @@ export default function InscriptionPro() {
         </p>
 
         <div className="mt-6">
-          <AuthProviders
-            mode="signup"
-            onGoogle={signupGoogle}
-            loading={loading}
-          />
+          <AuthProviders mode="signup" onGoogle={signupGoogle} loading={loading} />
         </div>
 
-        {errorMessage ? (
+        {errorMessage && (
           <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {errorMessage}
           </div>
-        ) : null}
+        )}
 
-        {successMessage ? (
+        {successMessage && (
           <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
             {successMessage}
           </div>
-        ) : null}
+        )}
 
         <form onSubmit={signup} className="mt-5 grid gap-3">
           <input
@@ -116,30 +162,14 @@ export default function InscriptionPro() {
 
           <button
             disabled={loading}
-            className="text-3d-button mt-2 inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+            className="text-3d-button mt-2 inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:opacity-60"
           >
             {loading ? "Création..." : "Créer mon accès pro"}
           </button>
 
-          <p className="text-3d-soft mt-2 text-xs text-slate-500">
-            Après création du compte, vous serez redirigé vers l’étape de vérification SIRET.
-          </p>
-
           <div className="mt-3 text-center text-sm text-slate-600">
-            <Link
-              href="/pro/connexion"
-              className="text-3d-soft font-medium text-black hover:underline"
-            >
+            <Link href="/pro/connexion" className="font-medium text-black hover:underline">
               Déjà un compte ? Se connecter
-            </Link>
-          </div>
-
-          <div className="mt-3 text-center text-sm text-slate-600">
-            <Link
-              href="/inscription"
-              className="text-3d-soft font-medium text-black hover:underline"
-            >
-              Vous êtes particulier ? Créer un compte particulier
             </Link>
           </div>
         </form>
