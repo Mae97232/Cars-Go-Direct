@@ -5,6 +5,7 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const next = requestUrl.searchParams.get("next");
+  const roleParam = requestUrl.searchParams.get("role"); // 🔥 AJOUT
   const origin = requestUrl.origin;
 
   const supabase = await createClient();
@@ -40,7 +41,7 @@ export async function GET(request: Request) {
       .upsert({
         id: user.id,
         email: user.email,
-        role: next?.includes("/pro") ? "pro" : "buyer",
+        role: roleParam === "pro" ? "pro" : "buyer", // 🔥 FIX ICI
         onboarding_completed: false,
       })
       .select()
