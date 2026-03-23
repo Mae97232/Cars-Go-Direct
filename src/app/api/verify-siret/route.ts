@@ -2,12 +2,6 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-type InseeTokenResponse = {
-  access_token?: string;
-  token_type?: string;
-  expires_in?: number;
-};
-
 type InseeEtablissementResponse = {
   etablissement?: {
     siret?: string;
@@ -33,66 +27,6 @@ function normalizeSiret(value: string) {
   return value.replace(/\D/g, "");
 }
 
-async function getInseeAccessToken() {
-  const clientId = process.env.INSEE_CLIENT_ID?.trim();
-  const clientSecret = process.env.INSEE_CLIENT_SECRET?.trim();
-  const tokenUrl =
-    process.env.INSEE_TOKEN_URL?.trim() || "https://api.insee.fr/oauth2/token";
-
-  console.error("INSEE OAUTH ENV CHECK", {
-    hasClientId: Boolean(clientId),
-    hasClientSecret: Boolean(clientSecret),
-    tokenUrl,
-  });
-
-  if (!clientId || !clientSecret) {
-    throw new Error("Identifiants OAuth INSEE manquants sur le serveur.");
-  }
-
-  const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString(
-    "base64"
-  );
-
-  const tokenRes = await fetch(tokenUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${basicAuth}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "application/json",
-    },
-    body: "grant_type=client_credentials",
-    cache: "no-store",
-  });
-
-  const tokenText = await tokenRes.text();
-
-  if (!tokenRes.ok) {
-    console.error("INSEE_TOKEN_ERROR", {
-      status: tokenRes.status,
-      statusText: tokenRes.statusText,
-      body: tokenText,
-    });
-
-    throw new Error("Impossible de récupérer le token OAuth INSEE.");
-  }
-
-  let tokenData: InseeTokenResponse;
-
-  try {
-    tokenData = JSON.parse(tokenText) as InseeTokenResponse;
-  } catch {
-    console.error("INSEE_TOKEN_PARSE_ERROR", tokenText);
-    throw new Error("Réponse OAuth INSEE invalide.");
-  }
-
-  if (!tokenData.access_token) {
-    console.error("INSEE_TOKEN_MISSING_ACCESS_TOKEN", tokenData);
-    throw new Error("Token OAuth INSEE introuvable.");
-  }
-
-  return tokenData.access_token;
-}
-
 export async function POST(req: Request) {
   try {
     const { siret } = await req.json();
@@ -108,14 +42,29 @@ export async function POST(req: Request) {
       );
     }
 
-    const accessToken = await getInseeAccessToken();
+    const apiKey = process.env.INSEE_API_KEY?.trim();
+
+    console.error("INSEE ENV CHECK", {
+      hasApiKey: Boolean(apiKey),
+      prefix: apiKey?.slice(0, 8),
+    });
+
+    if (!apiKey) {
+      return NextResponse.json(
+        {
+          success: false,
+          reason: "La clé API Insee est manquante sur le serveur.",
+        },
+        { status: 500 }
+      );
+    }
 
     const sireneRes = await fetch(
       `https://api.insee.fr/api-sirene/3.11/siret/${cleanSiret}`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          "X-INSEE-Api-Key-Integration": apiKey,
           Accept: "application/json",
         },
         cache: "no-store",
