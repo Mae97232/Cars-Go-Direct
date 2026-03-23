@@ -8,56 +8,70 @@ import { useRouter } from "next/navigation";
 
 export default function ConnexionPro() {
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const router = useRouter();
   const supabase = createClient();
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
 
     const formData = new FormData(e.currentTarget);
 
-    const email = String(formData.get("email") ?? "");
+    const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data: signInData, error: signInError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (signInError) {
-      alert(signInError.message);
+    if (signInError || !signInData.user) {
+      setErrorMessage(
+        "Email ou mot de passe incorrect. Si le compte a été créé avec Google, utilisez Google pour vous connecter."
+      );
       setLoading(false);
       return;
     }
 
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      alert("Impossible de récupérer l’utilisateur connecté.");
-      setLoading(false);
-      return;
-    }
+    const user = signInData.user;
 
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role, onboarding_completed")
       .eq("id", user.id)
       .maybeSingle();
 
     if (profileError) {
-      alert("Impossible de vérifier le type de compte.");
+      setErrorMessage("Impossible de vérifier votre compte pour le moment.");
       setLoading(false);
       return;
     }
 
-    if (profile?.role !== "pro") {
+    if (!profile) {
       await supabase.auth.signOut();
-      alert("Ce compte n’est pas un compte professionnel.");
+      setErrorMessage("Aucun profil professionnel n’a été trouvé pour ce compte.");
       setLoading(false);
+      return;
+    }
+
+    if (profile.role !== "pro") {
+      await supabase.auth.signOut();
+      setErrorMessage("Ce compte n’est pas un compte professionnel.");
+      setLoading(false);
+      return;
+    }
+
+    setSuccessMessage("Connexion réussie. Redirection en cours...");
+
+    if (!profile.onboarding_completed) {
+      router.push("/pro/onboarding");
+      router.refresh();
       return;
     }
 
@@ -67,31 +81,40 @@ export default function ConnexionPro() {
 
   async function loginGoogle() {
     setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
 
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback?next=/pro/dashboard`,
       },
     });
 
-    setLoading(false);
+    if (error) {
+      setErrorMessage("Impossible de se connecter avec Google.");
+      setLoading(false);
+    }
   }
 
   async function resetPassword() {
-    const email = prompt("Entrez votre email");
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    const email = window.prompt("Entrez votre email");
 
     if (!email) return;
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo: `${window.location.origin}/auth/callback`,
     });
 
     if (error) {
-      alert(error.message);
-    } else {
-      alert("Email de réinitialisation envoyé.");
+      setErrorMessage("Impossible d’envoyer l’email de réinitialisation.");
+      return;
     }
+
+    setSuccessMessage("Email de réinitialisation envoyé.");
   }
 
   return (
@@ -112,6 +135,18 @@ export default function ConnexionPro() {
             loading={loading}
           />
         </div>
+
+        {errorMessage ? (
+          <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {errorMessage}
+          </div>
+        ) : null}
+
+        {successMessage ? (
+          <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {successMessage}
+          </div>
+        ) : null}
 
         <form onSubmit={login} className="mt-5 grid gap-3">
           <input

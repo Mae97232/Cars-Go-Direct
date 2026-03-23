@@ -54,21 +54,18 @@ export default function ProOnboardingPage() {
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("role, full_name, phone")
+        .select("role, full_name, phone, onboarding_completed")
         .eq("id", user.id)
         .maybeSingle();
 
-      if (profile?.role === "pro") {
-        const { data: proAccount } = await supabase
-          .from("pro_accounts")
-          .select("id")
-          .eq("profile_id", user.id)
-          .maybeSingle();
+      if (profile?.role !== "pro") {
+        router.push("/pro/connexion");
+        return;
+      }
 
-        if (proAccount) {
-          router.push("/pro/dashboard");
-          return;
-        }
+      if (profile?.onboarding_completed) {
+        router.push("/pro/dashboard");
+        return;
       }
 
       if (profile?.full_name) {
@@ -77,6 +74,35 @@ export default function ProOnboardingPage() {
 
       if (profile?.phone) {
         setPhone(profile.phone);
+      }
+
+      const { data: proAccount } = await supabase
+        .from("pro_accounts")
+        .select("garage_name, siret, legal_name, city, ape_code, verification_status")
+        .eq("profile_id", user.id)
+        .maybeSingle();
+
+      if (proAccount?.garage_name) {
+        setGarageName(proAccount.garage_name);
+      }
+
+      if (proAccount?.siret) {
+        setSiret(proAccount.siret);
+      }
+
+      if (proAccount?.verification_status === "approved") {
+        setVerificationStatus("approved");
+        setVerificationMessage("Entreprise déjà vérifiée avec succès.");
+        setCompany({
+          success: true,
+          siret: proAccount.siret,
+          siren: proAccount.siret?.slice(0, 9) || null,
+          legal_name: proAccount.legal_name || proAccount.garage_name || null,
+          city: proAccount.city || null,
+          ape: proAccount.ape_code || null,
+          decision: "approved",
+          reason: "Entreprise déjà vérifiée.",
+        });
       }
     }
 
@@ -166,6 +192,7 @@ export default function ProOnboardingPage() {
         phone: phone.trim(),
         city: company.city,
         role: "pro",
+        onboarding_completed: true,
         updated_at: new Date().toISOString(),
       },
       { onConflict: "id" }
