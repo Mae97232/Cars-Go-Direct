@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
@@ -15,6 +15,7 @@ type ListingRow = {
 export async function POST() {
   try {
     const supabase = await createClient();
+    const supabaseAdmin = getSupabaseAdmin();
 
     const {
       data: { user },
@@ -37,7 +38,7 @@ export async function POST() {
       .from("pro_accounts")
       .select("id")
       .eq("profile_id", userId)
-      .maybeSingle<ProAccountRow>();
+      .maybeSingle();
 
     if (proAccountError) {
       console.error("ACCOUNT_DELETE_PRO_ACCOUNT_FETCH_ERROR", proAccountError);
@@ -51,7 +52,8 @@ export async function POST() {
       );
     }
 
-    const proId = proAccount?.id ?? null;
+    const typedProAccount = proAccount as ProAccountRow | null;
+    const proId = typedProAccount?.id ?? null;
 
     const { error: favoritesError } = await supabaseAdmin
       .from("favorites")
@@ -108,8 +110,7 @@ export async function POST() {
       const { data: listings, error: listingsFetchError } = await supabaseAdmin
         .from("listings")
         .select("id")
-        .eq("pro_account_id", proId)
-        .returns<ListingRow[]>();
+        .eq("pro_account_id", proId);
 
       if (listingsFetchError) {
         console.error("ACCOUNT_DELETE_LISTINGS_FETCH_ERROR", listingsFetchError);
@@ -123,7 +124,9 @@ export async function POST() {
         );
       }
 
-      const listingIds = (listings ?? []).map((item) => item.id);
+      const listingIds = ((listings ?? []) as ListingRow[]).map(
+        (item: ListingRow) => item.id
+      );
 
       if (listingIds.length > 0) {
         const { error: listingPhotosError } = await supabaseAdmin
