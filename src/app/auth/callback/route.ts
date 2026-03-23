@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next");
+  const flow = requestUrl.searchParams.get("flow");
   const origin = requestUrl.origin;
 
   const supabase = await createClient();
@@ -26,56 +26,57 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/connexion`);
   }
 
-  // 🔥 RÉCUP PROFIL
-  let { data: profile } = await supabase
+  let { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role, onboarding_completed")
     .eq("id", user.id)
     .maybeSingle();
 
-  // 🔥 CRÉATION SI INEXISTANT
+  if (profileError) {
+    return NextResponse.redirect(`${origin}/connexion`);
+  }
+
   if (!profile) {
-    const { data: newProfile } = await supabase
+    const { data: newProfile, error: createProfileError } = await supabase
       .from("profiles")
       .upsert({
         id: user.id,
         email: user.email,
-        role: next?.startsWith("/pro") ? "pro" : "buyer", // ✅ FIX
+        role: flow === "pro" ? "pro" : "buyer",
         onboarding_completed: false,
       })
-      .select()
+      .select("role, onboarding_completed")
       .single();
+
+    if (createProfileError || !newProfile) {
+      return NextResponse.redirect(`${origin}/connexion`);
+    }
 
     profile = newProfile;
   }
 
-  // 🔥 UPGRADE buyer → pro SI LOGIN VIA /pro
-  if (profile && profile.role !== "pro" && next?.startsWith("/pro")) {
-    const { data: updatedProfile } = await supabase
+  if (flow === "pro" && profile.role !== "pro") {
+    const { data: upgradedProfile, error: upgradeError } = await supabase
       .from("profiles")
       .update({ role: "pro" })
       .eq("id", user.id)
-      .select()
+      .select("role, onboarding_completed")
       .single();
 
-    profile = updatedProfile;
-  }
-
-  // 🔥 REDIRECTION PRO
-  if (profile?.role === "pro") {
-    if (!profile.onboarding_completed) {
-      return NextResponse.redirect(
-        `${origin}/auth/post-login?next=${encodeURIComponent("/pro/onboarding")}`
-      );
+    if (upgradeError || !upgradedProfile) {
+      return NextResponse.redirect(`${origin}/connexion`);
     }
 
-    return NextResponse.redirect(
-      `${origin}/auth/post-login?next=${encodeURIComponent("/pro/dashboard")}`
-      );
+    profile = upgradedProfile;
   }
 
-  // 🔥 PARTICULIER
-  return NextResponse.redirect(
-    `${origin}/auth/post-login?next=${encodeURIComponent("/compte")}`
-  );
+  if (profile.role === "pro") {
+    if (!profile.onboarding_completed) {
+      return NextResponse.redirect(`${origin}/pro/onboarding`);
+    }
+
+    return NextResponse.redirect(`${origin}/pro/dashboard`);
+  }
+
+  return NextResponse.redirect(`${origin}/compte`);
 }

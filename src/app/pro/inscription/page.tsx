@@ -29,19 +29,17 @@ export default function InscriptionPro() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/pro/onboarding`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?flow=pro`,
         data: {
           signup_role: "pro",
         },
       },
     });
 
-    // 🔴 CAS : COMPTE EXISTE DÉJÀ
     if (error) {
       const message = error.message?.toLowerCase() || "";
 
       if (message.includes("already registered")) {
-        // tentative de connexion automatique
         const { data: loginData, error: loginError } =
           await supabase.auth.signInWithPassword({
             email,
@@ -54,7 +52,6 @@ export default function InscriptionPro() {
           return;
         }
 
-        // récupération profil
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("role, onboarding_completed")
@@ -67,8 +64,11 @@ export default function InscriptionPro() {
           return;
         }
 
-        // 🔥 REDIRECTION INTELLIGENTE
-        if (profile?.role === "pro" && !profile?.onboarding_completed) {
+        if (profile?.role !== "pro") {
+          await supabase.from("profiles").update({ role: "pro" }).eq("id", loginData.user.id);
+        }
+
+        if (!profile?.onboarding_completed) {
           router.push("/pro/onboarding");
           return;
         }
@@ -82,7 +82,6 @@ export default function InscriptionPro() {
       return;
     }
 
-    // 🟢 NOUVEAU COMPTE
     const userId = data.user?.id;
 
     if (userId) {
@@ -106,12 +105,12 @@ export default function InscriptionPro() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/pro/onboarding`,
+        redirectTo: `${window.location.origin}/auth/callback?flow=pro`,
       },
     });
 
     if (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(error.message || "Impossible de continuer avec Google.");
       setLoading(false);
     }
   }
