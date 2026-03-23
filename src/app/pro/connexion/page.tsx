@@ -80,22 +80,22 @@ export default function ConnexionPro() {
   }
 
   async function loginGoogle() {
-  setLoading(true);
-  setErrorMessage("");
-  setSuccessMessage("");
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
 
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: `${window.location.origin}/auth/pro/callback`,
-    },
-  });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/pro/callback`,
+      },
+    });
 
-  if (error) {
-    setErrorMessage("Impossible de se connecter avec Google.");
-    setLoading(false);
+    if (error) {
+      setErrorMessage("Impossible de se connecter avec Google.");
+      setLoading(false);
+    }
   }
-}
 
   async function resetPassword() {
     setErrorMessage("");

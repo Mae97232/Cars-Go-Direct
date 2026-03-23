@@ -29,7 +29,7 @@ export default function InscriptionPro() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?flow=pro`,
+        emailRedirectTo: `${window.location.origin}/auth/pro/callback`,
         data: {
           signup_role: "pro",
         },
@@ -65,7 +65,16 @@ export default function InscriptionPro() {
         }
 
         if (profile?.role !== "pro") {
-          await supabase.from("profiles").update({ role: "pro" }).eq("id", loginData.user.id);
+          const { error: upgradeError } = await supabase
+            .from("profiles")
+            .update({ role: "pro" })
+            .eq("id", loginData.user.id);
+
+          if (upgradeError) {
+            setErrorMessage("Impossible de convertir ce compte en compte professionnel.");
+            setLoading(false);
+            return;
+          }
         }
 
         if (!profile?.onboarding_completed) {
@@ -85,12 +94,18 @@ export default function InscriptionPro() {
     const userId = data.user?.id;
 
     if (userId) {
-      await supabase.from("profiles").upsert({
+      const { error: upsertError } = await supabase.from("profiles").upsert({
         id: userId,
         email,
         role: "pro",
         onboarding_completed: false,
       });
+
+      if (upsertError) {
+        setErrorMessage("Compte créé, mais impossible d’initialiser le profil professionnel.");
+        setLoading(false);
+        return;
+      }
     }
 
     setSuccessMessage("Compte créé. Redirection...");
@@ -98,22 +113,22 @@ export default function InscriptionPro() {
   }
 
   async function signupGoogle() {
-  setLoading(true);
-  setErrorMessage("");
-  setSuccessMessage("");
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
 
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: `${window.location.origin}/auth/pro/callback`,
-    },
-  });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/pro/callback`,
+      },
+    });
 
-  if (error) {
-    setErrorMessage(error.message || "Impossible de continuer avec Google.");
-    setLoading(false);
+    if (error) {
+      setErrorMessage(error.message || "Impossible de continuer avec Google.");
+      setLoading(false);
+    }
   }
-}
 
   return (
     <div className="mx-auto max-w-xl">
