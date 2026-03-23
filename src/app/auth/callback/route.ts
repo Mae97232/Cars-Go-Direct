@@ -26,30 +26,32 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/connexion`);
   }
 
-  if (next === "/pro/onboarding") {
-    return NextResponse.redirect(
-      `${origin}/auth/post-login?next=${encodeURIComponent("/pro/onboarding")}`
-    );
-  }
-
-  const { data: profile, error: profileError } = await supabase
+  // 🔥 RÉCUP OU CRÉATION DU PROFIL
+  let { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, onboarding_completed")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profileError) {
-    return NextResponse.redirect(`${origin}/connexion`);
+  // 👉 SI PAS DE PROFIL → ON LE CRÉE
+  if (!profile) {
+    const { data: newProfile } = await supabase
+      .from("profiles")
+      .upsert({
+        id: user.id,
+        email: user.email,
+        role: next?.includes("/pro") ? "pro" : "buyer",
+        onboarding_completed: false,
+      })
+      .select()
+      .single();
+
+    profile = newProfile;
   }
 
+  // 🔥 CAS PRO
   if (profile?.role === "pro") {
-    const { data: proAccount } = await supabase
-      .from("pro_accounts")
-      .select("id")
-      .eq("profile_id", user.id)
-      .maybeSingle();
-
-    if (!proAccount) {
+    if (!profile.onboarding_completed) {
       return NextResponse.redirect(
         `${origin}/auth/post-login?next=${encodeURIComponent("/pro/onboarding")}`
       );
@@ -60,6 +62,7 @@ export async function GET(request: Request) {
     );
   }
 
+  // 🔥 CAS PARTICULIER
   return NextResponse.redirect(
     `${origin}/auth/post-login?next=${encodeURIComponent("/compte")}`
   );
