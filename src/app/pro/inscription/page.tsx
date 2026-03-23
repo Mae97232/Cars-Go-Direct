@@ -98,22 +98,22 @@ export default function InscriptionPro() {
   }
 
   async function signupGoogle() {
-    setLoading(true);
-    setErrorMessage("");
-    setSuccessMessage("");
+  setLoading(true);
+  setErrorMessage("");
+  setSuccessMessage("");
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?flow=pro`,
-      },
-    });
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${window.location.origin}/auth/pro/callback`,
+    },
+  });
 
-    if (error) {
-      setErrorMessage(error.message || "Impossible de continuer avec Google.");
-      setLoading(false);
-    }
+  if (error) {
+    setErrorMessage(error.message || "Impossible de continuer avec Google.");
+    setLoading(false);
   }
+}
 
   return (
     <div className="mx-auto max-w-xl">
