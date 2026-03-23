@@ -93,6 +93,7 @@ export default function AccountSettingsForm({
 
   const [saving, setSaving] = useState(false);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -169,6 +170,44 @@ export default function AccountSettingsForm({
       setErrorMessage("Erreur réseau.");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDeleteAccount() {
+    const firstConfirm = window.confirm(
+      "Voulez-vous vraiment supprimer votre compte ?"
+    );
+    if (!firstConfirm) return;
+
+    const secondConfirm = window.confirm(
+      "Cette action est définitive. Votre profil, vos messages, vos favoris et toutes vos données liées au compte seront supprimés. Continuer ?"
+    );
+    if (!secondConfirm) return;
+
+    setDeletingAccount(true);
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/account/delete", {
+        method: "POST",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMessage(
+          data?.reason || "Impossible de supprimer le compte."
+        );
+        return;
+      }
+
+      alert("Votre compte a été supprimé définitivement.");
+      window.location.href = "/";
+    } catch {
+      setErrorMessage("Erreur réseau pendant la suppression du compte.");
+    } finally {
+      setDeletingAccount(false);
     }
   }
 
@@ -416,7 +455,10 @@ export default function AccountSettingsForm({
           </section>
         )}
 
-        <section className="animate-fade-up border-t border-[#ece7e0] pt-6" style={{ animationDelay: "0.26s" }}>
+        <section
+          className="animate-fade-up border-t border-[#ece7e0] pt-6"
+          style={{ animationDelay: "0.26s" }}
+        >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
@@ -433,6 +475,36 @@ export default function AccountSettingsForm({
               disabled={saving}
             >
               {saving ? "Enregistrement..." : "Enregistrer les modifications"}
+            </button>
+          </div>
+        </section>
+
+        <section
+          className="animate-fade-up rounded-[28px] border border-red-200 bg-red-50 p-6"
+          style={{ animationDelay: "0.3s" }}
+        >
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <h2 className="text-xl font-semibold tracking-tight text-red-700">
+                Supprimer mon compte
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-red-700/90">
+                Cette action est définitive. Votre profil, vos messages, vos favoris,
+                vos paramètres privés et toutes les données liées à votre compte seront
+                supprimés. Vous pourrez recréer un compte plus tard avec la même adresse
+                email.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleDeleteAccount}
+              disabled={deletingAccount}
+              className="inline-flex items-center justify-center rounded-2xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {deletingAccount
+                ? "Suppression en cours..."
+                : "Supprimer définitivement mon compte"}
             </button>
           </div>
         </section>
