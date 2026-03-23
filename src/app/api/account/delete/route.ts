@@ -34,6 +34,7 @@ export async function POST() {
 
     const userId = user.id;
 
+    // 1. récupérer le compte pro éventuel du profil connecté
     const { data: proAccount, error: proAccountError } = await supabaseAdmin
       .from("pro_accounts")
       .select("id")
@@ -55,10 +56,11 @@ export async function POST() {
     const typedProAccount = proAccount as ProAccountRow | null;
     const proId = typedProAccount?.id ?? null;
 
+    // 2. supprimer les favoris du user auth
     const { error: favoritesError } = await supabaseAdmin
       .from("favorites")
       .delete()
-      .eq("profile_id", userId);
+      .eq("user_id", userId);
 
     if (favoritesError) {
       console.error("ACCOUNT_DELETE_FAVORITES_ERROR", favoritesError);
@@ -72,41 +74,50 @@ export async function POST() {
       );
     }
 
-    const { error: messagesError } = await supabaseAdmin
-      .from("messages")
-      .delete()
-      .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`);
-
-    if (messagesError) {
-      console.error("ACCOUNT_DELETE_MESSAGES_ERROR", messagesError);
-
-      return NextResponse.json(
-        {
-          success: false,
-          reason: "Impossible de supprimer les messages.",
-        },
-        { status: 500 }
-      );
-    }
-
-    const { error: conversationsError } = await supabaseAdmin
+    // 3. supprimer les conversations où l'utilisateur est acheteur
+    // les messages liés sont supprimés automatiquement par cascade
+    const { error: buyerConversationsError } = await supabaseAdmin
       .from("conversations")
       .delete()
-      .or(`user1_id.eq.${userId},user2_id.eq.${userId}`);
+      .eq("buyer_profile_id", userId);
 
-    if (conversationsError) {
-      console.error("ACCOUNT_DELETE_CONVERSATIONS_ERROR", conversationsError);
+    if (buyerConversationsError) {
+      console.error(
+        "ACCOUNT_DELETE_BUYER_CONVERSATIONS_ERROR",
+        buyerConversationsError
+      );
 
       return NextResponse.json(
         {
           success: false,
-          reason: "Impossible de supprimer les conversations.",
+          reason: "Impossible de supprimer les conversations acheteur.",
         },
         { status: 500 }
       );
     }
 
+    // 4. si compte pro -> supprimer conversations du garage + annonces + photos + compte pro
     if (proId) {
+      const { error: proConversationsError } = await supabaseAdmin
+        .from("conversations")
+        .delete()
+        .eq("garage_id", proId);
+
+      if (proConversationsError) {
+        console.error(
+          "ACCOUNT_DELETE_PRO_CONVERSATIONS_ERROR",
+          proConversationsError
+        );
+
+        return NextResponse.json(
+          {
+            success: false,
+            reason: "Impossible de supprimer les conversations du garage.",
+          },
+          { status: 500 }
+        );
+      }
+
       const { data: listings, error: listingsFetchError } = await supabaseAdmin
         .from("listings")
         .select("id")
@@ -135,7 +146,10 @@ export async function POST() {
           .in("listing_id", listingIds);
 
         if (listingPhotosError) {
-          console.error("ACCOUNT_DELETE_LISTING_PHOTOS_ERROR", listingPhotosError);
+          console.error(
+            "ACCOUNT_DELETE_LISTING_PHOTOS_ERROR",
+            listingPhotosError
+          );
 
           return NextResponse.json(
             {
@@ -182,13 +196,17 @@ export async function POST() {
       }
     }
 
+    // 5. supprimer paramètres privés
     const { error: privateSettingsError } = await supabaseAdmin
       .from("private_user_settings")
       .delete()
       .eq("profile_id", userId);
 
     if (privateSettingsError) {
-      console.error("ACCOUNT_DELETE_PRIVATE_SETTINGS_ERROR", privateSettingsError);
+      console.error(
+        "ACCOUNT_DELETE_PRIVATE_SETTINGS_ERROR",
+        privateSettingsError
+      );
 
       return NextResponse.json(
         {
@@ -199,6 +217,7 @@ export async function POST() {
       );
     }
 
+    // 6. supprimer profil
     const { error: profileDeleteError } = await supabaseAdmin
       .from("profiles")
       .delete()
@@ -216,6 +235,7 @@ export async function POST() {
       );
     }
 
+    // 7. supprimer le compte auth
     const { error: authDeleteError } =
       await supabaseAdmin.auth.admin.deleteUser(userId);
 
