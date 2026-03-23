@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const flow = requestUrl.searchParams.get("flow");
   const origin = requestUrl.origin;
 
   const supabase = await createClient();
@@ -42,7 +41,7 @@ export async function GET(request: Request) {
       .upsert({
         id: user.id,
         email: user.email,
-        role: flow === "pro" ? "pro" : "buyer",
+        role: "buyer",
         onboarding_completed: false,
       })
       .select("role, onboarding_completed")
@@ -53,21 +52,6 @@ export async function GET(request: Request) {
     }
 
     profile = newProfile;
-  }
-
-  if (flow === "pro" && profile.role !== "pro") {
-    const { data: upgradedProfile, error: upgradeError } = await supabase
-      .from("profiles")
-      .update({ role: "pro" })
-      .eq("id", user.id)
-      .select("role, onboarding_completed")
-      .single();
-
-    if (upgradeError || !upgradedProfile) {
-      return NextResponse.redirect(`${origin}/connexion`);
-    }
-
-    profile = upgradedProfile;
   }
 
   if (profile.role === "pro") {

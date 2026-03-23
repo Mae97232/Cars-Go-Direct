@@ -9,46 +9,67 @@ export async function GET(request: Request) {
   const supabase = await createClient();
 
   if (code) {
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (error) {
+      return NextResponse.redirect(`${origin}/pro/connexion`);
+    }
   }
 
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (userError || !user) {
     return NextResponse.redirect(`${origin}/pro/connexion`);
   }
 
-  // 🔥 FORCER ROLE PRO ICI
-  const { data: profile } = await supabase
+  let { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role, onboarding_completed")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (!profile) {
-    await supabase.from("profiles").insert({
-      id: user.id,
-      email: user.email,
-      role: "pro",
-      onboarding_completed: false,
-    });
-  } else if (profile.role !== "pro") {
-    await supabase
-      .from("profiles")
-      .update({ role: "pro" })
-      .eq("id", user.id);
+  if (profileError) {
+    return NextResponse.redirect(`${origin}/pro/connexion`);
   }
 
-  // 🔥 REDIRECTION
-  const { data: updatedProfile } = await supabase
-    .from("profiles")
-    .select("onboarding_completed")
-    .eq("id", user.id)
-    .single();
+  if (!profile) {
+    const { data: newProfile, error: createProfileError } = await supabase
+      .from("profiles")
+      .upsert({
+        id: user.id,
+        email: user.email,
+        role: "pro",
+        onboarding_completed: false,
+      })
+      .select("role, onboarding_completed")
+      .single();
 
-  if (!updatedProfile?.onboarding_completed) {
+    if (createProfileError || !newProfile) {
+      return NextResponse.redirect(`${origin}/pro/connexion`);
+    }
+
+    profile = newProfile;
+  }
+
+  if (profile.role !== "pro") {
+    const { data: upgradedProfile, error: upgradeError } = await supabase
+      .from("profiles")
+      .update({ role: "pro" })
+      .eq("id", user.id)
+      .select("role, onboarding_completed")
+      .single();
+
+    if (upgradeError || !upgradedProfile) {
+      return NextResponse.redirect(`${origin}/pro/connexion`);
+    }
+
+    profile = upgradedProfile;
+  }
+
+  if (!profile.onboarding_completed) {
     return NextResponse.redirect(`${origin}/pro/onboarding`);
   }
 
