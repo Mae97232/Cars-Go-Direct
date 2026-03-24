@@ -130,7 +130,12 @@ export default function InscriptionPro() {
     }
   }
 
-  return (
+ return (
+  <>
+    <div style={{ background: "red", color: "white", padding: "16px", fontSize: "24px" }}>
+      TEST PROD 999
+    </div>
+
     <div className="mx-auto max-w-xl">
       <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-8">
         <h1 className="text-3d-hero text-xl font-bold tracking-tight text-black sm:text-2xl">
@@ -189,5 +194,6 @@ export default function InscriptionPro() {
         </form>
       </div>
     </div>
-  );
+  </>
+);
 }
