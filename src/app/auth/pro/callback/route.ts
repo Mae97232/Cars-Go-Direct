@@ -52,9 +52,7 @@ export async function GET(request: Request) {
     }
 
     profile = newProfile;
-  }
-
-  if (profile.role !== "pro") {
+  } else if (profile.role !== "pro") {
     const { data: upgradedProfile, error: upgradeError } = await supabase
       .from("profiles")
       .update({ role: "pro" })

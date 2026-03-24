@@ -25,6 +25,9 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/connexion`);
   }
 
+  const signupRole =
+    user.user_metadata?.signup_role === "pro" ? "pro" : "buyer";
+
   let { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role, onboarding_completed")
@@ -41,7 +44,7 @@ export async function GET(request: Request) {
       .upsert({
         id: user.id,
         email: user.email,
-        role: "buyer",
+        role: signupRole,
         onboarding_completed: false,
       })
       .select("role, onboarding_completed")
