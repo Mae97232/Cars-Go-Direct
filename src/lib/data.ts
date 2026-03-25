@@ -6,7 +6,7 @@ export type Listing = {
   year: number;
   mileage: number;
   price: number;
-  type: "Utilitaire" | "Société" | "Tourisme";
+  type: "Utilitaire" | "Tourisme" | "2 roues";
   fuel: "Diesel" | "Essence" | "Hybride" | "Électrique";
   vatRecoverable: boolean;
   city: string;

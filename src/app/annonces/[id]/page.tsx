@@ -12,6 +12,10 @@ type ProAccount = {
   city?: string | null;
   verification_status?: string | null;
   profile_id?: string | null;
+  google_place_id?: string | null;
+  google_rating?: number | null;
+  google_reviews_count?: number | null;
+  google_maps_url?: string | null;
 };
 
 type RelatedListing = {
@@ -63,13 +67,13 @@ const EQUIPMENT_CATEGORIES = [
 ] as const;
 
 const primaryButtonClass =
-  "text-3d-button inline-flex min-h-[48px] items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.18)] transition hover:bg-[#0f0d0c]";
+  "inline-flex min-h-[48px] items-center justify-center rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-600";
 
 const secondaryButtonClass =
-  "text-3d-soft inline-flex min-h-[48px] items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]";
+  "inline-flex min-h-[48px] items-center justify-center rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600";
 
 const softPillClass =
-  "text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#171311]";
+  "rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-[11px] font-medium text-orange-600";
 
 function formatPriceEUR(value: number | null | undefined) {
   if (typeof value !== "number" || Number.isNaN(value)) {
@@ -160,15 +164,64 @@ function groupEquipmentByCategory(
   return categorized;
 }
 
+function renderStars(rating: number) {
+  const rounded = Math.round(rating);
+  return "★".repeat(rounded) + "☆".repeat(5 - rounded);
+}
+
 function ProPill({ children }: { children: React.ReactNode }) {
   return <span className={softPillClass}>{children}</span>;
 }
 
 function SoftTag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-3d-soft inline-flex items-center rounded-full bg-[#f5f3ef] px-3 py-1.5 text-[12px] font-medium text-[#171311]">
+    <span className="inline-flex items-center rounded-full bg-orange-50 px-3 py-1.5 text-[12px] font-medium text-orange-600">
       {children}
     </span>
+  );
+}
+
+function GoogleReviewsCard({
+  rating,
+  count,
+  url,
+}: {
+  rating?: number | null;
+  count?: number | null;
+  url?: string | null;
+}) {
+  if (typeof rating !== "number" || typeof count !== "number" || count <= 0) {
+    return null;
+  }
+
+  return (
+    <div className="mt-4 rounded-md border border-orange-200 bg-orange-50 p-4">
+      <p className="text-[13px] font-semibold text-slate-900">Avis Google</p>
+
+      <div className="mt-2 flex items-center gap-2">
+        <span className="text-[20px] font-semibold text-orange-600">
+          {rating.toFixed(1)}
+        </span>
+        <span className="text-sm text-slate-600">/ 5</span>
+      </div>
+
+      <p className="mt-1 text-sm text-orange-500">{renderStars(rating)}</p>
+
+      <p className="mt-2 text-[13px] text-slate-600">
+        {count.toLocaleString("fr-FR")} avis Google
+      </p>
+
+      {url ? (
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-3 inline-flex text-sm font-medium text-orange-600 hover:underline"
+        >
+          Voir les avis Google
+        </a>
+      ) : null}
+    </div>
   );
 }
 
@@ -185,17 +238,15 @@ function DetailSection({
 }) {
   return (
     <section
-      className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-5 lg:p-6"
+      className="animate-fade-up rounded-md border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-5 lg:p-6"
       style={{ animationDelay: `${delay}s` }}
     >
       <div>
-        <h2 className="text-3d-title text-[18px] font-semibold tracking-tight text-black sm:text-[20px]">
+        <h2 className="text-[18px] font-semibold tracking-tight text-slate-900 sm:text-[20px]">
           {title}
         </h2>
         {subtitle ? (
-          <p className="text-3d-soft mt-1 text-[14px] text-slate-500">
-            {subtitle}
-          </p>
+          <p className="mt-1 text-[14px] text-slate-500">{subtitle}</p>
         ) : null}
       </div>
       <div className="mt-5">{children}</div>
@@ -211,9 +262,9 @@ function InfoCard({
   value: React.ReactNode;
 }) {
   return (
-    <div className="rounded-3xl border border-[#ece7e0] bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.03)]">
-      <p className="text-3d-soft text-[13px] text-slate-500">{label}</p>
-      <p className="text-3d-title mt-1 text-[15px] font-semibold text-black sm:text-[16px]">
+    <div className="rounded-md border border-slate-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.03)]">
+      <p className="text-[13px] text-slate-500">{label}</p>
+      <p className="mt-1 text-[15px] font-semibold text-slate-900 sm:text-[16px]">
         {value}
       </p>
     </div>
@@ -228,9 +279,9 @@ function InfoRow({
   value: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start justify-between gap-5 border-b border-[#f1ece6] py-3 last:border-b-0">
-      <span className="text-3d-soft text-[14px] text-slate-500">{label}</span>
-      <span className="text-right text-[14px] font-medium text-black sm:text-[15px]">
+    <div className="flex items-start justify-between gap-5 border-b border-slate-200 py-3 last:border-b-0">
+      <span className="text-[14px] text-slate-500">{label}</span>
+      <span className="text-right text-[14px] font-medium text-slate-900 sm:text-[15px]">
         {value}
       </span>
     </div>
@@ -247,7 +298,7 @@ function RelatedCard({ item }: { item: RelatedListing }) {
   return (
     <Link
       href={`/annonces/${item.id}`}
-      className="animate-fade-up group block overflow-hidden rounded-3xl border border-[#e7e2db] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-[#d4ccc2] hover:shadow-[0_18px_40px_rgba(0,0,0,0.06)]"
+      className="animate-fade-up group block overflow-hidden rounded-md border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-orange-300 hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)]"
     >
       <div className="overflow-hidden bg-slate-100">
         {photo ? (
@@ -257,32 +308,30 @@ function RelatedCard({ item }: { item: RelatedListing }) {
             className="aspect-[4/3] h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
           />
         ) : (
-          <div className="text-3d-soft grid aspect-[4/3] place-items-center text-sm text-slate-500">
+          <div className="grid aspect-[4/3] place-items-center text-sm text-slate-500">
             Photo indisponible
           </div>
         )}
       </div>
 
       <div className="p-4">
-        <div className="text-3d-title text-[20px] font-semibold tracking-tight text-black">
+        <div className="text-[20px] font-semibold tracking-tight text-orange-600">
           {formatPriceEUR(item.price)}
         </div>
 
-        <h3 className="text-3d-title mt-1 line-clamp-2 text-[14px] font-semibold leading-5 text-black">
+        <h3 className="mt-1 line-clamp-2 text-[14px] font-semibold leading-5 text-slate-900">
           {item.title}
         </h3>
 
-        <p className="text-3d-soft mt-2 text-[13px] text-slate-600">
+        <p className="mt-2 text-[13px] text-slate-600">
           {item.year || "—"} • {formatNumber(item.mileage, " km")}
         </p>
 
-        <p className="text-3d-soft mt-1 text-[13px] text-slate-500">
+        <p className="mt-1 text-[13px] text-slate-500">
           {item.fuel || "—"} • {item.type || "—"}
         </p>
 
-        <p className="text-3d-soft mt-2 text-[13px] text-slate-500">
-          {locationText}
-        </p>
+        <p className="mt-2 text-[13px] text-slate-500">{locationText}</p>
       </div>
     </Link>
   );
@@ -298,13 +347,13 @@ export default async function AnnonceDetailPage({
 
   if (!item || item.status !== "published") {
     return (
-      <div className="min-h-screen bg-[#f8f6f3]">
+      <div className="min-h-screen bg-white">
         <div className="container-app py-6">
-          <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-8 shadow-[0_14px_40px_rgba(0,0,0,0.05)]">
-            <h1 className="text-3d-title text-2xl font-semibold tracking-tight text-black">
+          <div className="animate-fade-up rounded-md border border-slate-200 bg-white p-8 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
               Annonce introuvable
             </h1>
-            <p className="text-3d-soft mt-2 text-[15px] text-slate-600">
+            <p className="mt-2 text-[15px] text-slate-600">
               L’annonce n’existe pas, n’est plus disponible ou n’est pas publiée.
             </p>
 
@@ -379,12 +428,15 @@ export default async function AnnonceDetailPage({
   let garageVerificationStatus = proAccount?.verification_status ?? null;
   let garageProfileId = proAccount?.profile_id ?? null;
   let garageAvatarUrl: string | null = null;
+  let garageGoogleRating = proAccount?.google_rating ?? null;
+  let garageGoogleReviewsCount = proAccount?.google_reviews_count ?? null;
+  let garageGoogleMapsUrl = proAccount?.google_maps_url ?? null;
 
   if (garageId) {
     const { data: fullProAccount } = await supabase
       .from("pro_accounts")
       .select(
-        "id, garage_name, siret, phone, city, verification_status, profile_id"
+        "id, garage_name, siret, phone, city, verification_status, profile_id, google_place_id, google_rating, google_reviews_count, google_maps_url"
       )
       .eq("id", garageId)
       .maybeSingle();
@@ -397,6 +449,10 @@ export default async function AnnonceDetailPage({
       garageVerificationStatus =
         fullProAccount.verification_status ?? garageVerificationStatus;
       garageProfileId = fullProAccount.profile_id ?? garageProfileId;
+      garageGoogleRating = fullProAccount.google_rating ?? garageGoogleRating;
+      garageGoogleReviewsCount =
+        fullProAccount.google_reviews_count ?? garageGoogleReviewsCount;
+      garageGoogleMapsUrl = fullProAccount.google_maps_url ?? garageGoogleMapsUrl;
     }
   }
 
@@ -562,12 +618,12 @@ export default async function AnnonceDetailPage({
   const similarListings = (similarListingsData ?? []) as RelatedListing[];
 
   return (
-    <div className="min-h-screen bg-[#f8f6f3]">
+    <div className="min-h-screen bg-white text-slate-900">
       <div className="container-app py-4 sm:py-5 lg:py-6">
         <div className="animate-fade-up mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link
             href="/annonces"
-            className="text-3d-soft inline-flex items-center gap-2 text-[14px] font-medium text-[#171311] transition hover:text-black"
+            className="inline-flex items-center gap-2 text-[14px] font-medium text-slate-700 transition hover:text-orange-600"
           >
             <span>←</span>
             <span>Retour aux annonces</span>
@@ -581,9 +637,9 @@ export default async function AnnonceDetailPage({
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
           <main className="min-w-0 space-y-5 sm:space-y-6">
-            <section className="animate-fade-up overflow-hidden rounded-[28px] border border-[#e4ddd4] bg-white p-3 shadow-[0_14px_40px_rgba(0,0,0,0.05)]">
+            <section className="animate-fade-up overflow-hidden rounded-md border border-slate-200 bg-white p-3 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
               <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_320px]">
-                <div className="relative overflow-hidden rounded-[24px] bg-slate-100">
+                <div className="relative overflow-hidden rounded-md bg-slate-100">
                   {mainPhoto ? (
                     <img
                       src={mainPhoto}
@@ -591,13 +647,13 @@ export default async function AnnonceDetailPage({
                       className="aspect-[16/10] h-full w-full object-cover sm:aspect-[16/9]"
                     />
                   ) : (
-                    <div className="text-3d-soft grid aspect-[16/10] place-items-center text-sm text-slate-500 sm:aspect-[16/9]">
+                    <div className="grid aspect-[16/10] place-items-center text-sm text-slate-500 sm:aspect-[16/9]">
                       Photo principale indisponible
                     </div>
                   )}
 
                   <div className="absolute left-3 top-3 flex flex-wrap gap-2 sm:left-4 sm:top-4">
-                    <span className="text-3d-button rounded-full bg-[#171311] px-3 py-1 text-[12px] font-semibold text-white shadow-[0_8px_20px_rgba(0,0,0,0.14)]">
+                    <span className="rounded-full bg-orange-500 px-3 py-1 text-[12px] font-semibold text-white shadow-sm">
                       À la une
                     </span>
                     <span className="rounded-full bg-white px-3 py-1 text-[12px] font-medium text-slate-900">
@@ -632,7 +688,7 @@ export default async function AnnonceDetailPage({
                     sidePhotos.map((photo, index) => (
                       <div
                         key={`${photo}-${index}`}
-                        className="overflow-hidden rounded-[24px] bg-slate-100"
+                        className="overflow-hidden rounded-md bg-slate-100"
                       >
                         <img
                           src={photo}
@@ -643,16 +699,16 @@ export default async function AnnonceDetailPage({
                     ))
                   ) : (
                     <>
-                      <div className="text-3d-soft grid aspect-[4/3] place-items-center rounded-[24px] bg-slate-100 text-sm text-slate-500">
+                      <div className="grid aspect-[4/3] place-items-center rounded-md bg-slate-100 text-sm text-slate-500">
                         Photo
                       </div>
-                      <div className="text-3d-soft grid aspect-[4/3] place-items-center rounded-[24px] bg-slate-100 text-sm text-slate-500">
+                      <div className="grid aspect-[4/3] place-items-center rounded-md bg-slate-100 text-sm text-slate-500">
                         Photo
                       </div>
-                      <div className="text-3d-soft grid aspect-[4/3] place-items-center rounded-[24px] bg-slate-100 text-sm text-slate-500">
+                      <div className="grid aspect-[4/3] place-items-center rounded-md bg-slate-100 text-sm text-slate-500">
                         Photo
                       </div>
-                      <div className="text-3d-soft grid aspect-[4/3] place-items-center rounded-[24px] bg-slate-100 text-sm text-slate-500">
+                      <div className="grid aspect-[4/3] place-items-center rounded-md bg-slate-100 text-sm text-slate-500">
                         Photo
                       </div>
                     </>
@@ -662,7 +718,7 @@ export default async function AnnonceDetailPage({
             </section>
 
             <section
-              className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-4 shadow-[0_14px_40px_rgba(0,0,0,0.05)] sm:p-5 lg:p-6"
+              className="animate-fade-up rounded-md border border-slate-200 bg-white p-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)] sm:p-5 lg:p-6"
               style={{ animationDelay: "0.08s" }}
             >
               <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
@@ -673,11 +729,11 @@ export default async function AnnonceDetailPage({
                     {item.vat_recoverable ? <SoftTag>TVA récupérable</SoftTag> : null}
                   </div>
 
-                  <h1 className="text-3d-hero mt-3 max-w-4xl text-[24px] font-semibold leading-[1.08] tracking-[-0.03em] text-black sm:text-[30px] lg:text-[36px]">
+                  <h1 className="mt-3 max-w-4xl text-[24px] font-semibold leading-[1.08] tracking-[-0.03em] text-slate-900 sm:text-[30px] lg:text-[36px]">
                     {item.title || "Annonce véhicule"}
                   </h1>
 
-                  <p className="text-3d-soft mt-3 text-[14px] leading-7 text-slate-600 sm:text-[15px]">
+                  <p className="mt-3 text-[14px] leading-7 text-slate-600 sm:text-[15px]">
                     {locationText} • {item.year || "—"} • {formatNumber(item.mileage, " km")}
                     {item.fuel ? ` • ${item.fuel}` : ""}
                     {item.transmission ? ` • ${item.transmission}` : ""}
@@ -694,10 +750,10 @@ export default async function AnnonceDetailPage({
                 </div>
 
                 <div className="shrink-0 lg:min-w-[220px]">
-                  <div className="text-3d-title text-[30px] font-semibold leading-none tracking-tight text-black sm:text-[34px]">
+                  <div className="text-[30px] font-semibold leading-none tracking-tight text-orange-600 sm:text-[34px]">
                     {formatPriceEUR(item.price)}
                   </div>
-                  <p className="text-3d-soft mt-2 text-[14px] text-slate-500">
+                  <p className="mt-2 text-[14px] text-slate-500">
                     Vendu par {garageName}
                   </p>
 
@@ -742,9 +798,9 @@ export default async function AnnonceDetailPage({
                   {groupedEquipment.map((group) => (
                     <div
                       key={group.category}
-                      className="rounded-3xl border border-[#ece7e0] bg-[#fbf9f6] p-4"
+                      className="rounded-md border border-slate-200 bg-slate-50 p-4"
                     >
-                      <h3 className="text-3d-title text-[15px] font-semibold text-black">
+                      <h3 className="text-[15px] font-semibold text-slate-900">
                         {group.category}
                       </h3>
 
@@ -752,7 +808,7 @@ export default async function AnnonceDetailPage({
                         {group.items.map((entry) => (
                           <div
                             key={`${group.category}-${entry}`}
-                            className="text-3d-soft rounded-2xl border border-[#ece7e0] bg-white px-4 py-3 text-[14px] text-slate-700"
+                            className="rounded-md border border-slate-200 bg-white px-4 py-3 text-[14px] text-slate-700"
                           >
                             {entry}
                           </div>
@@ -782,7 +838,7 @@ export default async function AnnonceDetailPage({
               delay={0.24}
             >
               <div className="max-w-5xl">
-                <p className="text-3d-soft whitespace-pre-wrap text-[14px] leading-7 text-slate-700 sm:text-[15px] sm:leading-8">
+                <p className="whitespace-pre-wrap text-[14px] leading-7 text-slate-700 sm:text-[15px] sm:leading-8">
                   {item.description && item.description.trim() !== ""
                     ? item.description
                     : "Aucune description fournie pour le moment."}
@@ -804,21 +860,27 @@ export default async function AnnonceDetailPage({
                       className="h-14 w-14 shrink-0 rounded-full object-cover ring-1 ring-slate-200"
                     />
                   ) : (
-                    <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#171311] text-sm font-semibold text-white">
+                    <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-orange-500 text-sm font-semibold text-white">
                       {garageInitials}
                     </div>
                   )}
 
                   <div>
-                    <p className="text-3d-title text-[18px] font-semibold text-black">
+                    <p className="text-[18px] font-semibold text-slate-900">
                       {garageName}
                     </p>
-                    <p className="text-3d-soft mt-1 text-[14px] text-slate-600">
+                    <p className="mt-1 text-[14px] text-slate-600">
                       {garageLocationText}
                     </p>
-                    <p className="text-3d-soft mt-1 text-[14px] text-slate-500">
+                    <p className="mt-1 text-[14px] text-slate-500">
                       SIRET : {garageSiret || "Non renseigné"}
                     </p>
+
+                    <GoogleReviewsCard
+                      rating={garageGoogleRating}
+                      count={garageGoogleReviewsCount}
+                      url={garageGoogleMapsUrl}
+                    />
 
                     <div className="mt-3 flex flex-wrap gap-2">
                       {garageVerificationStatus === "approved" ? (
@@ -873,8 +935,8 @@ export default async function AnnonceDetailPage({
 
           <aside className="min-w-0">
             <div className="space-y-5 xl:sticky xl:top-24">
-              <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white shadow-[0_14px_40px_rgba(0,0,0,0.05)]">
-                <div className="border-b border-[#ece7e0] px-4 py-5 sm:px-5">
+              <div className="animate-fade-up rounded-md border border-slate-200 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
+                <div className="border-b border-slate-200 px-4 py-5 sm:px-5">
                   <div className="flex items-start gap-3">
                     {garageAvatarUrl ? (
                       <img
@@ -883,16 +945,16 @@ export default async function AnnonceDetailPage({
                         className="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-slate-200"
                       />
                     ) : (
-                      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#171311] text-sm font-semibold text-white">
+                      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-orange-500 text-sm font-semibold text-white">
                         {garageInitials}
                       </div>
                     )}
 
                     <div className="min-w-0">
-                      <p className="text-3d-title truncate text-[16px] font-semibold text-black">
+                      <p className="truncate text-[16px] font-semibold text-slate-900">
                         {garageName}
                       </p>
-                      <p className="text-3d-soft mt-1 text-[13px] text-slate-500">
+                      <p className="mt-1 text-[13px] text-slate-500">
                         SIRET : {garageSiret || "Non renseigné"}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-2">
@@ -901,6 +963,12 @@ export default async function AnnonceDetailPage({
                           <SoftTag>Vérifié</SoftTag>
                         ) : null}
                       </div>
+
+                      <GoogleReviewsCard
+                        rating={garageGoogleRating}
+                        count={garageGoogleReviewsCount}
+                        url={garageGoogleMapsUrl}
+                      />
                     </div>
                   </div>
                 </div>
@@ -908,14 +976,14 @@ export default async function AnnonceDetailPage({
                 <div className="px-4 py-5 sm:px-5">
                   {!isOwner ? (
                     <div className="space-y-4">
-                      <div className="rounded-3xl border border-[#ece7e0] bg-[#faf7f2] p-4">
-                        <p className="text-3d-soft text-[11px] uppercase tracking-wide text-slate-500">
+                      <div className="rounded-md border border-orange-200 bg-orange-50 p-4">
+                        <p className="text-[11px] uppercase tracking-wide text-slate-500">
                           Prix affiché
                         </p>
-                        <p className="text-3d-title mt-2 text-[28px] font-semibold leading-none tracking-tight text-black sm:text-[30px]">
+                        <p className="mt-2 text-[28px] font-semibold leading-none tracking-tight text-orange-600 sm:text-[30px]">
                           {formatPriceEUR(item.price)}
                         </p>
-                        <p className="text-3d-soft mt-3 text-[13px] text-slate-500">
+                        <p className="mt-3 text-[13px] text-slate-500">
                           {item.title || "Annonce véhicule"}
                         </p>
                       </div>
@@ -930,11 +998,11 @@ export default async function AnnonceDetailPage({
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      <div className="rounded-3xl border border-[#ece7e0] bg-[#faf7f2] p-4">
-                        <h3 className="text-3d-title text-[15px] font-semibold text-black">
+                      <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                        <h3 className="text-[15px] font-semibold text-slate-900">
                           Votre annonce
                         </h3>
-                        <p className="text-3d-soft mt-2 text-[14px] leading-7 text-slate-600">
+                        <p className="mt-2 text-[14px] leading-7 text-slate-600">
                           Vous êtes le propriétaire de cette annonce. Le formulaire
                           de contact est masqué sur votre propre fiche.
                         </p>
@@ -952,14 +1020,14 @@ export default async function AnnonceDetailPage({
               </div>
 
               <div
-                className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-5 shadow-[0_14px_40px_rgba(0,0,0,0.05)]"
+                className="animate-fade-up rounded-md border border-slate-200 bg-white p-5 shadow-[0_14px_40px_rgba(15,23,42,0.05)]"
                 style={{ animationDelay: "0.08s" }}
               >
-                <h3 className="text-3d-title text-[15px] font-semibold text-black">
+                <h3 className="text-[15px] font-semibold text-slate-900">
                   Avant d’acheter
                 </h3>
 
-                <ul className="text-3d-soft mt-4 space-y-3 text-[14px] leading-7 text-slate-600">
+                <ul className="mt-4 space-y-3 text-[14px] leading-7 text-slate-600">
                   <li>Vérifiez les documents et l’état général du véhicule.</li>
                   <li>Demandez l’entretien, les factures et l’historique.</li>
                   <li>Essayez le véhicule avant toute décision d’achat.</li>

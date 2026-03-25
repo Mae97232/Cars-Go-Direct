@@ -62,39 +62,39 @@ export default async function ProParametresPage() {
       : "";
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-6">
-      <div className="animate-fade-up flex flex-wrap items-center gap-2 text-sm text-slate-500">
+    <div className="mx-auto max-w-6xl bg-white text-slate-900">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
         <Link
           href="/pro/dashboard"
-          className="text-3d-soft font-medium text-slate-700 hover:underline"
+          className="font-medium text-slate-700 hover:underline"
         >
           Dashboard
         </Link>
         <span>›</span>
-        <span className="text-3d-soft">Paramètres</span>
+        <span>Paramètres</span>
       </div>
 
-      <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
+      <section className="mt-5 border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3d-hero text-2xl font-extrabold tracking-tight text-black sm:text-3xl">
+            <h1 className="text-[26px] font-semibold tracking-tight text-slate-900 sm:text-[30px]">
               Paramètres du compte professionnel
             </h1>
-            <p className="text-3d-soft mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-600">
               Gérez les informations de votre garage, votre profil et vos préférences privées.
             </p>
           </div>
 
           <Link
             href="/pro/dashboard"
-            className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+            className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
           >
             Retour au dashboard
           </Link>
         </div>
       </section>
 
-      <div className="animate-fade-up">
+      <div className="mt-6">
         <ProAccountSettingsForm
           userId={user.id}
           userEmail={user.email || ""}

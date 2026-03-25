@@ -80,7 +80,7 @@ function Avatar({
   if (!src || imgError) {
     return (
       <div
-        className={`text-3d-button grid ${sizeClass} shrink-0 place-items-center rounded-full bg-[#171311] font-semibold text-white`}
+        className={`grid ${sizeClass} shrink-0 place-items-center rounded-full bg-slate-900 font-semibold text-white`}
       >
         {initials}
       </div>
@@ -91,7 +91,7 @@ function Avatar({
     <img
       src={src}
       alt={alt}
-      className={`${sizeClass} shrink-0 rounded-full object-cover ring-1 ring-[#e4ddd4]`}
+      className={`${sizeClass} shrink-0 rounded-full object-cover ring-1 ring-slate-200`}
       onError={() => setImgError(true)}
     />
   );
@@ -276,22 +276,21 @@ export default function ProMessagesPage() {
 
   if (checkingAuth) {
     return (
-      <div className="animate-fade-up py-10 text-sm text-slate-500">
+      <div className="py-10 text-sm text-slate-500">
         Vérification de la session...
       </div>
     );
   }
 
   return (
-    <div className="min-h-[calc(100vh-140px)] bg-[#f8f6f3]">
-      <div className="animate-fade-up border-b border-[#ece7e0] pb-6">
+    <div className="min-h-[calc(100vh-140px)] bg-white text-slate-900">
+      <div className="border-b border-slate-200 pb-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-3d-soft text-sm text-slate-500">
-              Messagerie professionnelle
-            </p>
+            <p className="text-sm text-slate-500">Messagerie professionnelle</p>
+
             <div className="mt-1 flex items-center gap-3">
-              <h1 className="text-3d-hero text-3xl font-semibold tracking-tight text-black">
+              <h1 className="text-[26px] font-semibold tracking-tight text-slate-900 sm:text-[30px]">
                 Messages clients
               </h1>
 
@@ -302,19 +301,19 @@ export default function ProMessagesPage() {
               ) : null}
             </div>
 
-            <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+            <p className="mt-2 text-sm leading-7 text-slate-600">
               Retrouvez vos demandes acheteurs, répondez rapidement et suivez vos échanges.
             </p>
           </div>
 
           <div className="w-full max-w-md">
-            <div className="flex items-center gap-3 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 shadow-[0_4px_18px_rgba(0,0,0,0.03)]">
+            <div className="flex items-center gap-3 rounded-md border border-slate-300 bg-white px-4 py-3 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
               <Search className="h-4 w-4 text-slate-400" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Rechercher un acheteur, une annonce, un message..."
-                className="text-3d-soft w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                className="w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
               />
             </div>
           </div>
@@ -322,8 +321,8 @@ export default function ProMessagesPage() {
       </div>
 
       <div className="grid min-h-[700px] lg:grid-cols-[360px_minmax(0,1fr)]">
-        <aside className="border-r border-[#ece7e0]">
-          <div className="divide-y divide-[#f1ece6]">
+        <aside className="border-r border-slate-200 bg-white">
+          <div className="divide-y divide-slate-100">
             {loadingMessages ? (
               <div className="px-5 py-6 text-sm text-slate-500">
                 Chargement des conversations...
@@ -346,8 +345,8 @@ export default function ProMessagesPage() {
                     onClick={() => openConversation(conversation.id)}
                     className={
                       active
-                        ? "animate-fade-up flex w-full items-start gap-4 border-l-2 border-[#171311] bg-[#faf7f2] px-5 py-5 text-left"
-                        : "animate-fade-up flex w-full items-start gap-4 border-l-2 border-transparent px-5 py-5 text-left transition hover:bg-[#faf7f2]"
+                        ? "flex w-full items-start gap-4 border-l-2 border-orange-500 bg-orange-50 px-5 py-5 text-left"
+                        : "flex w-full items-start gap-4 border-l-2 border-transparent px-5 py-5 text-left transition hover:bg-slate-50"
                     }
                     style={{ animationDelay: `${0.04 + index * 0.03}s` }}
                   >
@@ -362,7 +361,7 @@ export default function ProMessagesPage() {
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
-                            <p className="text-3d-title truncate text-sm font-semibold text-black">
+                            <p className="truncate text-sm font-semibold text-slate-900">
                               {conversation.buyer_name}
                             </p>
 
@@ -373,7 +372,7 @@ export default function ProMessagesPage() {
                             ) : null}
                           </div>
 
-                          <p className="text-3d-soft mt-1 truncate text-xs text-slate-500">
+                          <p className="mt-1 truncate text-xs text-slate-500">
                             {conversation.listing_title || "Annonce"}
                           </p>
                         </div>
@@ -383,7 +382,7 @@ export default function ProMessagesPage() {
                         </span>
                       </div>
 
-                      <p className="text-3d-soft mt-2 truncate text-sm text-slate-600">
+                      <p className="mt-2 truncate text-sm text-slate-600">
                         {lastMessage
                           ? `${lastMessage.sender_name} : ${lastMessage.content}`
                           : "Aucun message"}
@@ -400,24 +399,24 @@ export default function ProMessagesPage() {
           </div>
         </aside>
 
-        <section className="min-w-0">
+        <section className="min-w-0 bg-white">
           {activeConversation ? (
             <div className="flex h-full flex-col">
-              <div className="animate-fade-up border-b border-[#ece7e0] px-6 py-5">
+              <div className="border-b border-slate-200 px-6 py-5">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <Circle className="h-2.5 w-2.5 fill-current text-emerald-500" />
-                      <span className="text-3d-soft text-xs font-medium uppercase tracking-wide text-slate-500">
+                      <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
                         Conversation active
                       </span>
                     </div>
 
-                    <h2 className="text-3d-title mt-2 text-xl font-semibold text-black">
+                    <h2 className="mt-2 text-xl font-semibold text-slate-900">
                       {activeConversation.listing_title || "Annonce"}
                     </h2>
 
-                    <p className="text-3d-soft mt-2 text-sm text-slate-600">
+                    <p className="mt-2 text-sm text-slate-600">
                       Acheteur : {activeConversation.buyer_name}
                     </p>
                   </div>
@@ -425,13 +424,13 @@ export default function ProMessagesPage() {
                   <div className="flex flex-wrap gap-3 text-sm text-slate-600">
                     <div className="inline-flex items-center gap-2">
                       <Mail className="h-4 w-4 text-slate-400" />
-                      <span className="text-3d-soft">{activeConversation.buyer_email}</span>
+                      <span>{activeConversation.buyer_email}</span>
                     </div>
 
                     {activeConversation.buyer_phone ? (
                       <div className="inline-flex items-center gap-2">
                         <Phone className="h-4 w-4 text-slate-400" />
-                        <span className="text-3d-soft">{activeConversation.buyer_phone}</span>
+                        <span>{activeConversation.buyer_phone}</span>
                       </div>
                     ) : null}
                   </div>
@@ -447,7 +446,7 @@ export default function ProMessagesPage() {
                     return (
                       <div
                         key={message.id}
-                        className={`${mine ? "flex justify-end" : "flex justify-start"} animate-fade-up`}
+                        className={`${mine ? "flex justify-end" : "flex justify-start"}`}
                         style={{ animationDelay: `${0.03 + index * 0.02}s` }}
                       >
                         <div
@@ -456,7 +455,7 @@ export default function ProMessagesPage() {
                           }`}
                         >
                           {mine ? (
-                            <div className="text-3d-button grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#171311] text-xs font-semibold text-white">
+                            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-slate-900 text-xs font-semibold text-white">
                               P
                             </div>
                           ) : (
@@ -482,8 +481,8 @@ export default function ProMessagesPage() {
                             <div
                               className={
                                 mine
-                                  ? "text-3d-button rounded-2xl rounded-tr-md bg-[#171311] px-4 py-3 text-sm leading-6 text-white"
-                                  : "text-3d-soft rounded-2xl rounded-tl-md bg-[#f5f3ef] px-4 py-3 text-sm leading-6 text-[#171311]"
+                                  ? "rounded-2xl rounded-tr-md bg-orange-500 px-4 py-3 text-sm leading-6 text-white"
+                                  : "rounded-2xl rounded-tl-md bg-slate-100 px-4 py-3 text-sm leading-6 text-slate-800"
                               }
                             >
                               {message.content}
@@ -500,13 +499,13 @@ export default function ProMessagesPage() {
                 )}
               </div>
 
-              <div className="border-t border-[#ece7e0] px-6 py-5">
+              <div className="border-t border-slate-200 px-6 py-5">
                 <div className="flex flex-col gap-3">
                   <textarea
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     rows={4}
-                    className="text-3d-soft w-full resize-none rounded-2xl border border-[#e4ddd4] bg-white px-4 py-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                    className="w-full resize-none rounded-md border border-slate-300 bg-white px-4 py-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     placeholder="Écrire une réponse à l’acheteur..."
                   />
 
@@ -515,7 +514,7 @@ export default function ProMessagesPage() {
                       type="button"
                       onClick={sendMessage}
                       disabled={sending}
-                      className="text-3d-button inline-flex items-center gap-2 rounded-full bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex h-11 items-center gap-2 rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <Send className="h-4 w-4" />
                       {sending ? "Envoi..." : "Envoyer"}
@@ -527,10 +526,10 @@ export default function ProMessagesPage() {
           ) : (
             <div className="grid h-full place-items-center px-6 py-20">
               <div className="max-w-md text-center">
-                <h2 className="text-3d-title text-xl font-semibold text-black">
+                <h2 className="text-xl font-semibold text-slate-900">
                   Sélectionnez une conversation
                 </h2>
-                <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+                <p className="mt-2 text-sm leading-7 text-slate-600">
                   Choisissez un échange dans la colonne de gauche pour afficher les messages
                   et répondre à l’acheteur.
                 </p>

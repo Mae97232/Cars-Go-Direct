@@ -14,6 +14,10 @@ type InseeEtablissementResponse = {
       etatAdministratifUniteLegale?: string | null;
     };
     adresseEtablissement?: {
+      numeroVoieEtablissement?: string | null;
+      typeVoieEtablissement?: string | null;
+      libelleVoieEtablissement?: string | null;
+      codePostalEtablissement?: string | null;
       libelleCommuneEtablissement?: string | null;
     };
     periodesEtablissement?: Array<{
@@ -25,6 +29,15 @@ type InseeEtablissementResponse = {
 
 function normalizeSiret(value: string) {
   return value.replace(/\D/g, "");
+}
+
+function cleanText(value: string | null | undefined) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function buildAddress(parts: Array<string | null | undefined>) {
+  const cleanParts = parts.map(cleanText).filter(Boolean);
+  return cleanParts.length > 0 ? cleanParts.join(" ") : null;
 }
 
 export async function POST(req: Request) {
@@ -43,11 +56,6 @@ export async function POST(req: Request) {
     }
 
     const apiKey = process.env.INSEE_API_KEY?.trim();
-
-    console.error("INSEE ENV CHECK", {
-      hasApiKey: Boolean(apiKey),
-      prefix: apiKey?.slice(0, 8),
-    });
 
     if (!apiKey) {
       return NextResponse.json(
@@ -105,6 +113,7 @@ export async function POST(req: Request) {
     const etab = data.etablissement;
     const unite = etab?.uniteLegale;
     const periode = etab?.periodesEtablissement?.[0];
+    const adresse = etab?.adresseEtablissement;
 
     if (!etab?.siret) {
       return NextResponse.json(
@@ -140,16 +149,27 @@ export async function POST(req: Request) {
       unite?.denominationUniteLegale ||
       [unite?.nomUniteLegale, unite?.prenom1UniteLegale]
         .filter(Boolean)
-        .join(" ") ||
+        .join(" ")
+        .trim() ||
       null;
 
-    const city =
-      etab?.adresseEtablissement?.libelleCommuneEtablissement ?? null;
+    const city = adresse?.libelleCommuneEtablissement ?? null;
+    const zipCode = adresse?.codePostalEtablissement ?? null;
+
+    const fullAddress = buildAddress([
+      adresse?.numeroVoieEtablissement,
+      adresse?.typeVoieEtablissement,
+      adresse?.libelleVoieEtablissement,
+    ]);
 
     const ape =
       periode?.activitePrincipaleEtablissement ||
       unite?.activitePrincipaleUniteLegale ||
       null;
+
+    const searchText = [legalName, fullAddress, zipCode, city]
+      .filter((value) => typeof value === "string" && value.trim() !== "")
+      .join(", ");
 
     return NextResponse.json({
       success: true,
@@ -157,9 +177,12 @@ export async function POST(req: Request) {
       siren: etab.siren ?? null,
       legal_name: legalName,
       city,
+      zip_code: zipCode,
+      address: fullAddress,
       ape,
       decision: "approved",
       reason: "Entreprise active trouvée. Compte validé automatiquement.",
+      google_search_text: searchText || null,
     });
   } catch (error) {
     console.error("INSEE FULL ERROR:", error);

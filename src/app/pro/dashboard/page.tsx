@@ -62,17 +62,17 @@ function formatStatusLabel(status: string | null | undefined) {
 function statusClass(status: string | null | undefined) {
   switch (status) {
     case "published":
-      return "border-emerald-200 bg-emerald-50 text-emerald-700";
+      return "bg-orange-50 text-orange-600";
     case "pending":
-      return "border-amber-200 bg-amber-50 text-amber-700";
+      return "bg-amber-50 text-amber-700";
     case "draft":
-      return "border-[#e4ddd4] bg-[#faf7f2] text-[#171311]";
+      return "bg-slate-100 text-slate-700";
     case "rejected":
-      return "border-rose-200 bg-rose-50 text-rose-700";
+      return "bg-red-50 text-red-700";
     case "archived":
-      return "border-[#e4ddd4] bg-slate-100 text-slate-500";
+      return "bg-slate-100 text-slate-500";
     default:
-      return "border-[#e4ddd4] bg-[#faf7f2] text-[#171311]";
+      return "bg-slate-100 text-slate-700";
   }
 }
 
@@ -221,33 +221,33 @@ export default async function ProDashboardPage() {
   const garageInitial = getInitial(garageName);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6">
-      <section className="animate-fade-up rounded-[32px] border border-[#e4ddd4] bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+    <div className="mx-auto max-w-7xl bg-white px-4 py-5 text-slate-900 sm:px-6">
+      <section className="border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-4">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt={garageName}
-                className="h-14 w-14 rounded-full object-cover ring-4 ring-[#f5f3ef] sm:h-16 sm:w-16"
+                className="h-14 w-14 rounded-full object-cover ring-1 ring-slate-200 sm:h-16 sm:w-16"
               />
             ) : (
-              <div className="text-3d-button grid h-14 w-14 place-items-center rounded-full bg-[#171311] text-xl font-bold text-white ring-4 ring-[#f5f3ef] sm:h-16 sm:w-16">
+              <div className="grid h-14 w-14 place-items-center rounded-full bg-slate-900 text-xl font-bold text-white sm:h-16 sm:w-16">
                 {garageInitial}
               </div>
             )}
 
             <div className="min-w-0">
-              <p className="text-3d-soft text-[11px] font-medium uppercase tracking-wide text-slate-500">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-slate-500">
                 Espace professionnel
               </p>
 
-              <h1 className="text-3d-hero mt-1 text-lg font-bold tracking-tight text-black sm:text-xl">
+              <h1 className="mt-1 text-lg font-semibold text-slate-900 sm:text-xl">
                 {garageName}
               </h1>
 
               <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-600 sm:text-sm">
-                <span className="text-3d-soft inline-flex items-center gap-1">
+                <span className="inline-flex items-center gap-1">
                   <MapPin className="h-3.5 w-3.5" />
                   {proAccount.city || "Ville non renseignée"}
                 </span>
@@ -255,10 +255,10 @@ export default async function ProDashboardPage() {
                 <span className="text-slate-300">•</span>
 
                 <span
-                  className={`text-3d-soft inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
                     proAccount.verification_status === "approved"
-                      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                      : "border-amber-200 bg-amber-50 text-amber-700"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-amber-50 text-amber-700"
                   }`}
                 >
                   {proAccount.verification_status === "approved" ? (
@@ -277,19 +277,19 @@ export default async function ProDashboardPage() {
           <div className="flex flex-wrap gap-2">
             <Link
               href="/pro/deposer"
-              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600"
             >
               Déposer une annonce
             </Link>
             <Link
               href="/pro/messages"
-              className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+              className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
             >
               Messages
             </Link>
             <Link
               href="/pro/parametres"
-              className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+              className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
             >
               Paramètres
             </Link>
@@ -297,16 +297,16 @@ export default async function ProDashboardPage() {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2 text-xs sm:text-sm">
-          <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1.5 text-[#171311]">
+          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-slate-700">
             {totalListings} annonce{totalListings > 1 ? "s" : ""}
           </span>
-          <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1.5 text-[#171311]">
+          <span className="rounded-full bg-orange-50 px-3 py-1.5 text-orange-600">
             {publishedListings} publiée{publishedListings > 1 ? "s" : ""}
           </span>
-          <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1.5 text-[#171311]">
+          <span className="rounded-full bg-amber-50 px-3 py-1.5 text-amber-700">
             {pendingListings} en attente
           </span>
-          <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1.5 text-[#171311]">
+          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-slate-700">
             {draftListings} brouillon{draftListings > 1 ? "s" : ""}
           </span>
         </div>
@@ -315,7 +315,7 @@ export default async function ProDashboardPage() {
       <section className="mt-4 flex flex-wrap gap-3">
         <Link
           href="/pro/deposer"
-          className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] shadow-[0_6px_18px_rgba(0,0,0,0.03)] transition hover:bg-[#f7f5f2]"
+          className="inline-flex h-11 items-center gap-2 rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
         >
           <Plus className="h-4 w-4" />
           Nouvelle annonce
@@ -323,7 +323,7 @@ export default async function ProDashboardPage() {
 
         <Link
           href="/pro/messages"
-          className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] shadow-[0_6px_18px_rgba(0,0,0,0.03)] transition hover:bg-[#f7f5f2]"
+          className="inline-flex h-11 items-center gap-2 rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
         >
           <MessageSquare className="h-4 w-4" />
           Messagerie
@@ -331,7 +331,7 @@ export default async function ProDashboardPage() {
 
         <Link
           href="/pro/parametres"
-          className="text-3d-soft inline-flex items-center gap-2 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] shadow-[0_6px_18px_rgba(0,0,0,0.03)] transition hover:bg-[#f7f5f2]"
+          className="inline-flex h-11 items-center gap-2 rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
         >
           <Settings className="h-4 w-4" />
           Paramètres
@@ -341,33 +341,33 @@ export default async function ProDashboardPage() {
       <section className="mt-5">
         <div className="mb-3 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-3d-title text-base font-semibold tracking-tight text-black">
+            <h2 className="text-base font-semibold text-slate-900">
               Mes annonces
             </h2>
-            <p className="text-3d-soft mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-slate-600">
               Gérez vos véhicules publiés et en préparation.
             </p>
           </div>
 
           <Link
             href="/annonces"
-            className="text-3d-soft text-sm font-medium text-slate-600 hover:text-black"
+            className="text-sm font-medium text-slate-600 hover:text-orange-600"
           >
             Voir le site public
           </Link>
         </div>
 
         {myListings.length === 0 ? (
-          <div className="animate-fade-up rounded-[32px] border border-[#e4ddd4] bg-white p-8 text-center shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#f5f3ef] text-slate-600">
+          <div className="border border-slate-200 bg-white p-8 text-center shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-slate-100 text-slate-600">
               <CarFront className="h-6 w-6" />
             </div>
 
-            <h3 className="text-3d-title mt-4 text-lg font-semibold tracking-tight text-black">
+            <h3 className="mt-4 text-lg font-semibold text-slate-900">
               Aucune annonce pour le moment
             </h3>
 
-            <p className="text-3d-soft mx-auto mt-2 max-w-xl text-sm text-slate-600">
+            <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600">
               {profileCompleted
                 ? "Ajoutez votre premier véhicule pour commencer à recevoir des contacts."
                 : "Ajoutez votre premier véhicule et complétez votre profil pour commencer à recevoir des contacts."}
@@ -376,7 +376,7 @@ export default async function ProDashboardPage() {
             <div className="mt-5 flex flex-wrap justify-center gap-2">
               <Link
                 href="/pro/deposer"
-                className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
+                className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600"
               >
                 Déposer ma première annonce
               </Link>
@@ -384,7 +384,7 @@ export default async function ProDashboardPage() {
               {!profileCompleted ? (
                 <Link
                   href="/pro/parametres"
-                  className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                  className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                 >
                   Compléter mon profil
                 </Link>
@@ -393,14 +393,13 @@ export default async function ProDashboardPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {myListings.map((item, index) => (
+            {myListings.map((item) => (
               <div
                 key={String(item.id)}
-                className="animate-fade-up overflow-hidden rounded-[32px] border border-[#e4ddd4] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:shadow-md"
-                style={{ animationDelay: `${0.04 + index * 0.03}s` }}
+                className="overflow-hidden border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:bg-slate-50"
               >
                 <div className="flex flex-col sm:flex-row">
-                  <div className="h-36 w-full shrink-0 bg-slate-100 sm:h-auto sm:w-[190px]">
+                  <div className="h-36 w-full shrink-0 border-b border-slate-200 bg-slate-100 sm:h-auto sm:w-[190px] sm:border-b-0 sm:border-r">
                     {item.photos && item.photos.length > 0 ? (
                       <img
                         src={item.photos[0]}
@@ -419,7 +418,7 @@ export default async function ProDashboardPage() {
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <span
-                            className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${statusClass(
+                            className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold ${statusClass(
                               item.status
                             )}`}
                           >
@@ -431,12 +430,12 @@ export default async function ProDashboardPage() {
                           </span>
                         </div>
 
-                        <h3 className="text-3d-title mt-2 line-clamp-2 text-sm font-semibold text-black sm:text-base">
+                        <h3 className="mt-2 line-clamp-2 text-sm font-semibold text-slate-900 sm:text-base">
                           {item.title || "Annonce sans titre"}
                         </h3>
 
                         <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-slate-600 sm:text-sm">
-                          <span className="text-3d-soft inline-flex items-center gap-1">
+                          <span className="inline-flex items-center gap-1">
                             <MapPin className="h-3.5 w-3.5" />
                             {item.city || "Ville non renseignée"}
                           </span>
@@ -444,7 +443,7 @@ export default async function ProDashboardPage() {
                       </div>
 
                       <div className="shrink-0">
-                        <p className="text-3d-title text-base font-bold tracking-tight text-black sm:text-lg">
+                        <p className="text-base font-bold text-orange-600 sm:text-lg">
                           {formatPriceEUR(item.price)}
                         </p>
                       </div>
@@ -453,7 +452,7 @@ export default async function ProDashboardPage() {
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Link
                         href={`/annonces/${item.id}`}
-                        className="text-3d-soft inline-flex items-center gap-2 rounded-xl border border-[#e4ddd4] bg-white px-3 py-2 text-xs font-medium text-[#171311] transition hover:bg-[#f7f5f2] sm:text-sm"
+                        className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 sm:text-sm"
                       >
                         <Eye className="h-4 w-4" />
                         Voir
@@ -461,7 +460,7 @@ export default async function ProDashboardPage() {
 
                       <Link
                         href={`/pro/annonces/${item.id}/modifier`}
-                        className="text-3d-soft inline-flex items-center rounded-xl border border-[#e4ddd4] bg-white px-3 py-2 text-xs font-medium text-[#171311] transition hover:bg-[#f7f5f2] sm:text-sm"
+                        className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 sm:text-sm"
                       >
                         Modifier
                       </Link>
@@ -470,7 +469,7 @@ export default async function ProDashboardPage() {
                         <input type="hidden" name="listingId" value={String(item.id)} />
                         <button
                           type="submit"
-                          className="text-3d-soft inline-flex items-center rounded-xl border border-[#e4ddd4] bg-white px-3 py-2 text-xs font-medium text-[#171311] transition hover:bg-[#f7f5f2] sm:text-sm"
+                          className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700 sm:text-sm"
                         >
                           Supprimer
                         </button>

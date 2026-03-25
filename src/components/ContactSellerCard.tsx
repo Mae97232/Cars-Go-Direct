@@ -112,7 +112,7 @@ export default function ContactSellerCard({
 
   return (
     <section className="space-y-4">
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
+      <div className="rounded-md border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-[0.16em] text-slate-500">
@@ -126,7 +126,7 @@ export default function ContactSellerCard({
             </p>
           </div>
 
-          <span className="inline-flex shrink-0 items-center rounded-full border border-sky-300 bg-white px-2.5 py-0.5 text-[11px] font-medium text-sky-700">
+          <span className="inline-flex shrink-0 items-center rounded-full border border-orange-200 bg-orange-50 px-2.5 py-0.5 text-[11px] font-medium text-orange-600">
             Pro
           </span>
         </div>
@@ -135,7 +135,7 @@ export default function ContactSellerCard({
           <button
             type="button"
             onClick={scrollToForm}
-            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-orange-500 px-4 text-[13px] font-semibold text-white transition hover:bg-orange-600 sm:min-h-[46px] sm:text-[14px]"
+            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-md bg-orange-500 px-4 text-[13px] font-semibold text-white transition hover:bg-orange-600 sm:min-h-[46px] sm:text-[14px]"
           >
             Envoyer un message
           </button>
@@ -143,7 +143,7 @@ export default function ContactSellerCard({
           <button
             type="button"
             onClick={() => setShowPhone((prev) => !prev)}
-            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-[13px] font-medium text-slate-900 transition hover:bg-slate-50 sm:min-h-[46px] sm:text-[14px]"
+            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-md border border-slate-300 bg-white px-4 text-[13px] font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 sm:min-h-[46px] sm:text-[14px]"
           >
             {displayedPhone
               ? displayedPhone
@@ -155,7 +155,7 @@ export default function ContactSellerCard({
           {displayedPhone ? (
             <a
               href={`tel:${garagePhone}`}
-              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl border border-slate-300 bg-slate-50 px-4 text-[13px] font-medium text-slate-900 transition hover:bg-slate-100 sm:min-h-[46px] sm:text-[14px]"
+              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-md border border-slate-300 bg-slate-50 px-4 text-[13px] font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 sm:min-h-[46px] sm:text-[14px]"
             >
               Appeler maintenant
             </a>
@@ -166,7 +166,7 @@ export default function ContactSellerCard({
       <form
         id="contact-seller-form"
         onSubmit={handleSubmit}
-        className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5"
+        className="rounded-md border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-5"
       >
         <div className="mb-4">
           <h4 className="text-[15px] font-semibold text-slate-900 sm:text-[16px]">
@@ -191,7 +191,7 @@ export default function ContactSellerCard({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Votre nom"
-              className="h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-[14px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900"
+              className="h-11 w-full rounded-md border border-slate-300 bg-white px-3.5 text-[14px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
 
@@ -208,7 +208,7 @@ export default function ContactSellerCard({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="vous@email.com"
-              className="h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-[14px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900"
+              className="h-11 w-full rounded-md border border-slate-300 bg-white px-3.5 text-[14px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
 
@@ -225,7 +225,7 @@ export default function ContactSellerCard({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="06 00 00 00 00"
-              className="h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-[14px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900"
+              className="h-11 w-full rounded-md border border-slate-300 bg-white px-3.5 text-[14px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
 
@@ -241,19 +241,19 @@ export default function ContactSellerCard({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
-              className="w-full resize-none rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-[14px] leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900"
+              className="w-full resize-none rounded-md border border-slate-300 bg-white px-3.5 py-3 text-[14px] leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
         </div>
 
         {errorMessage ? (
-          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-3 py-3 text-[12px] text-red-700 sm:text-[13px]">
+          <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-3 text-[12px] text-red-700 sm:text-[13px]">
             {errorMessage}
           </div>
         ) : null}
 
         {successMessage ? (
-          <div className="mt-4 rounded-xl border border-green-200 bg-green-50 px-3 py-3 text-[12px] text-green-700 sm:text-[13px]">
+          <div className="mt-4 rounded-md border border-green-200 bg-green-50 px-3 py-3 text-[12px] text-green-700 sm:text-[13px]">
             {successMessage}
           </div>
         ) : null}
@@ -261,7 +261,7 @@ export default function ContactSellerCard({
         <button
           type="submit"
           disabled={submitting}
-          className="mt-4 inline-flex min-h-[46px] w-full items-center justify-center rounded-xl bg-slate-900 px-4 text-[14px] font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-4 inline-flex min-h-[46px] w-full items-center justify-center rounded-md bg-orange-500 px-4 text-[14px] font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {submitting ? "Envoi..." : "Envoyer le message"}
         </button>

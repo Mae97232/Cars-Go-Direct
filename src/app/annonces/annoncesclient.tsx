@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Listing } from "@/lib/data";
 
-type VehicleType = "Utilitaire" | "Société" | "Tourisme";
+type VehicleType = "Utilitaire" | "Tourisme" | "2 roues";
 type FuelType = "Diesel" | "Essence" | "Hybride" | "Électrique";
 
 export type RawListing = {
@@ -23,11 +23,24 @@ export type RawListing = {
   vat_recoverable: boolean | null;
   photos: string[] | null;
   description: string | null;
+  created_at?: string | null;
+  garage_name?: string | null;
+  google_rating?: number | null;
+  google_reviews_count?: number | null;
+  google_maps_url?: string | null;
+};
+
+type SearchListing = Listing & {
+  garageName?: string | null;
+  googleRating?: number | null;
+  googleReviewsCount?: number | null;
+  googleMapsUrl?: string | null;
 };
 
 type SortKey = "relevance" | "priceAsc" | "priceDesc" | "kmAsc" | "yearDesc";
 
 const PAGE_SIZE = 20;
+const validTypes = ["Utilitaire", "Tourisme", "2 roues"] as const;
 
 function normalize(s: string) {
   return s.toLowerCase().trim();
@@ -47,13 +60,36 @@ function formatKm(value: number) {
   return value.toLocaleString("fr-FR") + " km";
 }
 
-function mapListing(item: RawListing): Listing {
-  const safeType: VehicleType =
-    item.type === "Utilitaire" ||
-    item.type === "Société" ||
-    item.type === "Tourisme"
-      ? item.type
-      : "Tourisme";
+function renderStars(rating: number) {
+  const rounded = Math.round(rating);
+  return "★".repeat(rounded) + "☆".repeat(5 - rounded);
+}
+
+function mapListing(item: RawListing): SearchListing {
+  const rawType = (item.type || "").toLowerCase().trim();
+
+  let safeType: VehicleType = "Tourisme";
+
+  if (rawType.includes("utilitaire")) {
+    safeType = "Utilitaire";
+  } else if (
+    rawType.includes("moto") ||
+    rawType.includes("scooter") ||
+    rawType.includes("2 roues") ||
+    rawType.includes("2roues") ||
+    rawType.includes("deux roues") ||
+    rawType.includes("trail") ||
+    rawType.includes("cross") ||
+    rawType.includes("roadster") ||
+    rawType.includes("sportive") ||
+    rawType.includes("quad") ||
+    rawType.includes("mobylette") ||
+    rawType.includes("cyclo")
+  ) {
+    safeType = "2 roues";
+  } else if (rawType.includes("tourisme")) {
+    safeType = "Tourisme";
+  }
 
   const safeFuel: FuelType =
     item.fuel === "Diesel" ||
@@ -78,6 +114,10 @@ function mapListing(item: RawListing): Listing {
     vatRecoverable: Boolean(item.vat_recoverable),
     photos: Array.isArray(item.photos) ? item.photos : [],
     description: item.description ?? "",
+    garageName: item.garage_name ?? null,
+    googleRating: item.google_rating ?? null,
+    googleReviewsCount: item.google_reviews_count ?? null,
+    googleMapsUrl: item.google_maps_url ?? null,
   };
 }
 
@@ -94,10 +134,10 @@ function FilterButton({
     <button
       type="button"
       onClick={onClick}
-      className="text-3d-soft flex h-11 w-full items-center justify-between rounded-full border border-[#e4ddd4] bg-white px-4 text-[14px] font-medium text-[#171311] transition hover:border-[#cfc5b8] hover:bg-[#f7f5f2]"
+      className="flex h-11 w-full items-center justify-between rounded-md border border-slate-300 bg-white px-4 text-[14px] font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
     >
       <span className="truncate">{value || label}</span>
-      <span className="ml-3 text-[#7a6d60]">›</span>
+      <span className="ml-3 text-slate-400">›</span>
     </button>
   );
 }
@@ -111,10 +151,10 @@ function TopChip({
 }) {
   return (
     <span
-      className={`text-3d-soft inline-flex items-center rounded-full border px-3 py-1.5 text-[13px] whitespace-nowrap ${
+      className={`inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] whitespace-nowrap ${
         active
-          ? "border-[#171311] bg-[#f5f3ef] text-[#171311]"
-          : "border-[#e4ddd4] bg-white text-[#4b4036]"
+          ? "border-orange-500 bg-orange-500 text-white"
+          : "border-slate-300 bg-white text-slate-700"
       }`}
     >
       {children}
@@ -126,7 +166,7 @@ function SearchListingCard({
   item,
   index = 0,
 }: {
-  item: Listing;
+  item: SearchListing;
   index?: number;
 }) {
   const photo = item.photos?.[0] || "";
@@ -135,10 +175,24 @@ function SearchListingCard({
       ? `${item.city} (${item.department})`
       : item.city || item.department || "Localisation non renseignée";
 
+  const hasGoogleData =
+    typeof item.googleRating === "number" &&
+    typeof item.googleReviewsCount === "number" &&
+    item.googleReviewsCount > 0;
+
+  function openGoogleMaps(
+    e: React.MouseEvent<HTMLButtonElement>,
+    url: string
+  ) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
   return (
     <Link
       href={`/annonces/${item.id}`}
-      className="animate-fade-up group block overflow-hidden rounded-[28px] border border-[#e7e2db] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-[#d4ccc2] hover:shadow-[0_18px_40px_rgba(0,0,0,0.06)]"
+      className="group block overflow-hidden rounded-md border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-orange-300 hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)]"
       style={{ animationDelay: `${0.08 * index}s` }}
     >
       <div className="grid gap-0 md:grid-cols-[260px_minmax(0,1fr)] lg:grid-cols-[280px_minmax(0,1fr)]">
@@ -150,20 +204,20 @@ function SearchListingCard({
               className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.02] md:h-full md:min-h-[220px]"
             />
           ) : (
-            <div className="text-3d-soft grid aspect-[4/3] place-items-center text-sm text-slate-500 md:h-full md:min-h-[220px]">
+            <div className="grid aspect-[4/3] place-items-center text-sm text-slate-500 md:h-full md:min-h-[220px]">
               Photo indisponible
             </div>
           )}
 
           <div className="absolute left-3 top-3">
-            <span className="text-3d-button rounded-full bg-[#171311] px-2.5 py-1 text-[11px] font-semibold text-white shadow-[0_8px_18px_rgba(0,0,0,0.18)]">
-              À la une
+            <span className="rounded-full bg-orange-500 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+              Professionnel
             </span>
           </div>
 
           <button
             type="button"
-            className="text-3d-soft absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-[#171311] shadow-sm"
+            className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-slate-700 shadow-sm"
           >
             ♡
           </button>
@@ -172,21 +226,31 @@ function SearchListingCard({
         <div className="min-w-0 p-4 sm:p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="text-3d-title line-clamp-2 text-[15px] font-semibold leading-5 text-black sm:text-[17px]">
+              <h3 className="line-clamp-2 text-[18px] font-semibold leading-6 text-slate-900">
                 {item.title}
               </h3>
 
-              <div className="text-3d-title mt-2 text-[20px] font-bold leading-none text-black">
+              <div className="mt-2 text-[24px] font-bold leading-none text-orange-600">
                 {formatPrice(item.price)}
               </div>
 
-              <div className="mt-2 flex flex-wrap gap-2">
-                <span className="text-3d-soft inline-flex rounded-full border border-[#171311]/15 bg-[#f5f3ef] px-2.5 py-0.5 text-[12px] font-medium text-[#171311]">
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="inline-flex rounded-full bg-orange-50 px-2.5 py-1 text-[11px] font-medium text-orange-600">
                   Pro
                 </span>
+
                 {item.vatRecoverable ? (
-                  <span className="text-3d-soft inline-flex rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-2.5 py-0.5 text-[12px] font-medium text-[#4b4036]">
+                  <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-600">
                     TVA récupérable
+                  </span>
+                ) : null}
+
+                {hasGoogleData ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-[11px] font-medium text-orange-600">
+                    <span>{renderStars(item.googleRating!)}</span>
+                    <span>
+                      {item.googleRating!.toFixed(1)} ({item.googleReviewsCount})
+                    </span>
                   </span>
                 ) : null}
               </div>
@@ -195,48 +259,73 @@ function SearchListingCard({
 
           <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4">
             <div>
-              <div className="text-3d-soft text-[12px] text-slate-500">Année</div>
-              <div className="text-3d-title mt-0.5 text-[14px] font-medium text-black">
+              <div className="text-[12px] text-slate-500">Année</div>
+              <div className="mt-0.5 text-[14px] font-medium text-slate-900">
                 {item.year || "—"}
               </div>
             </div>
 
             <div>
-              <div className="text-3d-soft text-[12px] text-slate-500">Kilométrage</div>
-              <div className="text-3d-title mt-0.5 text-[14px] font-medium text-black">
+              <div className="text-[12px] text-slate-500">Kilométrage</div>
+              <div className="mt-0.5 text-[14px] font-medium text-slate-900">
                 {formatKm(item.mileage)}
               </div>
             </div>
 
             <div>
-              <div className="text-3d-soft text-[12px] text-slate-500">Énergie</div>
-              <div className="text-3d-title mt-0.5 text-[14px] font-medium text-black">
+              <div className="text-[12px] text-slate-500">Énergie</div>
+              <div className="mt-0.5 text-[14px] font-medium text-slate-900">
                 {item.fuel || "—"}
               </div>
             </div>
 
             <div>
-              <div className="text-3d-soft text-[12px] text-slate-500">Type</div>
-              <div className="text-3d-title mt-0.5 text-[14px] font-medium text-black">
+              <div className="text-[12px] text-slate-500">Type</div>
+              <div className="mt-0.5 text-[14px] font-medium text-slate-900">
                 {item.type || "—"}
               </div>
             </div>
           </div>
 
-          <p className="text-3d-soft mt-4 line-clamp-2 text-[13px] leading-6 text-slate-600">
+          <p className="mt-4 line-clamp-2 text-[13px] leading-6 text-slate-600">
             {item.description || "Voir l’annonce complète."}
           </p>
 
-          <div className="mt-4 flex items-start gap-3 border-t border-[#ece7e0] pt-4">
-            <div className="text-3d-title grid h-8 w-8 shrink-0 place-items-center rounded-md border border-[#e4ddd4] bg-white text-[10px] font-bold text-[#171311]">
+          <div className="mt-4 flex items-start gap-3 border-t border-slate-200 pt-4">
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-slate-200 bg-white text-[10px] font-bold text-slate-900">
               PRO
             </div>
 
-            <div className="min-w-0">
-              <div className="text-3d-title truncate text-[13px] font-medium text-black">
-                Garage partenaire
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-[13px] font-medium text-slate-900">
+                {item.garageName || "Garage partenaire"}
               </div>
-              <div className="text-3d-soft mt-0.5 text-[12px] text-slate-500">{locationText}</div>
+
+              <div className="mt-0.5 text-[12px] text-slate-500">
+                {locationText}
+              </div>
+
+              {hasGoogleData ? (
+                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-slate-600">
+                  <span className="font-medium text-orange-600">
+                    {renderStars(item.googleRating!)}
+                  </span>
+                  <span>
+                    {item.googleRating!.toFixed(1)} sur Google •{" "}
+                    {item.googleReviewsCount} avis
+                  </span>
+
+                  {item.googleMapsUrl ? (
+                    <button
+                      type="button"
+                      onClick={(e) => openGoogleMaps(e, item.googleMapsUrl!)}
+                      className="font-medium text-orange-600 underline underline-offset-2 hover:text-orange-700"
+                    >
+                      Voir sur Google
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -253,7 +342,10 @@ export default function AnnoncesClient({
   const router = useRouter();
   const params = useSearchParams();
 
-  const safeListings = useMemo<Listing[]>(() => listings.map(mapListing), [listings]);
+  const safeListings = useMemo<SearchListing[]>(
+    () => listings.map(mapListing),
+    [listings]
+  );
 
   const pageParam = Number(params.get("page") ?? "1");
   const currentPage = Number.isFinite(pageParam) ? Math.max(1, pageParam) : 1;
@@ -276,10 +368,8 @@ export default function AnnoncesClient({
 
   const [searchQuery, setSearchQuery] = useState(queryFromUrl);
   const [type, setType] = useState<"" | Listing["type"]>(
-    typeFromUrl === "Utilitaire" ||
-      typeFromUrl === "Société" ||
-      typeFromUrl === "Tourisme"
-      ? typeFromUrl
+    validTypes.includes(typeFromUrl as (typeof validTypes)[number])
+      ? (typeFromUrl as Listing["type"])
       : ""
   );
   const [brand, setBrand] = useState(brandFromUrl);
@@ -315,10 +405,8 @@ export default function AnnoncesClient({
   useEffect(() => {
     setSearchQuery(queryFromUrl);
     setType(
-      typeFromUrl === "Utilitaire" ||
-        typeFromUrl === "Société" ||
-        typeFromUrl === "Tourisme"
-        ? typeFromUrl
+      validTypes.includes(typeFromUrl as (typeof validTypes)[number])
+        ? (typeFromUrl as Listing["type"])
         : ""
     );
     setBrand(brandFromUrl);
@@ -363,7 +451,7 @@ export default function AnnoncesClient({
     return Array.from(set).sort((a, b) => a.localeCompare(b, "fr"));
   }, [safeListings]);
 
-  const results = useMemo<Listing[]>(() => {
+  const results = useMemo<SearchListing[]>(() => {
     const query = normalize(searchQuery);
 
     let arr = safeListings.filter((item) => {
@@ -377,6 +465,7 @@ export default function AnnoncesClient({
           item.city,
           item.department,
           item.description,
+          item.garageName ?? "",
           `${item.brand} ${item.model}`,
         ]
           .join(" ")
@@ -457,7 +546,7 @@ export default function AnnoncesClient({
   const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const page = clamp(currentPage, 1, totalPages);
 
-  const paginatedResults = useMemo<Listing[]>(() => {
+  const paginatedResults = useMemo<SearchListing[]>(() => {
     const start = (page - 1) * PAGE_SIZE;
     return results.slice(start, start + PAGE_SIZE);
   }, [results, page]);
@@ -558,17 +647,17 @@ export default function AnnoncesClient({
       : "Année récente";
 
   return (
-    <div className="min-h-screen bg-[#f8f6f3]">
+    <div className="min-h-screen bg-white text-slate-900">
       <div className="container-app py-4 sm:py-5 lg:py-6">
-        <div className="animate-fade-up rounded-3xl border border-[#e7e2db] bg-[#fffdf9] p-3 shadow-[0_12px_30px_rgba(0,0,0,0.04)] sm:p-4">
+        <div className="rounded-md border border-slate-200 bg-white p-3 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-4">
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_200px]">
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1.2fr)_repeat(4,minmax(0,1fr))]">
               <input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && applyFilters()}
-                placeholder="Rechercher une marque, un modèle..."
-                className="text-3d-soft h-11 w-full rounded-full border border-[#e4ddd4] bg-white px-4 text-[14px] text-[#171311] outline-none transition placeholder:text-slate-400 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                placeholder="Rechercher une marque, un modèle, un scooter, une moto..."
+                className="h-11 w-full rounded-md border border-slate-300 bg-white px-4 text-[14px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
               />
 
               <FilterButton
@@ -596,26 +685,28 @@ export default function AnnoncesClient({
               <button
                 type="button"
                 onClick={() => setFiltersOpen(true)}
-                className="text-3d-soft flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#e4ddd4] bg-white px-4 text-[14px] font-medium text-[#171311] transition hover:border-[#cfc5b8] hover:bg-[#f7f5f2]"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 text-[14px] font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
               >
                 <span>⚙️</span>
-                <span>Filtres{activeFiltersCount ? ` (${activeFiltersCount})` : ""}</span>
+                <span>
+                  Filtres{activeFiltersCount ? ` (${activeFiltersCount})` : ""}
+                </span>
               </button>
             </div>
 
             <button
               type="button"
               onClick={applyFilters}
-              className="text-3d-button h-11 rounded-full bg-[#171311] px-5 text-[14px] font-semibold text-white transition hover:bg-[#0f0d0c]"
+              className="h-11 rounded-md bg-orange-500 px-5 text-[14px] font-semibold text-white transition hover:bg-orange-600"
             >
               Rechercher
             </button>
           </div>
         </div>
 
-        <div className="animate-fade-up mt-4 overflow-x-auto [scrollbar-width:none]" style={{ animationDelay: "0.08s" }}>
+        <div className="mt-4 overflow-x-auto [scrollbar-width:none]">
           <div className="flex w-max gap-2 pr-2 sm:w-auto sm:flex-wrap">
-            <TopChip active>Voitures</TopChip>
+            <TopChip active>Annonces</TopChip>
             {searchQuery ? <TopChip>Recherche : {searchQuery}</TopChip> : null}
             {type ? <TopChip>{type}</TopChip> : null}
             {brand ? <TopChip>{brand}</TopChip> : null}
@@ -624,27 +715,29 @@ export default function AnnoncesClient({
             <button
               type="button"
               onClick={() => setFiltersOpen(true)}
-              className="text-3d-soft inline-flex items-center rounded-full border border-[#e4ddd4] bg-white px-3 py-1.5 text-[13px] text-[#4b4036] whitespace-nowrap hover:bg-[#f7f5f2]"
+              className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-[13px] text-slate-700 whitespace-nowrap transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
             >
               Tri : {sortLabel}
             </button>
           </div>
         </div>
 
-        <div className="mt-6">
-          <h1 className="text-3d-hero animate-fade-up text-[24px] font-semibold leading-tight text-black sm:text-[28px]" style={{ animationDelay: "0.12s" }}>
+        <div className="mt-6 border-b border-slate-200 pb-4">
+          <h1 className="text-[24px] font-semibold leading-tight text-slate-900 sm:text-[28px]">
             {searchQuery
               ? `Résultats pour "${searchQuery}"`
-              : "Annonces Voitures d'occasion"}
+              : type
+              ? `Annonces ${type}`
+              : "Toutes les annonces"}
           </h1>
 
           <div className="mt-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-            <p className="text-3d-title animate-fade-up text-[18px] font-semibold text-black" style={{ animationDelay: "0.16s" }}>
+            <p className="text-[18px] font-semibold text-slate-900">
               {results.length.toLocaleString("fr-FR")} annonces
             </p>
 
-            <p className="text-3d-soft animate-fade-up text-[12px] text-slate-600 sm:text-right" style={{ animationDelay: "0.2s" }}>
-              * Un crédit vous engage et doit être remboursé.
+            <p className="text-[12px] text-slate-500 sm:text-right">
+              Parcourez les véhicules publiés par des professionnels.
             </p>
           </div>
         </div>
@@ -655,23 +748,23 @@ export default function AnnoncesClient({
               <SearchListingCard key={item.id} item={item} index={index + 1} />
             ))
           ) : (
-            <div className="animate-fade-up rounded-2xl border border-[#e7e2db] bg-white p-8 text-[14px] text-slate-600">
+            <div className="rounded-md border border-slate-200 bg-white p-8 text-[14px] text-slate-600">
               Aucune annonce ne correspond. Essaie d’enlever des filtres.
             </div>
           )}
         </div>
 
         {results.length > 0 && totalPages > 1 && (
-          <div className="animate-fade-up mt-6 rounded-2xl border border-[#e7e2db] bg-white p-4 shadow-[0_10px_24px_rgba(0,0,0,0.04)]" style={{ animationDelay: "0.18s" }}>
+          <div className="mt-6 rounded-md border border-slate-200 bg-white p-4 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-3d-soft text-[13px] text-slate-600">
-                Page <span className="text-3d-title font-semibold text-black">{page}</span> /{" "}
+              <p className="text-[13px] text-slate-600">
+                Page <span className="font-semibold text-slate-900">{page}</span> /{" "}
                 {totalPages}
               </p>
 
               <div className="flex flex-wrap gap-2">
                 <button
-                  className="text-3d-soft rounded-xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm text-[#4b4036] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={() => goToPage(page - 1)}
                   disabled={page <= 1}
                 >
@@ -683,8 +776,8 @@ export default function AnnoncesClient({
                     key={p}
                     className={
                       p === page
-                        ? "text-3d-button rounded-xl border border-[#171311] bg-[#171311] px-4 py-2 text-sm text-white"
-                        : "text-3d-soft rounded-xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm text-[#4b4036]"
+                        ? "rounded-md border border-orange-500 bg-orange-500 px-4 py-2 text-sm text-white"
+                        : "rounded-md border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                     }
                     onClick={() => goToPage(p)}
                   >
@@ -693,7 +786,7 @@ export default function AnnoncesClient({
                 ))}
 
                 <button
-                  className="text-3d-soft rounded-xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm text-[#4b4036] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={() => goToPage(page + 1)}
                   disabled={page >= totalPages}
                 >
@@ -713,17 +806,19 @@ export default function AnnoncesClient({
             aria-label="Fermer"
           />
 
-          <aside className="fixed right-0 top-0 z-50 h-full w-[min(430px,100vw)] border-l border-[#e7e2db] bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#ece7e0] p-5">
+          <aside className="fixed right-0 top-0 z-50 h-full w-[min(430px,100vw)] border-l border-slate-200 bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 p-5">
               <div>
-                <h2 className="text-3d-title text-[18px] font-semibold text-black">Filtres</h2>
-                <p className="text-3d-soft mt-1 text-[13px] text-slate-500">
+                <h2 className="text-[18px] font-semibold text-slate-900">
+                  Filtres
+                </h2>
+                <p className="mt-1 text-[13px] text-slate-500">
                   {activeFiltersCount} actif(s)
                 </p>
               </div>
               <button
                 onClick={() => setFiltersOpen(false)}
-                className="text-3d-soft rounded-full border border-[#e4ddd4] px-3 py-2 text-sm text-[#4b4036] hover:bg-[#f7f5f2]"
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
               >
                 ✕
               </button>
@@ -733,35 +828,41 @@ export default function AnnoncesClient({
               <div className="overflow-auto p-5">
                 <div className="grid gap-5">
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">Recherche</label>
+                    <label className="text-sm font-semibold text-slate-900">
+                      Recherche
+                    </label>
                     <input
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Ex : Audi A3, Golf, Vito..."
-                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      placeholder="Ex : Audi A3, Golf, Vito, scooter..."
+                      className="h-12 rounded-md border border-slate-300 px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">Type</label>
+                    <label className="text-sm font-semibold text-slate-900">
+                      Type
+                    </label>
                     <select
                       value={type}
                       onChange={(e) => setType(e.target.value as "" | Listing["type"])}
-                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     >
                       <option value="">Tous</option>
                       <option value="Utilitaire">Utilitaire</option>
-                      <option value="Société">Société</option>
                       <option value="Tourisme">Tourisme</option>
+                      <option value="2 roues">2 roues</option>
                     </select>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">Marque</label>
+                    <label className="text-sm font-semibold text-slate-900">
+                      Marque
+                    </label>
                     <select
                       value={brand}
                       onChange={(e) => setBrand(e.target.value)}
-                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     >
                       <option value="">Toutes</option>
                       {brandOptions.map((b) => (
@@ -773,11 +874,13 @@ export default function AnnoncesClient({
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">Énergie</label>
+                    <label className="text-sm font-semibold text-slate-900">
+                      Énergie
+                    </label>
                     <select
                       value={fuel}
                       onChange={(e) => setFuel(e.target.value as "" | Listing["fuel"])}
-                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     >
                       <option value="">Toutes</option>
                       <option value="Diesel">Diesel</option>
@@ -787,10 +890,12 @@ export default function AnnoncesClient({
                     </select>
                   </div>
 
-                  <div className="flex items-center justify-between rounded-2xl border border-[#e4ddd4] p-4">
+                  <div className="flex items-center justify-between rounded-md border border-slate-200 p-4">
                     <div>
-                      <p className="text-3d-title text-sm font-semibold text-black">TVA récupérable</p>
-                      <p className="text-3d-soft mt-1 text-xs text-slate-500">
+                      <p className="text-sm font-semibold text-slate-900">
+                        TVA récupérable
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500">
                         Afficher uniquement les annonces TVA
                       </p>
                     </div>
@@ -798,12 +903,14 @@ export default function AnnoncesClient({
                       type="checkbox"
                       checked={vatOnly}
                       onChange={(e) => setVatOnly(e.target.checked)}
-                      className="h-5 w-5 accent-black"
+                      className="h-5 w-5 accent-orange-500"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">Prix (€)</label>
+                    <label className="text-sm font-semibold text-slate-900">
+                      Prix (€)
+                    </label>
                     <div className="grid grid-cols-2 gap-2">
                       <input
                         inputMode="numeric"
@@ -812,7 +919,7 @@ export default function AnnoncesClient({
                           setPriceMin(e.target.value === "" ? "" : Number(e.target.value))
                         }
                         placeholder="Min"
-                        className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                        className="h-12 rounded-md border border-slate-300 px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                       />
                       <input
                         inputMode="numeric"
@@ -821,13 +928,15 @@ export default function AnnoncesClient({
                           setPriceMax(e.target.value === "" ? "" : Number(e.target.value))
                         }
                         placeholder="Max"
-                        className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                        className="h-12 rounded-md border border-slate-300 px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                       />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">Kilométrage max</label>
+                    <label className="text-sm font-semibold text-slate-900">
+                      Kilométrage max
+                    </label>
                     <input
                       inputMode="numeric"
                       value={kmMax}
@@ -835,12 +944,14 @@ export default function AnnoncesClient({
                         setKmMax(e.target.value === "" ? "" : Number(e.target.value))
                       }
                       placeholder="Ex : 100000"
-                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 rounded-md border border-slate-300 px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">Année</label>
+                    <label className="text-sm font-semibold text-slate-900">
+                      Année
+                    </label>
                     <div className="grid grid-cols-2 gap-2">
                       <input
                         inputMode="numeric"
@@ -849,7 +960,7 @@ export default function AnnoncesClient({
                           setYearMin(e.target.value === "" ? "" : Number(e.target.value))
                         }
                         placeholder="Min"
-                        className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                        className="h-12 rounded-md border border-slate-300 px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                       />
                       <input
                         inputMode="numeric"
@@ -858,29 +969,31 @@ export default function AnnoncesClient({
                           setYearMax(e.target.value === "" ? "" : Number(e.target.value))
                         }
                         placeholder="Max"
-                        className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                        className="h-12 rounded-md border border-slate-300 px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                       />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">
+                    <label className="text-sm font-semibold text-slate-900">
                       Localisation (ville ou département)
                     </label>
                     <input
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       placeholder="Ex : 76, Le Havre, Rouen"
-                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 rounded-md border border-slate-300 px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-title text-sm font-semibold text-black">Tri</label>
+                    <label className="text-sm font-semibold text-slate-900">
+                      Tri
+                    </label>
                     <select
                       value={sort}
                       onChange={(e) => setSort(e.target.value as SortKey)}
-                      className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white px-4 text-sm text-[#171311] outline-none focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     >
                       <option value="relevance">Pertinence</option>
                       <option value="priceAsc">Prix croissant</option>
@@ -892,10 +1005,10 @@ export default function AnnoncesClient({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 border-t border-[#ece7e0] p-5">
+              <div className="grid grid-cols-2 gap-3 border-t border-slate-200 p-5">
                 <button
                   onClick={clearFilters}
-                  className="text-3d-soft h-12 rounded-xl border border-[#e4ddd4] bg-white text-sm font-medium text-[#4b4036] hover:bg-[#f7f5f2]"
+                  className="h-12 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                 >
                   Réinitialiser
                 </button>
@@ -904,7 +1017,7 @@ export default function AnnoncesClient({
                     applyFilters();
                     setFiltersOpen(false);
                   }}
-                  className="text-3d-button h-12 rounded-xl bg-[#171311] text-sm font-semibold text-white hover:bg-[#0f0d0c]"
+                  className="h-12 rounded-md bg-orange-500 text-sm font-semibold text-white transition hover:bg-orange-600"
                 >
                   Voir {results.length}
                 </button>

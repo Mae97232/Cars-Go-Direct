@@ -25,32 +25,32 @@ export default async function CompteParametresPage() {
     .maybeSingle();
 
   return (
-    <div className="mx-auto grid max-w-5xl gap-6">
-      <div className="animate-fade-up flex flex-wrap items-center gap-2 text-sm text-slate-500">
+    <div className="mx-auto grid max-w-5xl gap-6 bg-white text-slate-900">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
         <Link
           href="/compte"
-          className="text-3d-soft font-medium text-[#171311] hover:underline"
+          className="font-medium text-slate-700 hover:text-orange-600 hover:underline"
         >
           Mon compte
         </Link>
         <span>›</span>
-        <span className="text-3d-soft">Paramètres</span>
+        <span>Paramètres</span>
       </div>
 
-      <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
+      <section className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3d-hero text-2xl font-extrabold tracking-tight text-black sm:text-3xl">
+            <h1 className="text-[26px] font-semibold text-slate-900 sm:text-[30px]">
               Paramètres
             </h1>
-            <p className="text-3d-soft mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-600">
               Gère les informations de ton compte utilisateur.
             </p>
           </div>
 
           <Link
             href="/compte"
-            className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+            className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
           >
             Retour au compte
           </Link>

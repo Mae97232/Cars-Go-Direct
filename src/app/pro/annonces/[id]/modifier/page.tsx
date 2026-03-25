@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-type VehicleType = "Utilitaire" | "Société" | "Tourisme";
+type VehicleType = "Utilitaire" | "Tourisme" | "2 roues";
 type FuelType = "Diesel" | "Essence" | "Hybride" | "Électrique";
 type TransmissionType = "Manuelle" | "Automatique" | "Semi-automatique";
 
@@ -436,28 +436,28 @@ export default function ModifierAnnoncePage() {
 
   if (checkingAuth || loadingListing) {
     return (
-      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 text-sm text-slate-600 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+      <div className="border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
         Chargement de l’annonce...
       </div>
     );
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-5">
-      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
+    <div className="mx-auto grid max-w-6xl gap-5 bg-white text-slate-900">
+      <div className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-7">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h1 className="text-3d-hero text-2xl font-extrabold tracking-tight text-black">
+            <h1 className="text-[26px] font-semibold text-slate-900 sm:text-[30px]">
               Modifier une annonce
             </h1>
-            <p className="text-3d-soft mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-600">
               Modifiez toutes les informations de votre véhicule avant d’enregistrer.
             </p>
           </div>
 
           <div className="flex gap-2">
             <button
-              className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+              className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
               onClick={() => router.push("/pro/dashboard")}
             >
               Dashboard
@@ -469,40 +469,36 @@ export default function ModifierAnnoncePage() {
           <div
             className={
               step === 1
-                ? "rounded-[24px] border border-[#171311] bg-[#faf7f2] p-4"
-                : "rounded-[24px] border border-[#e4ddd4] bg-white p-4 opacity-70"
+                ? "border border-orange-500 bg-orange-50 p-4"
+                : "border border-slate-200 bg-white p-4 opacity-70"
             }
           >
-            <p className="text-3d-soft text-xs text-slate-500">Étape 1</p>
-            <p className="text-3d-title font-semibold text-black">
-              Informations complètes
-            </p>
+            <p className="text-xs text-slate-500">Étape 1</p>
+            <p className="font-semibold text-slate-900">Informations complètes</p>
           </div>
           <div
             className={
               step === 2
-                ? "rounded-[24px] border border-[#171311] bg-[#faf7f2] p-4"
-                : "rounded-[24px] border border-[#e4ddd4] bg-white p-4 opacity-70"
+                ? "border border-orange-500 bg-orange-50 p-4"
+                : "border border-slate-200 bg-white p-4 opacity-70"
             }
           >
-            <p className="text-3d-soft text-xs text-slate-500">Étape 2</p>
-            <p className="text-3d-title font-semibold text-black">
-              Aperçu & sauvegarde
-            </p>
+            <p className="text-xs text-slate-500">Étape 2</p>
+            <p className="font-semibold text-slate-900">Aperçu & sauvegarde</p>
           </div>
         </div>
       </div>
 
       {step === 1 ? (
         <div className="grid gap-5 lg:grid-cols-[1.2fr_.8fr] lg:items-start">
-          <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+          <section className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
             <div className="flex items-start justify-between gap-3">
-              <h2 className="text-3d-title text-lg font-bold tracking-tight text-black">
+              <h2 className="text-lg font-semibold text-slate-900">
                 Informations véhicule
               </h2>
               <button
                 type="button"
-                className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                 onClick={autoTitle}
               >
                 Générer le titre
@@ -511,43 +507,37 @@ export default function ModifierAnnoncePage() {
 
             <div className="mt-6 grid gap-6">
               <div className="grid gap-3">
-                <h3 className="text-3d-soft text-sm font-bold uppercase tracking-wide text-slate-500">
+                <h3 className="text-sm font-bold uppercase tracking-wide text-slate-500">
                   Informations principales
                 </h3>
 
                 <div className="grid gap-2">
-                  <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                    Titre
-                  </label>
+                  <label className="text-sm font-semibold text-slate-700">Titre</label>
                   <input
                     value={draft.title}
                     onChange={(e) => update("title", e.target.value)}
-                    className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                    className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                   />
                   {errors.title && <p className="text-xs text-red-600">{errors.title}</p>}
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Marque
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Marque</label>
                     <input
                       value={draft.brand}
                       onChange={(e) => update("brand", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.brand && <p className="text-xs text-red-600">{errors.brand}</p>}
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Modèle
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Modèle</label>
                     <input
                       value={draft.model}
                       onChange={(e) => update("model", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.model && <p className="text-xs text-red-600">{errors.model}</p>}
                   </div>
@@ -555,40 +545,34 @@ export default function ModifierAnnoncePage() {
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Année
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Année</label>
                     <input
                       inputMode="numeric"
                       value={draft.year}
                       onChange={(e) => update("year", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.year && <p className="text-xs text-red-600">{errors.year}</p>}
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Kilométrage
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Kilométrage</label>
                     <input
                       inputMode="numeric"
                       value={draft.mileage}
                       onChange={(e) => update("mileage", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.mileage && <p className="text-xs text-red-600">{errors.mileage}</p>}
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Prix (€)
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Prix (€)</label>
                     <input
                       inputMode="numeric"
                       value={draft.price}
                       onChange={(e) => update("price", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.price && <p className="text-xs text-red-600">{errors.price}</p>}
                   </div>
@@ -596,30 +580,26 @@ export default function ModifierAnnoncePage() {
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Type
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Type</label>
                     <select
                       value={draft.type}
                       onChange={(e) => update("type", e.target.value as VehicleType | "")}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     >
                       <option value="">Choisir</option>
                       <option value="Utilitaire">Utilitaire</option>
-                      <option value="Société">Société</option>
                       <option value="Tourisme">Tourisme</option>
+                      <option value="2 roues">2 roues</option>
                     </select>
                     {errors.type && <p className="text-xs text-red-600">{errors.type}</p>}
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Énergie
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Énergie</label>
                     <select
                       value={draft.fuel}
                       onChange={(e) => update("fuel", e.target.value as FuelType | "")}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     >
                       <option value="">Choisir</option>
                       <option value="Diesel">Diesel</option>
@@ -631,7 +611,7 @@ export default function ModifierAnnoncePage() {
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                    <label className="text-sm font-semibold text-slate-700">
                       Boîte de vitesse
                     </label>
                     <select
@@ -639,7 +619,7 @@ export default function ModifierAnnoncePage() {
                       onChange={(e) =>
                         update("transmission", e.target.value as TransmissionType | "")
                       }
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     >
                       <option value="">Choisir</option>
                       <option value="Manuelle">Manuelle</option>
@@ -652,12 +632,10 @@ export default function ModifierAnnoncePage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between rounded-2xl border border-[#e4ddd4] p-4">
+                <div className="flex items-center justify-between border border-slate-200 p-4">
                   <div>
-                    <p className="text-3d-title text-sm font-semibold text-black">
-                      TVA récupérable
-                    </p>
-                    <p className="text-3d-soft text-xs text-slate-500">
+                    <p className="text-sm font-semibold text-slate-900">TVA récupérable</p>
+                    <p className="text-xs text-slate-500">
                       Afficher “TVA récupérable” sur l’annonce
                     </p>
                   </div>
@@ -665,37 +643,33 @@ export default function ModifierAnnoncePage() {
                     type="checkbox"
                     checked={draft.vatRecoverable}
                     onChange={(e) => update("vatRecoverable", e.target.checked)}
-                    className="h-5 w-5 accent-black"
+                    className="h-5 w-5 accent-orange-500"
                   />
                 </div>
               </div>
 
               <div className="grid gap-3">
-                <h3 className="text-3d-soft text-sm font-bold uppercase tracking-wide text-slate-500">
+                <h3 className="text-sm font-bold uppercase tracking-wide text-slate-500">
                   Localisation
                 </h3>
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Ville
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Ville</label>
                     <input
                       value={draft.city}
                       onChange={(e) => update("city", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.city && <p className="text-xs text-red-600">{errors.city}</p>}
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Département
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Département</label>
                     <input
                       value={draft.department}
                       onChange={(e) => update("department", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.department && (
                       <p className="text-xs text-red-600">{errors.department}</p>
@@ -705,57 +679,55 @@ export default function ModifierAnnoncePage() {
               </div>
 
               <div className="grid gap-3">
-                <h3 className="text-3d-soft text-sm font-bold uppercase tracking-wide text-slate-500">
+                <h3 className="text-sm font-bold uppercase tracking-wide text-slate-500">
                   Caractéristiques techniques
                 </h3>
 
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                      Couleur
-                    </label>
+                    <label className="text-sm font-semibold text-slate-700">Couleur</label>
                     <input
                       value={draft.color}
                       onChange={(e) => update("color", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                    <label className="text-sm font-semibold text-slate-700">
                       Nombre de portes
                     </label>
                     <input
                       inputMode="numeric"
                       value={draft.doors}
                       onChange={(e) => update("doors", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.doors && <p className="text-xs text-red-600">{errors.doors}</p>}
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                    <label className="text-sm font-semibold text-slate-700">
                       Nombre de places
                     </label>
                     <input
                       inputMode="numeric"
                       value={draft.seats}
                       onChange={(e) => update("seats", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.seats && <p className="text-xs text-red-600">{errors.seats}</p>}
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                    <label className="text-sm font-semibold text-slate-700">
                       Puissance DIN (ch)
                     </label>
                     <input
                       inputMode="numeric"
                       value={draft.powerDin}
                       onChange={(e) => update("powerDin", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.powerDin && (
                       <p className="text-xs text-red-600">{errors.powerDin}</p>
@@ -763,14 +735,14 @@ export default function ModifierAnnoncePage() {
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                    <label className="text-sm font-semibold text-slate-700">
                       Puissance fiscale (cv)
                     </label>
                     <input
                       inputMode="numeric"
                       value={draft.fiscalPower}
                       onChange={(e) => update("fiscalPower", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.fiscalPower && (
                       <p className="text-xs text-red-600">{errors.fiscalPower}</p>
@@ -778,14 +750,14 @@ export default function ModifierAnnoncePage() {
                   </div>
 
                   <div className="grid gap-2">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                    <label className="text-sm font-semibold text-slate-700">
                       Première mise en circulation
                     </label>
                     <input
                       type="date"
                       value={draft.firstRegistration}
                       onChange={(e) => update("firstRegistration", e.target.value)}
-                      className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                      className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     />
                     {errors.firstRegistration && (
                       <p className="text-xs text-red-600">{errors.firstRegistration}</p>
@@ -795,30 +767,28 @@ export default function ModifierAnnoncePage() {
               </div>
 
               <div className="grid gap-3">
-                <h3 className="text-3d-soft text-sm font-bold uppercase tracking-wide text-slate-500">
+                <h3 className="text-sm font-bold uppercase tracking-wide text-slate-500">
                   Contenu de l’annonce
                 </h3>
 
                 <div className="grid gap-2">
-                  <label className="text-3d-soft text-sm font-semibold text-slate-700">
-                    Description
-                  </label>
+                  <label className="text-sm font-semibold text-slate-700">Description</label>
                   <textarea
                     value={draft.description}
                     onChange={(e) => update("description", e.target.value)}
-                    className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                    className="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     rows={6}
                   />
                 </div>
 
                 <div className="grid gap-3">
                   <div className="flex items-center justify-between gap-3">
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                    <label className="text-sm font-semibold text-slate-700">
                       Points forts
                     </label>
                     <button
                       type="button"
-                      className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                      className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                       onClick={() => addArrayField("highlights")}
                     >
                       Ajouter
@@ -833,11 +803,11 @@ export default function ModifierAnnoncePage() {
                           updateArrayField("highlights", index, e.target.value)
                         }
                         placeholder="Ex : TVA récupérable"
-                        className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                        className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                       />
                       <button
                         type="button"
-                        className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-2 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                        className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                         onClick={() => removeArrayField("highlights", index)}
                       >
                         Retirer
@@ -848,16 +818,16 @@ export default function ModifierAnnoncePage() {
 
                 <div className="grid gap-4">
                   <div>
-                    <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                    <label className="text-sm font-semibold text-slate-700">
                       Équipements
                     </label>
-                    <p className="text-3d-soft mt-1 text-xs text-slate-500">
+                    <p className="mt-1 text-xs text-slate-500">
                       Sélectionnez les équipements présents sur le véhicule.
                     </p>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    <span className="text-3d-button rounded-full bg-[#171311] px-3 py-1 text-xs font-semibold text-white">
+                    <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-semibold text-white">
                       {cleanedEquipment.length} sélectionné
                       {cleanedEquipment.length > 1 ? "s" : ""}
                     </span>
@@ -865,7 +835,7 @@ export default function ModifierAnnoncePage() {
                     {selectedEquipmentByCategory.map((group) => (
                       <span
                         key={group.category}
-                        className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-xs font-medium text-slate-600"
+                        className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600"
                       >
                         {group.category} : {group.count}
                       </span>
@@ -876,13 +846,13 @@ export default function ModifierAnnoncePage() {
                     {EQUIPMENT_CATEGORIES.map((group) => (
                       <div
                         key={group.category}
-                        className="rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] p-4"
+                        className="border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)]"
                       >
                         <div className="mb-4">
-                          <h4 className="text-3d-title text-sm font-bold uppercase tracking-wide text-black">
+                          <h4 className="text-sm font-bold uppercase tracking-wide text-slate-900">
                             {group.category}
                           </h4>
-                          <p className="text-3d-soft mt-1 text-xs text-slate-500">
+                          <p className="mt-1 text-xs text-slate-500">
                             {group.items.length} équipement
                             {group.items.length > 1 ? "s" : ""} disponible
                             {group.items.length > 1 ? "s" : ""}
@@ -896,17 +866,17 @@ export default function ModifierAnnoncePage() {
                             return (
                               <label
                                 key={option}
-                                className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm transition ${
+                                className={`flex cursor-pointer items-center gap-3 border px-4 py-3 text-sm transition ${
                                   checked
-                                    ? "border-[#171311] bg-[#171311] text-white"
-                                    : "border-[#e4ddd4] bg-white text-slate-700 hover:bg-[#f7f5f2]"
+                                    ? "border-orange-500 bg-orange-50 text-orange-700"
+                                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                                 }`}
                               >
                                 <input
                                   type="checkbox"
                                   checked={checked}
                                   onChange={() => toggleEquipment(option)}
-                                  className="h-4 w-4 shrink-0 accent-black"
+                                  className="h-4 w-4 shrink-0 accent-orange-500"
                                 />
                                 <span>{option}</span>
                               </label>
@@ -920,16 +890,16 @@ export default function ModifierAnnoncePage() {
               </div>
 
               <div className="grid gap-3">
-                <h3 className="text-3d-soft text-sm font-bold uppercase tracking-wide text-slate-500">
+                <h3 className="text-sm font-bold uppercase tracking-wide text-slate-500">
                   Historique et entretien
                 </h3>
 
-                <div className="flex items-center justify-between rounded-2xl border border-[#e4ddd4] p-4">
+                <div className="flex items-center justify-between border border-slate-200 p-4">
                   <div>
-                    <p className="text-3d-title text-sm font-semibold text-black">
+                    <p className="text-sm font-semibold text-slate-900">
                       Carnet d’entretien disponible
                     </p>
-                    <p className="text-3d-soft text-xs text-slate-500">
+                    <p className="text-xs text-slate-500">
                       Indique si le carnet d’entretien est disponible
                     </p>
                   </div>
@@ -937,45 +907,45 @@ export default function ModifierAnnoncePage() {
                     type="checkbox"
                     checked={draft.maintenanceBook}
                     onChange={(e) => update("maintenanceBook", e.target.checked)}
-                    className="h-5 w-5 accent-black"
+                    className="h-5 w-5 accent-orange-500"
                   />
                 </div>
 
                 <div className="grid gap-2">
-                  <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                  <label className="text-sm font-semibold text-slate-700">
                     Historique du véhicule
                   </label>
                   <input
                     value={draft.vehicleHistory}
                     onChange={(e) => update("vehicleHistory", e.target.value)}
                     placeholder="Ex : Première main, historique complet..."
-                    className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                    className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                   />
                 </div>
 
                 <div className="grid gap-2">
-                  <label className="text-3d-soft text-sm font-semibold text-slate-700">
+                  <label className="text-sm font-semibold text-slate-700">
                     Disponibilité des pièces
                   </label>
                   <input
                     value={draft.partsAvailability}
                     onChange={(e) => update("partsAvailability", e.target.value)}
                     placeholder="Ex : Disponible immédiatement"
-                    className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                    className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-2 pt-2 sm:flex-row">
                 <button
-                  className="text-3d-soft inline-flex w-full items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2] sm:w-auto"
+                  className="inline-flex h-11 w-full items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 sm:w-auto"
                   onClick={() => saveListing("draft")}
                   disabled={submitting}
                 >
                   {submitting ? "Enregistrement..." : "Enregistrer en brouillon"}
                 </button>
                 <button
-                  className="text-3d-button inline-flex w-full items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:opacity-60 sm:w-auto"
+                  className="inline-flex h-11 w-full items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600 disabled:opacity-60 sm:w-auto"
                   onClick={goNext}
                   disabled={!isStep1Valid}
                 >
@@ -985,16 +955,14 @@ export default function ModifierAnnoncePage() {
             </div>
           </section>
 
-          <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-            <h2 className="text-3d-title text-lg font-bold tracking-tight text-black">
-              Photos
-            </h2>
-            <p className="text-3d-soft mt-2 text-sm text-slate-600">
+          <section className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <h2 className="text-lg font-semibold text-slate-900">Photos</h2>
+            <p className="mt-2 text-sm text-slate-600">
               Ajoutez, retirez ou remplacez des photos. Maximum {MAX_PHOTOS}.
             </p>
 
             <div className="mt-4 grid gap-3">
-              <label className="cursor-pointer rounded-2xl border border-dashed border-[#d4ccc2] bg-white p-6 text-center transition hover:bg-[#f7f5f2]">
+              <label className="cursor-pointer border border-dashed border-slate-300 bg-white p-6 text-center transition hover:bg-slate-50">
                 <input
                   type="file"
                   accept="image/*"
@@ -1002,10 +970,10 @@ export default function ModifierAnnoncePage() {
                   className="hidden"
                   onChange={(e) => onPickPhotos(e.target.files)}
                 />
-                <div className="text-3d-title text-sm font-semibold text-black">
+                <div className="text-sm font-semibold text-slate-900">
                   Ajouter des photos
                 </div>
-                <div className="text-3d-soft mt-1 text-xs text-slate-500">
+                <div className="mt-1 text-xs text-slate-500">
                   JPG, PNG, WEBP • {totalPhotos}/{MAX_PHOTOS}
                 </div>
               </label>
@@ -1014,14 +982,12 @@ export default function ModifierAnnoncePage() {
 
               {existingPhotos.length > 0 && (
                 <div className="grid gap-2">
-                  <p className="text-3d-title text-sm font-semibold text-black">
-                    Photos actuelles
-                  </p>
+                  <p className="text-sm font-semibold text-slate-900">Photos actuelles</p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                     {existingPhotos.map((url, idx) => (
                       <div
                         key={`${url}-${idx}`}
-                        className="relative overflow-hidden rounded-2xl border border-[#e4ddd4] bg-[#faf7f2]"
+                        className="relative overflow-hidden border border-slate-200 bg-slate-50"
                       >
                         <img
                           src={url}
@@ -1031,7 +997,7 @@ export default function ModifierAnnoncePage() {
                         <button
                           type="button"
                           onClick={() => removeExistingPhoto(idx)}
-                          className="absolute right-2 top-2 rounded-lg border border-[#e4ddd4] bg-white/90 px-2 py-1 text-xs font-semibold hover:bg-white"
+                          className="absolute right-2 top-2 rounded-md border border-slate-200 bg-white/90 px-2 py-1 text-xs font-semibold hover:bg-white"
                         >
                           Supprimer
                         </button>
@@ -1043,14 +1009,12 @@ export default function ModifierAnnoncePage() {
 
               {newPhotos.length > 0 && (
                 <div className="grid gap-2">
-                  <p className="text-3d-title text-sm font-semibold text-black">
-                    Nouvelles photos
-                  </p>
+                  <p className="text-sm font-semibold text-slate-900">Nouvelles photos</p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                     {photoPreviews.map((p, idx) => (
                       <div
                         key={p.url}
-                        className="relative overflow-hidden rounded-2xl border border-[#e4ddd4] bg-[#faf7f2]"
+                        className="relative overflow-hidden border border-slate-200 bg-slate-50"
                       >
                         <img
                           src={p.url}
@@ -1060,7 +1024,7 @@ export default function ModifierAnnoncePage() {
                         <button
                           type="button"
                           onClick={() => removeNewPhoto(idx)}
-                          className="absolute right-2 top-2 rounded-lg border border-[#e4ddd4] bg-white/90 px-2 py-1 text-xs font-semibold hover:bg-white"
+                          className="absolute right-2 top-2 rounded-md border border-slate-200 bg-white/90 px-2 py-1 text-xs font-semibold hover:bg-white"
                         >
                           Supprimer
                         </button>
@@ -1080,21 +1044,17 @@ export default function ModifierAnnoncePage() {
         </div>
       ) : (
         <div className="grid gap-5 lg:grid-cols-[1.15fr_.85fr] lg:items-start">
-          <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-            <h2 className="text-3d-title text-lg font-bold tracking-tight text-black">
-              Aperçu de l’annonce
-            </h2>
-            <p className="text-3d-soft mt-2 text-sm text-slate-600">
+          <section className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <h2 className="text-lg font-semibold text-slate-900">Aperçu de l’annonce</h2>
+            <p className="mt-2 text-sm text-slate-600">
               Vérifiez les informations avant d’enregistrer.
             </p>
 
-            <div className="mt-5 rounded-2xl border border-[#e4ddd4] bg-white p-5">
+            <div className="mt-5 border border-slate-200 bg-white p-5">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <h3 className="text-3d-hero text-xl font-extrabold tracking-tight text-black">
-                    {draft.title}
-                  </h3>
-                  <p className="text-3d-soft mt-2 text-sm text-slate-600">
+                  <h3 className="text-xl font-semibold text-slate-900">{draft.title}</h3>
+                  <p className="mt-2 text-sm text-slate-600">
                     {draft.city} ({draft.department}) • {draft.year} •{" "}
                     {Number(draft.mileage || 0).toLocaleString("fr-FR")} km
                     {draft.fuel ? ` • ${draft.fuel}` : ""}
@@ -1102,28 +1062,28 @@ export default function ModifierAnnoncePage() {
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {draft.type && (
-                      <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-xs font-medium text-[#171311]">
+                      <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-medium text-orange-600">
                         {draft.type}
                       </span>
                     )}
                     {draft.fuel && (
-                      <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-xs font-medium text-[#171311]">
+                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                         {draft.fuel}
                       </span>
                     )}
                     {draft.transmission && (
-                      <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-xs font-medium text-[#171311]">
+                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                         {draft.transmission}
                       </span>
                     )}
                     {draft.vatRecoverable && (
-                      <span className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-xs font-medium text-[#171311]">
+                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                         TVA récupérable
                       </span>
                     )}
                   </div>
                 </div>
-                <div className="text-3d-title shrink-0 text-xl font-extrabold text-black">
+                <div className="shrink-0 text-xl font-bold text-orange-600">
                   {Number(draft.price || 0).toLocaleString("fr-FR")} €
                 </div>
               </div>
@@ -1135,7 +1095,7 @@ export default function ModifierAnnoncePage() {
                       key={`preview-existing-${url}-${idx}`}
                       src={url}
                       alt={`Photo ${idx + 1}`}
-                      className="h-28 w-full rounded-xl border border-[#e4ddd4] object-cover"
+                      className="h-28 w-full border border-slate-200 object-cover"
                     />
                   ))}
                   {photoPreviews.map((p, idx) => (
@@ -1143,44 +1103,36 @@ export default function ModifierAnnoncePage() {
                       key={`preview-new-${p.url}-${idx}`}
                       src={p.url}
                       alt={`Nouvelle photo ${idx + 1}`}
-                      className="h-28 w-full rounded-xl border border-[#e4ddd4] object-cover"
+                      className="h-28 w-full border border-slate-200 object-cover"
                     />
                   ))}
                 </div>
               )}
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                <div className="rounded-xl border border-[#e4ddd4] p-4">
-                  <p className="text-3d-soft text-xs text-slate-500">Marque</p>
-                  <p className="text-3d-title mt-1 font-semibold text-black">{draft.brand}</p>
+                <div className="border border-slate-200 p-4">
+                  <p className="text-xs text-slate-500">Marque</p>
+                  <p className="mt-1 font-semibold text-slate-900">{draft.brand}</p>
                 </div>
-                <div className="rounded-xl border border-[#e4ddd4] p-4">
-                  <p className="text-3d-soft text-xs text-slate-500">Modèle</p>
-                  <p className="text-3d-title mt-1 font-semibold text-black">{draft.model}</p>
+                <div className="border border-slate-200 p-4">
+                  <p className="text-xs text-slate-500">Modèle</p>
+                  <p className="mt-1 font-semibold text-slate-900">{draft.model}</p>
                 </div>
-                <div className="rounded-xl border border-[#e4ddd4] p-4">
-                  <p className="text-3d-soft text-xs text-slate-500">Couleur</p>
-                  <p className="text-3d-title mt-1 font-semibold text-black">
-                    {draft.color || "—"}
-                  </p>
+                <div className="border border-slate-200 p-4">
+                  <p className="text-xs text-slate-500">Couleur</p>
+                  <p className="mt-1 font-semibold text-slate-900">{draft.color || "—"}</p>
                 </div>
-                <div className="rounded-xl border border-[#e4ddd4] p-4">
-                  <p className="text-3d-soft text-xs text-slate-500">Portes</p>
-                  <p className="text-3d-title mt-1 font-semibold text-black">
-                    {draft.doors || "—"}
-                  </p>
+                <div className="border border-slate-200 p-4">
+                  <p className="text-xs text-slate-500">Portes</p>
+                  <p className="mt-1 font-semibold text-slate-900">{draft.doors || "—"}</p>
                 </div>
-                <div className="rounded-xl border border-[#e4ddd4] p-4">
-                  <p className="text-3d-soft text-xs text-slate-500">Places</p>
-                  <p className="text-3d-title mt-1 font-semibold text-black">
-                    {draft.seats || "—"}
-                  </p>
+                <div className="border border-slate-200 p-4">
+                  <p className="text-xs text-slate-500">Places</p>
+                  <p className="mt-1 font-semibold text-slate-900">{draft.seats || "—"}</p>
                 </div>
-                <div className="rounded-xl border border-[#e4ddd4] p-4">
-                  <p className="text-3d-soft text-xs text-slate-500">
-                    Première immatriculation
-                  </p>
-                  <p className="text-3d-title mt-1 font-semibold text-black">
+                <div className="border border-slate-200 p-4">
+                  <p className="text-xs text-slate-500">Première immatriculation</p>
+                  <p className="mt-1 font-semibold text-slate-900">
                     {draft.firstRegistration || "—"}
                   </p>
                 </div>
@@ -1188,13 +1140,13 @@ export default function ModifierAnnoncePage() {
 
               <div className="mt-4 grid gap-4">
                 <div>
-                  <p className="text-3d-soft text-xs text-slate-500">Points forts</p>
+                  <p className="text-xs text-slate-500">Points forts</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {cleanedHighlights.length > 0 ? (
                       cleanedHighlights.map((item) => (
                         <span
                           key={item}
-                          className="text-3d-soft rounded-full border border-[#e4ddd4] bg-[#faf7f2] px-3 py-1 text-xs font-medium text-[#171311]"
+                          className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700"
                         >
                           {item}
                         </span>
@@ -1206,7 +1158,7 @@ export default function ModifierAnnoncePage() {
                 </div>
 
                 <div>
-                  <p className="text-3d-soft text-xs text-slate-500">Équipements</p>
+                  <p className="text-xs text-slate-500">Équipements</p>
                   {cleanedEquipment.length > 0 ? (
                     <div className="mt-3 grid gap-4">
                       {EQUIPMENT_CATEGORIES.map((group) => {
@@ -1218,14 +1170,14 @@ export default function ModifierAnnoncePage() {
 
                         return (
                           <div key={group.category}>
-                            <h4 className="text-3d-title text-sm font-semibold text-black">
+                            <h4 className="text-sm font-semibold text-slate-900">
                               {group.category}
                             </h4>
                             <ul className="mt-2 grid gap-2 sm:grid-cols-2">
                               {groupItems.map((item) => (
                                 <li
                                   key={item}
-                                  className="text-3d-soft rounded-xl border border-[#e4ddd4] px-4 py-3 text-sm text-slate-700"
+                                  className="border border-slate-200 px-4 py-3 text-sm text-slate-700"
                                 >
                                   {item}
                                 </li>
@@ -1241,8 +1193,8 @@ export default function ModifierAnnoncePage() {
                 </div>
 
                 <div>
-                  <p className="text-3d-soft text-xs text-slate-500">Description</p>
-                  <p className="text-3d-soft mt-2 whitespace-pre-wrap text-sm leading-7 text-slate-700">
+                  <p className="text-xs text-slate-500">Description</p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-slate-700">
                     {draft.description || "Aucune description."}
                   </p>
                 </div>
@@ -1251,31 +1203,29 @@ export default function ModifierAnnoncePage() {
           </section>
 
           <aside className="grid gap-5">
-            <section className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-              <h3 className="text-3d-title text-base font-bold tracking-tight text-black">
-                Sauvegarde
-              </h3>
-              <p className="text-3d-soft mt-2 text-sm text-slate-600">
+            <section className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+              <h3 className="text-base font-semibold text-slate-900">Sauvegarde</h3>
+              <p className="mt-2 text-sm text-slate-600">
                 Enregistrez vos modifications ou republiez l’annonce.
               </p>
 
               <div className="mt-4 grid gap-2">
                 <button
-                  className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                  className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                   onClick={goBack}
                   disabled={submitting}
                 >
                   Modifier
                 </button>
                 <button
-                  className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                  className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                   onClick={() => saveListing("draft")}
                   disabled={submitting}
                 >
                   {submitting ? "Enregistrement..." : "Enregistrer en brouillon"}
                 </button>
                 <button
-                  className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
+                  className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600"
                   onClick={() => saveListing("published")}
                   disabled={submitting}
                 >

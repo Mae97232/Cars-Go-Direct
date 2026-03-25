@@ -59,28 +59,31 @@ export default async function Header() {
     if (unreadMessagesCount <= 0) return null;
 
     return (
-      <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[11px] font-semibold leading-none text-white shadow-sm">
+      <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-semibold leading-none text-white">
         {unreadMessagesCount > 99 ? "99+" : unreadMessagesCount}
       </span>
     );
   }
 
   const desktopLinkClass =
-    "rounded-xl px-4 py-2 text-[15px] font-medium text-[#2a2017] transition duration-200 hover:bg-black/6 hover:text-black";
+    "inline-flex h-10 items-center rounded-md px-3 text-[14px] font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900";
 
   const desktopInlineBadgeLinkClass =
-    "inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[15px] font-medium text-[#2a2017] transition duration-200 hover:bg-black/6 hover:text-black";
+    "inline-flex h-10 items-center gap-2 rounded-md px-3 text-[14px] font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900";
 
   const mobileLinkClass =
-    "shrink-0 rounded-full border border-[#d6c4a9] bg-[#fffaf2] px-3.5 py-2 text-[13px] font-medium text-[#6f4d1f] transition hover:bg-[#f6ead7]";
+    "shrink-0 rounded-md border border-slate-300 bg-white px-3 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-900";
+
+  const ctaClass =
+    "inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-4 text-[14px] font-semibold text-white transition hover:bg-orange-600 sm:px-5";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#d2b07a] bg-[linear-gradient(90deg,#a96d2c_0%,#c88a38_24%,#efc46c_52%,#c98b38_78%,#8d5920_100%)] text-[#20160f] shadow-[0_14px_40px_rgba(44,28,10,0.18)]">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
       <div className="container-app">
-        <div className="flex min-h-[78px] items-center justify-between gap-3 py-3 sm:min-h-[86px]">
-          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+        <div className="flex min-h-[74px] items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-4">
             <Link href="/" className="flex shrink-0 items-center gap-3">
-              <span className="flex h-[56px] w-[56px] shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[#1a1714] shadow-[0_10px_24px_rgba(0,0,0,0.22)] sm:h-[62px] sm:w-[62px]">
+              <span className="flex h-[48px] w-[48px] shrink-0 items-center justify-center overflow-hidden rounded-md border border-slate-200 bg-white">
                 <img
                   src="/logo-cargodirect.jpg"
                   alt="Cars Go Direct"
@@ -89,10 +92,10 @@ export default async function Header() {
               </span>
 
               <div className="min-w-0">
-                <span className="block truncate text-[17px] font-semibold tracking-[-0.03em] text-[#241912] sm:text-[19px]">
+                <span className="block truncate text-[18px] font-semibold text-slate-900">
                   Cars Go Direct
                 </span>
-                <span className="hidden text-xs text-[#4f3923]/85 sm:block">
+                <span className="hidden text-xs text-slate-500 sm:block">
                   Marketplace auto pro
                 </span>
               </div>
@@ -160,35 +163,25 @@ export default async function Header() {
           <div className="flex shrink-0 items-center gap-2">
             {user ? (
               <>
-                <LogoutButton className="hidden rounded-xl border border-black/10 bg-white/18 px-4 py-2 text-[14px] font-medium text-[#231912] backdrop-blur-sm transition hover:bg-white/28 lg:inline-flex" />
+                <LogoutButton className="hidden h-10 items-center rounded-md border border-slate-300 bg-white px-4 text-[14px] font-medium text-slate-700 transition hover:bg-slate-50 lg:inline-flex" />
 
                 {isPro ? (
-                  <Link
-                    href="/pro/deposer"
-                    className="inline-flex h-11 items-center justify-center rounded-2xl bg-[#171311] px-4 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.22)] transition duration-200 hover:bg-[#0f0d0c] sm:px-5 sm:text-[14px]"
-                  >
-                    <span className="hidden sm:inline">
-                      Déposer une annonce
-                    </span>
+                  <Link href="/pro/deposer" className={ctaClass}>
+                    <span className="hidden sm:inline">Déposer une annonce</span>
                     <span className="sm:hidden">Déposer</span>
                   </Link>
                 ) : (
                   <Link
                     href="/compte/favoris"
-                    className="inline-flex h-10 items-center justify-center rounded-xl border border-black/10 bg-white/18 px-3 text-[13px] font-medium text-[#231912] transition hover:bg-white/28 sm:hidden"
+                    className="inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-3 text-[13px] font-medium text-slate-700 transition hover:bg-slate-50 sm:hidden"
                   >
                     Favoris
                   </Link>
                 )}
               </>
             ) : (
-              <Link
-                href="/pro/inscription"
-                className="inline-flex h-11 items-center justify-center rounded-2xl bg-[#171311] px-4 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.22)] transition duration-200 hover:bg-[#0f0d0c] sm:px-5 sm:text-[14px]"
-              >
-                <span className="hidden sm:inline">
-                  Déposer une annonce
-                </span>
+              <Link href="/pro/inscription" className={ctaClass}>
+                <span className="hidden sm:inline">Déposer une annonce</span>
                 <span className="sm:hidden">Déposer</span>
               </Link>
             )}
@@ -196,7 +189,7 @@ export default async function Header() {
         </div>
       </div>
 
-      <div className="border-t border-black/8 bg-[#fffdf9] xl:hidden">
+      <div className="border-t border-slate-200 bg-white xl:hidden">
         <div className="container-app">
           <div className="flex gap-2 overflow-x-auto py-2.5 [scrollbar-width:none]">
             <Link href="/annonces" className={mobileLinkClass}>
@@ -219,13 +212,13 @@ export default async function Header() {
 
                 <Link
                   href="/pro/messages"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#d6c4a9] bg-[#fffaf2] px-3.5 py-2 text-[13px] font-medium text-[#6f4d1f] transition hover:bg-[#f6ead7]"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-50"
                 >
                   <span>Messages</span>
                   <MessagesBadge />
                 </Link>
 
-                <LogoutButton className="shrink-0 rounded-full border border-[#d6c4a9] bg-[#fffaf2] px-3.5 py-2 text-[13px] font-medium text-[#6f4d1f] transition hover:bg-[#f6ead7]" />
+                <LogoutButton className="shrink-0 rounded-md border border-slate-300 bg-white px-3 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-50" />
               </>
             ) : user ? (
               <>
@@ -235,13 +228,13 @@ export default async function Header() {
 
                 <Link
                   href="/messages"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#d6c4a9] bg-[#fffaf2] px-3.5 py-2 text-[13px] font-medium text-[#6f4d1f] transition hover:bg-[#f6ead7]"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-50"
                 >
                   <span>Messages</span>
                   <MessagesBadge />
                 </Link>
 
-                <LogoutButton className="shrink-0 rounded-full border border-[#d6c4a9] bg-[#fffaf2] px-3.5 py-2 text-[13px] font-medium text-[#6f4d1f] transition hover:bg-[#f6ead7]" />
+                <LogoutButton className="shrink-0 rounded-md border border-slate-300 bg-white px-3 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-50" />
               </>
             ) : (
               <>

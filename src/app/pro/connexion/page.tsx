@@ -118,13 +118,13 @@ export default function ConnexionPro() {
   }
 
   return (
-    <div className="mx-auto max-w-md">
-      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-        <h1 className="text-3d-hero text-xl font-bold tracking-tight text-black">
+    <div className="mx-auto max-w-md bg-white text-slate-900">
+      <div className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <h1 className="text-[26px] font-semibold text-slate-900">
           Connexion professionnel
         </h1>
 
-        <p className="text-3d-soft mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-600">
           Accédez à votre espace pro pour gérer vos annonces.
         </p>
 
@@ -137,13 +137,13 @@ export default function ConnexionPro() {
         </div>
 
         {errorMessage ? (
-          <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {errorMessage}
           </div>
         ) : null}
 
         {successMessage ? (
-          <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+          <div className="mt-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
             {successMessage}
           </div>
         ) : null}
@@ -154,7 +154,7 @@ export default function ConnexionPro() {
             required
             type="email"
             placeholder="Email"
-            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+            className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
           />
 
           <input
@@ -162,13 +162,13 @@ export default function ConnexionPro() {
             required
             type="password"
             placeholder="Mot de passe"
-            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+            className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="text-3d-button mt-2 inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-2 inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
@@ -176,7 +176,7 @@ export default function ConnexionPro() {
           <div className="mt-2 flex items-center justify-between text-sm">
             <button
               type="button"
-              className="text-3d-soft text-slate-600 hover:underline"
+              className="text-slate-600 hover:text-orange-600 hover:underline"
               onClick={resetPassword}
             >
               Mot de passe oublié
@@ -184,7 +184,7 @@ export default function ConnexionPro() {
 
             <Link
               href="/pro/inscription"
-              className="text-3d-soft font-semibold text-black hover:underline"
+              className="font-semibold text-orange-600 hover:underline"
             >
               Créer un compte
             </Link>

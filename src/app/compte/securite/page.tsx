@@ -16,16 +16,16 @@ function SecurityLine({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="animate-fade-up flex flex-col gap-4 border-b border-[#ece7e0] py-6 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-4 border-b border-slate-200 py-6 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <h3 className="text-3d-title text-[15px] font-semibold text-black">
+        <h3 className="text-[15px] font-semibold text-slate-900">
           {title}
         </h3>
-        <p className="text-3d-soft mt-1 text-sm leading-6 text-slate-600">
+        <p className="mt-1 text-sm leading-6 text-slate-600">
           {description}
         </p>
         {value ? (
-          <p className="text-3d-soft mt-3 text-sm font-medium text-slate-900">
+          <p className="mt-3 text-sm font-medium text-slate-900">
             {value}
           </p>
         ) : null}
@@ -91,64 +91,61 @@ export default async function CompteSecuritePage() {
   );
 
   return (
-    <div className="mx-auto max-w-5xl">
-      {/* breadcrumb */}
-      <div className="animate-fade-up flex flex-wrap items-center gap-2 text-sm text-slate-500">
+    <div className="mx-auto max-w-5xl bg-white text-slate-900">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
         <Link
           href="/compte"
-          className="text-3d-soft font-medium text-[#171311] hover:underline"
+          className="font-medium text-slate-700 hover:text-orange-600 hover:underline"
         >
           Mon compte
         </Link>
         <span>›</span>
-        <span className="text-3d-soft">Connexion et sécurité</span>
+        <span>Connexion et sécurité</span>
       </div>
 
-      {/* header */}
-      <section className="animate-fade-up mt-5 border-b border-[#ece7e0] pb-6">
+      <section className="mt-5 border-b border-slate-200 pb-6">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-3d-soft text-sm text-slate-500">
+            <p className="text-sm text-slate-500">
               Compte particulier
             </p>
-            <h1 className="text-3d-hero mt-1 text-3xl font-bold tracking-tight text-black">
+            <h1 className="mt-1 text-[26px] font-semibold text-slate-900 sm:text-[30px]">
               Connexion et sécurité
             </h1>
-            <p className="text-3d-soft mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-600">
               Gérez l’accès à votre compte, votre adresse email et la sécurité de connexion.
             </p>
           </div>
 
           <Link
             href="/compte"
-            className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+            className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
           >
             Retour au compte
           </Link>
         </div>
       </section>
 
-      {/* EMAIL */}
-      <section className="animate-fade-up py-8">
-        <div className="border-b border-[#ece7e0] pb-4">
+      <section className="py-8">
+        <div className="border-b border-slate-200 pb-4">
           <div className="flex items-center gap-3">
-            <Mail className="h-5 w-5 text-black" />
-            <h2 className="text-3d-title text-xl font-semibold text-black">
+            <Mail className="h-5 w-5 text-slate-900" />
+            <h2 className="text-[22px] font-semibold text-slate-900">
               Adresse email
             </h2>
           </div>
-          <p className="text-3d-soft mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-slate-600">
             Votre email principal de connexion à la plateforme.
           </p>
         </div>
 
-        <div className="divide-y divide-slate-100">
+        <div>
           <SecurityLine
             title="Email de connexion"
             description="Cette adresse est utilisée pour vous connecter à votre compte."
             value={email}
             action={
-              <button className="text-3d-button rounded-2xl bg-[#171311] px-4 py-3 text-sm text-white hover:bg-[#0f0d0c]">
+              <button className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-4 text-sm font-medium text-white transition hover:bg-orange-600">
                 Modifier
               </button>
             }
@@ -158,21 +155,20 @@ export default async function CompteSecuritePage() {
 
       <PasswordSecurityForm email={email} />
 
-      {/* SECURITE */}
-      <section className="animate-fade-up py-2">
-        <div className="border-b border-[#ece7e0] pb-4">
+      <section className="py-2">
+        <div className="border-b border-slate-200 pb-4">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="h-5 w-5 text-black" />
-            <h2 className="text-3d-title text-xl font-semibold text-black">
+            <ShieldCheck className="h-5 w-5 text-slate-900" />
+            <h2 className="text-[22px] font-semibold text-slate-900">
               Sécurité du compte
             </h2>
           </div>
-          <p className="text-3d-soft mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-slate-600">
             Informations utiles sur vos accès et votre méthode de connexion.
           </p>
         </div>
 
-        <div className="divide-y divide-slate-100">
+        <div>
           <SecurityLine
             title="Méthode de connexion"
             description="Méthode utilisée pour accéder à votre compte."
@@ -186,32 +182,31 @@ export default async function CompteSecuritePage() {
           />
         </div>
 
-        <div className="mt-6 rounded-2xl border border-[#e8d9c5] bg-[#fdf6ed] px-4 py-4">
-          <p className="text-3d-title text-sm font-semibold text-black">
+        <div className="mt-6 border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+          <p className="text-sm font-semibold text-slate-900">
             Conseil de sécurité
           </p>
-          <p className="text-3d-soft mt-2 text-sm leading-6 text-slate-700">
+          <p className="mt-2 text-sm leading-6 text-slate-600">
             Ne partagez jamais votre mot de passe. Vérifiez régulièrement vos connexions et
             conservez une adresse email sécurisée pour votre compte.
           </p>
         </div>
       </section>
 
-      {/* LOGOUT */}
-      <section className="animate-fade-up border-t border-[#ece7e0] py-8">
+      <section className="border-t border-slate-200 py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-3d-title text-xl font-semibold text-black">
+            <h2 className="text-[22px] font-semibold text-slate-900">
               Déconnexion
             </h2>
-            <p className="text-3d-soft mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-600">
               Vous pouvez fermer votre session à tout moment depuis votre espace personnel.
             </p>
           </div>
 
           <Link
             href="/deconnexion"
-            className="text-3d-button inline-flex items-center gap-2 rounded-2xl bg-[#171311] px-5 py-3 text-sm text-white hover:bg-[#0f0d0c]"
+            className="inline-flex h-11 items-center gap-2 rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600"
           >
             <LogOut className="h-4 w-4" />
             Me déconnecter

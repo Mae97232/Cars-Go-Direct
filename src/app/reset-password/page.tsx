@@ -50,49 +50,49 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-16">
-      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-        <h1 className="text-3d-hero text-2xl font-semibold tracking-tight text-black">
+    <div className="mx-auto max-w-xl bg-white px-4 py-16 text-slate-900">
+      <div className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <h1 className="text-[26px] font-semibold tracking-tight text-slate-900 sm:text-[30px]">
           Réinitialiser le mot de passe
         </h1>
 
-        <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+        <p className="mt-2 text-sm leading-7 text-slate-600">
           Entrez votre nouveau mot de passe.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-800">
+            <label className="mb-2 block text-sm font-medium text-slate-800">
               Nouveau mot de passe
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+              className="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
 
           <div>
-            <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-800">
+            <label className="mb-2 block text-sm font-medium text-slate-800">
               Confirmer le mot de passe
             </label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+              className="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
 
           {errorMessage ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {errorMessage}
             </div>
           ) : null}
 
           {successMessage ? (
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            <div className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
               {successMessage}
             </div>
           ) : null}
@@ -100,7 +100,7 @@ export default function ResetPasswordPage() {
           <button
             type="submit"
             disabled={loading}
-            className="text-3d-button inline-flex rounded-2xl bg-[#171311] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f0d0c] disabled:opacity-60"
+            className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:opacity-60"
           >
             {loading ? "Enregistrement..." : "Enregistrer le nouveau mot de passe"}
           </button>

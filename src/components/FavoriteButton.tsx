@@ -81,7 +81,6 @@ export default function FavoriteButton({
         data: { user },
       } = await supabase.auth.getUser();
 
-      // MODE VISITEUR NON CONNECTÉ
       if (!user) {
         const guestFavorites = getGuestFavorites();
 
@@ -89,9 +88,7 @@ export default function FavoriteButton({
           const next = guestFavorites.filter((id) => id !== listingId);
           setGuestFavorites(next);
           setIsFavorite(false);
-          setInfoMessage(
-            "Favori temporaire retiré de cet appareil."
-          );
+          setInfoMessage("Favori temporaire retiré de cet appareil.");
         } else {
           const next = [...guestFavorites, listingId];
           setGuestFavorites(next);
@@ -105,7 +102,6 @@ export default function FavoriteButton({
         return;
       }
 
-      // MODE CONNECTÉ
       setIsAuthenticated(true);
 
       if (isFavorite) {
@@ -143,7 +139,6 @@ export default function FavoriteButton({
       setIsFavorite(true);
       setInfoMessage("Annonce ajoutée à vos favoris.");
     } catch {
-      // En cas de problème session, on bascule quand même en mode invité
       try {
         const guestFavorites = getGuestFavorites();
 
@@ -151,9 +146,7 @@ export default function FavoriteButton({
           const next = guestFavorites.filter((id) => id !== listingId);
           setGuestFavorites(next);
           setIsFavorite(false);
-          setInfoMessage(
-            "Favori temporaire retiré de cet appareil."
-          );
+          setInfoMessage("Favori temporaire retiré de cet appareil.");
         } else {
           const next = [...guestFavorites, listingId];
           setGuestFavorites(next);
@@ -180,8 +173,8 @@ export default function FavoriteButton({
         disabled={loading}
         className={
           isFavorite
-            ? "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 transition hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-            : "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            ? "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-md border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-medium text-orange-600 transition hover:bg-orange-100 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            : "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         }
         aria-pressed={isFavorite}
         aria-label={
@@ -209,13 +202,13 @@ export default function FavoriteButton({
       ) : null}
 
       {infoMessage ? (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 sm:text-[13px]">
+        <div className="rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-xs text-orange-700 sm:text-[13px]">
           {infoMessage}
         </div>
       ) : null}
 
       {errorMessage ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 sm:text-[13px]">
+        <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 sm:text-[13px]">
           {errorMessage}
         </div>
       ) : null}

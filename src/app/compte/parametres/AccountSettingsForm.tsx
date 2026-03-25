@@ -59,11 +59,11 @@ function ReadOnlyField({
   value: string;
 }) {
   return (
-    <div className="animate-fade-up">
-      <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+    <div>
+      <label className="mb-2 block text-sm font-medium text-slate-700">
         {label}
       </label>
-      <div className="text-3d-soft flex min-h-[52px] items-center rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] px-4 py-3 text-sm text-slate-600">
+      <div className="flex min-h-[52px] items-center rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
         {displayValue(value)}
       </div>
     </div>
@@ -213,26 +213,26 @@ export default function AccountSettingsForm({
 
   return (
     <>
-      <section className="animate-fade-up border-b border-[#ece7e0] pb-8">
+      <section className="border-b border-slate-200 pb-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-4">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt="Photo de profil"
-                className="h-20 w-20 rounded-full object-cover ring-1 ring-[#e4ddd4]"
+                className="h-20 w-20 rounded-full object-cover ring-1 ring-slate-200"
               />
             ) : (
-              <div className="text-3d-button grid h-20 w-20 place-items-center rounded-full bg-[#171311] text-3xl font-bold text-white">
+              <div className="grid h-20 w-20 place-items-center rounded-full bg-slate-900 text-3xl font-bold text-white">
                 {initial}
               </div>
             )}
 
             <div>
-              <h2 className="text-3d-title text-2xl font-semibold tracking-tight text-black">
+              <h2 className="text-[22px] font-semibold text-slate-900">
                 Photo de profil
               </h2>
-              <p className="text-3d-soft mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Ajoutez une photo pour personnaliser votre compte.
               </p>
             </div>
@@ -253,7 +253,7 @@ export default function AccountSettingsForm({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingPhoto}
-              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {uploadingPhoto ? "Envoi..." : "Ajouter / changer la photo"}
             </button>
@@ -262,12 +262,12 @@ export default function AccountSettingsForm({
       </section>
 
       <form onSubmit={handleSubmit} className="space-y-10 py-8">
-        <section className="animate-fade-up" style={{ animationDelay: "0.06s" }}>
-          <div className="border-b border-[#ece7e0] pb-4">
-            <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
+        <section>
+          <div className="border-b border-slate-200 pb-4">
+            <h2 className="text-[22px] font-semibold text-slate-900">
               Informations de compte
             </h2>
-            <p className="text-3d-soft mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-slate-600">
               Vous pouvez modifier votre téléphone et votre ville. La date de naissance
               peut être renseignée une seule fois.
             </p>
@@ -279,8 +279,8 @@ export default function AccountSettingsForm({
             <ReadOnlyField label="Prénom" value={initialProfile.firstName} />
             <ReadOnlyField label="Adresse" value={initialProfile.address} />
 
-            <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
-              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
                 Date de naissance
               </label>
               <input
@@ -288,85 +288,85 @@ export default function AccountSettingsForm({
                 value={birthdate}
                 disabled={birthdateLocked}
                 onChange={(e) => setBirthdate(e.target.value)}
-                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4] disabled:cursor-not-allowed disabled:bg-[#f5f3ef] disabled:text-slate-500"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500"
               />
               {birthdateLocked ? (
-                <p className="text-3d-soft mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-slate-500">
                   La date de naissance ne peut plus être modifiée.
                 </p>
               ) : (
-                <p className="text-3d-soft mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-slate-500">
                   Vous pouvez renseigner votre date de naissance une seule fois.
                 </p>
               )}
             </div>
 
-            <div className="animate-fade-up" style={{ animationDelay: "0.1s" }}>
-              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
                 Ville
               </label>
               <input
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="Votre ville"
-                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
               />
             </div>
 
-            <div className="animate-fade-up" style={{ animationDelay: "0.12s" }}>
-              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
                 Téléphone
               </label>
               <input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="06 00 00 00 00"
-                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
               />
             </div>
 
-            <div className="animate-fade-up" style={{ animationDelay: "0.14s" }}>
-              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
                 E-mail
               </label>
-              <div className="text-3d-soft flex min-h-[52px] items-center rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] px-4 py-3 text-sm text-slate-600">
+              <div className="flex min-h-[52px] items-center rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
                 {displayValue(userEmail)}
               </div>
-              <p className="text-3d-soft mt-2 text-xs text-slate-500">
+              <p className="mt-2 text-xs text-slate-500">
                 L’email n’est pas affiché publiquement aux autres utilisateurs.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="animate-fade-up" style={{ animationDelay: "0.12s" }}>
-          <div className="border-b border-[#ece7e0] pb-4">
-            <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
+        <section>
+          <div className="border-b border-slate-200 pb-4">
+            <h2 className="text-[22px] font-semibold text-slate-900">
               Moyens de paiement
             </h2>
-            <p className="text-3d-soft mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-slate-600">
               Vos informations bancaires restent privées.
             </p>
           </div>
 
           <div className="grid gap-8 py-6 lg:grid-cols-2">
             <div>
-              <h3 className="text-3d-title text-base font-semibold text-black">IBAN</h3>
-              <p className="text-3d-soft mt-1 text-sm text-slate-600">
+              <h3 className="text-base font-semibold text-slate-900">IBAN</h3>
+              <p className="mt-1 text-sm text-slate-600">
                 Cet IBAN n’est jamais affiché publiquement.
               </p>
 
               <div className="mt-4">
-                <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700">
                   IBAN
                 </label>
                 <input
                   value={iban}
                   onChange={(e) => setIban(e.target.value)}
                   placeholder="FR76..."
-                  className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                  className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                 />
-                <p className="text-3d-soft mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-slate-500">
                   {iban
                     ? `Aperçu masqué : ${maskIban(iban)}`
                     : "Aucun IBAN renseigné pour le moment."}
@@ -375,37 +375,37 @@ export default function AccountSettingsForm({
             </div>
 
             <div>
-              <h3 className="text-3d-title text-base font-semibold text-black">
+              <h3 className="text-base font-semibold text-slate-900">
                 Carte bancaire
               </h3>
-              <p className="text-3d-soft mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Vous n’avez pas de carte bancaire enregistrée.
               </p>
 
-              <div className="text-3d-soft mt-4 rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] px-4 py-4 text-sm text-slate-500">
+              <div className="mt-4 rounded-md border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-500">
                 Aucun moyen de paiement par carte enregistré pour le moment.
               </div>
             </div>
           </div>
         </section>
 
-        <section className="animate-fade-up" style={{ animationDelay: "0.18s" }}>
-          <div className="border-b border-[#ece7e0] pb-4">
-            <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
+        <section>
+          <div className="border-b border-slate-200 pb-4">
+            <h2 className="text-[22px] font-semibold text-slate-900">
               Notifications
             </h2>
-            <p className="text-3d-soft mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-slate-600">
               Gérez les alertes et emails liés à votre compte.
             </p>
           </div>
 
           <div className="grid gap-4 py-6">
-            <label className="animate-fade-up flex items-center justify-between gap-4 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-4">
+            <label className="flex items-center justify-between gap-4 border border-slate-200 bg-white px-4 py-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
               <div>
-                <p className="text-3d-title text-sm font-semibold text-black">
+                <p className="text-sm font-semibold text-slate-900">
                   Nouveaux messages
                 </p>
-                <p className="text-3d-soft mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-slate-500">
                   Être prévenu lorsqu’un nouveau message arrive.
                 </p>
               </div>
@@ -413,19 +413,16 @@ export default function AccountSettingsForm({
                 type="checkbox"
                 checked={notificationsMessages}
                 onChange={(e) => setNotificationsMessages(e.target.checked)}
-                className="h-5 w-5 accent-black"
+                className="h-5 w-5 accent-orange-500"
               />
             </label>
 
-            <label
-              className="animate-fade-up flex items-center justify-between gap-4 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-4"
-              style={{ animationDelay: "0.05s" }}
-            >
+            <label className="flex items-center justify-between gap-4 border border-slate-200 bg-white px-4 py-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
               <div>
-                <p className="text-3d-title text-sm font-semibold text-black">
+                <p className="text-sm font-semibold text-slate-900">
                   Emails d’information
                 </p>
-                <p className="text-3d-soft mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-slate-500">
                   Recevoir des emails utiles concernant le compte et la plateforme.
                 </p>
               </div>
@@ -433,45 +430,42 @@ export default function AccountSettingsForm({
                 type="checkbox"
                 checked={notificationsEmails}
                 onChange={(e) => setNotificationsEmails(e.target.checked)}
-                className="h-5 w-5 accent-black"
+                className="h-5 w-5 accent-orange-500"
               />
             </label>
           </div>
         </section>
 
         {(successMessage || errorMessage) && (
-          <section className="animate-fade-up" style={{ animationDelay: "0.22s" }}>
+          <section>
             {successMessage ? (
-              <div className="text-3d-soft rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+              <div className="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
                 {successMessage}
               </div>
             ) : null}
 
             {errorMessage ? (
-              <div className="text-3d-soft rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+              <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
                 {errorMessage}
               </div>
             ) : null}
           </section>
         )}
 
-        <section
-          className="animate-fade-up border-t border-[#ece7e0] pt-6"
-          style={{ animationDelay: "0.26s" }}
-        >
+        <section className="border-t border-slate-200 pt-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
+              <h2 className="text-[22px] font-semibold text-slate-900">
                 Confidentialité
               </h2>
-              <p className="text-3d-soft mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Vos informations personnelles ne sont pas affichées publiquement sur la plateforme.
               </p>
             </div>
 
             <button
               type="submit"
-              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
               disabled={saving}
             >
               {saving ? "Enregistrement..." : "Enregistrer les modifications"}
@@ -479,13 +473,10 @@ export default function AccountSettingsForm({
           </div>
         </section>
 
-        <section
-          className="animate-fade-up rounded-[28px] border border-red-200 bg-red-50 p-6"
-          style={{ animationDelay: "0.3s" }}
-        >
+        <section className="border border-red-200 bg-red-50 p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
-              <h2 className="text-xl font-semibold tracking-tight text-red-700">
+              <h2 className="text-xl font-semibold text-red-700">
                 Supprimer mon compte
               </h2>
               <p className="mt-2 text-sm leading-6 text-red-700/90">
@@ -500,7 +491,7 @@ export default function AccountSettingsForm({
               type="button"
               onClick={handleDeleteAccount}
               disabled={deletingAccount}
-              className="inline-flex items-center justify-center rounded-2xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-red-600 px-5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {deletingAccount
                 ? "Suppression en cours..."

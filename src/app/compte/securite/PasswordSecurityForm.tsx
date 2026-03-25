@@ -115,23 +115,23 @@ export default function PasswordSecurityForm({ email }: Props) {
   const isDisabled = loadingUpdate || loadingReset;
 
   return (
-    <section className="animate-fade-up py-2">
-      <div className="border-b border-[#ece7e0] pb-4">
+    <section className="py-2">
+      <div className="border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
-          <KeyRound className="h-5 w-5 text-black" />
-          <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
+          <KeyRound className="h-5 w-5 text-slate-900" />
+          <h2 className="text-[22px] font-semibold text-slate-900">
             Mot de passe
           </h2>
         </div>
-        <p className="text-3d-soft mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-600">
           Mettez à jour votre mot de passe pour renforcer la sécurité du compte.
         </p>
       </div>
 
       <form onSubmit={handleChangePassword} className="py-6">
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="animate-fade-up sm:col-span-2" style={{ animationDelay: "0.04s" }}>
-            <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+          <div className="sm:col-span-2">
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Mot de passe actuel
             </label>
             <input
@@ -139,12 +139,12 @@ export default function PasswordSecurityForm({ email }: Props) {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="Entrez votre mot de passe actuel"
-              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+              className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
 
-          <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
-            <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Nouveau mot de passe
             </label>
             <input
@@ -152,12 +152,12 @@ export default function PasswordSecurityForm({ email }: Props) {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="••••••••"
-              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+              className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
 
-          <div className="animate-fade-up" style={{ animationDelay: "0.12s" }}>
-            <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-700">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Confirmer le mot de passe
             </label>
             <input
@@ -165,19 +165,19 @@ export default function PasswordSecurityForm({ email }: Props) {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
-              className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+              className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
         </div>
 
         {errorMessage ? (
-          <div className="text-3d-soft mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="mt-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {errorMessage}
           </div>
         ) : null}
 
         {successMessage ? (
-          <div className="text-3d-soft mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+          <div className="mt-5 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
             {successMessage}
           </div>
         ) : null}
@@ -186,7 +186,7 @@ export default function PasswordSecurityForm({ email }: Props) {
           <button
             type="submit"
             disabled={isDisabled}
-            className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loadingUpdate ? "Mise à jour..." : "Mettre à jour le mot de passe"}
           </button>
@@ -195,13 +195,13 @@ export default function PasswordSecurityForm({ email }: Props) {
             type="button"
             onClick={handleSendResetEmail}
             disabled={isDisabled}
-            className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2] disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loadingReset ? "Envoi..." : "Envoyer un email de réinitialisation"}
           </button>
         </div>
 
-        <p className="text-3d-soft mt-3 text-xs text-slate-500">
+        <p className="mt-3 text-xs text-slate-500">
           Utilisez un mot de passe fort avec lettres, chiffres et caractères spéciaux.
         </p>
       </form>

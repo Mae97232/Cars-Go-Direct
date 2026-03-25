@@ -80,7 +80,7 @@ function Avatar({
       <img
         src={src}
         alt={alt}
-        className="h-10 w-10 shrink-0 rounded-full object-cover ring-1 ring-[#e4ddd4]"
+        className="h-10 w-10 shrink-0 rounded-full object-cover ring-1 ring-slate-200"
         onError={(e) => {
           e.currentTarget.style.display = "none";
         }}
@@ -89,7 +89,7 @@ function Avatar({
   }
 
   return (
-    <div className="text-3d-button grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#171311] text-xs font-semibold text-white">
+    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-slate-900 text-xs font-semibold text-white">
       {initials}
     </div>
   );
@@ -239,14 +239,14 @@ export default function MessagesClient({
   }
 
   return (
-    <div className="min-h-[calc(100vh-140px)] bg-[#f8f6f3]">
-      <div className="animate-fade-up border-b border-[#ece7e0] pb-6">
+    <div className="min-h-[calc(100vh-140px)] bg-white text-slate-900">
+      <div className="border-b border-slate-200 pb-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-3d-soft text-sm text-slate-500">Compte particulier</p>
+            <p className="text-sm text-slate-500">Compte particulier</p>
 
             <div className="mt-1 flex items-center gap-3">
-              <h1 className="text-3d-hero text-3xl font-semibold tracking-tight text-black">
+              <h1 className="text-[26px] font-semibold text-slate-900 sm:text-[30px]">
                 Messages
               </h1>
 
@@ -257,19 +257,19 @@ export default function MessagesClient({
               ) : null}
             </div>
 
-            <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+            <p className="mt-2 text-sm leading-7 text-slate-600">
               Retrouvez vos échanges avec les vendeurs et suivez vos conversations.
             </p>
           </div>
 
           <div className="w-full max-w-md">
-            <div className="flex items-center gap-3 rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 shadow-[0_4px_18px_rgba(0,0,0,0.03)]">
+            <div className="flex items-center gap-3 rounded-md border border-slate-300 bg-white px-4 py-3 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
               <Search className="h-4 w-4 text-slate-400" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Rechercher une annonce, un vendeur, un message..."
-                className="text-3d-soft w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                className="w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
               />
             </div>
           </div>
@@ -277,10 +277,10 @@ export default function MessagesClient({
       </div>
 
       <div className="grid min-h-[700px] lg:grid-cols-[360px_minmax(0,1fr)]">
-        <aside className="border-r border-[#ece7e0]">
-          <div className="divide-y divide-[#f1ece6]">
+        <aside className="border-r border-slate-200 bg-white">
+          <div className="divide-y divide-slate-100">
             {filteredConversations.length ? (
-              filteredConversations.map((conversation, index) => {
+              filteredConversations.map((conversation) => {
                 const isActive = activeId === conversation.id;
                 const lastMessage = getLastMessage(conversation);
                 const initials = getInitials(conversation.garageName) || "V";
@@ -293,19 +293,18 @@ export default function MessagesClient({
                     onClick={() => openConversation(conversation.id)}
                     className={
                       isActive
-                        ? "animate-fade-up flex w-full items-start gap-4 border-l-2 border-[#171311] bg-[#faf7f2] px-5 py-5 text-left"
-                        : "animate-fade-up flex w-full items-start gap-4 border-l-2 border-transparent px-5 py-5 text-left transition hover:bg-[#faf7f2]"
+                        ? "flex w-full items-start gap-4 border-l-2 border-orange-500 bg-orange-50 px-5 py-5 text-left"
+                        : "flex w-full items-start gap-4 border-l-2 border-transparent px-5 py-5 text-left transition hover:bg-slate-50"
                     }
-                    style={{ animationDelay: `${0.04 + index * 0.03}s` }}
                   >
                     {conversation.garageAvatarUrl ? (
                       <img
                         src={conversation.garageAvatarUrl}
                         alt={conversation.garageName}
-                        className="h-11 w-11 shrink-0 rounded-full object-cover ring-1 ring-[#e4ddd4]"
+                        className="h-11 w-11 shrink-0 rounded-full object-cover ring-1 ring-slate-200"
                       />
                     ) : (
-                      <div className="text-3d-button grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#171311] text-sm font-semibold text-white">
+                      <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-slate-900 text-sm font-semibold text-white">
                         {initials}
                       </div>
                     )}
@@ -314,7 +313,7 @@ export default function MessagesClient({
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
-                            <p className="text-3d-title truncate text-sm font-semibold text-black">
+                            <p className="truncate text-sm font-semibold text-slate-900">
                               {conversation.garageName}
                             </p>
 
@@ -325,7 +324,7 @@ export default function MessagesClient({
                             ) : null}
                           </div>
 
-                          <p className="text-3d-soft mt-1 truncate text-xs text-slate-500">
+                          <p className="mt-1 truncate text-xs text-slate-500">
                             {conversation.listingTitle || "Annonce"}
                           </p>
                         </div>
@@ -335,7 +334,7 @@ export default function MessagesClient({
                         </span>
                       </div>
 
-                      <p className="text-3d-soft mt-2 truncate text-sm text-slate-600">
+                      <p className="mt-2 truncate text-sm text-slate-600">
                         {lastMessage
                           ? `${lastMessage.senderName} : ${lastMessage.content}`
                           : "Aucun message"}
@@ -352,24 +351,24 @@ export default function MessagesClient({
           </div>
         </aside>
 
-        <main className="min-w-0">
+        <main className="min-w-0 bg-white">
           {activeConversation ? (
             <div className="flex h-full flex-col">
-              <div className="animate-fade-up border-b border-[#ece7e0] px-6 py-5">
+              <div className="border-b border-slate-200 px-6 py-5">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <Circle className="h-2.5 w-2.5 fill-current text-emerald-500" />
-                      <span className="text-3d-soft text-xs font-medium uppercase tracking-wide text-slate-500">
+                      <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
                         Conversation active
                       </span>
                     </div>
 
-                    <h2 className="text-3d-title mt-2 text-xl font-semibold text-black">
+                    <h2 className="mt-2 text-[22px] font-semibold text-slate-900">
                       {activeConversation.listingTitle || "Annonce"}
                     </h2>
 
-                    <p className="text-3d-soft mt-2 text-sm text-slate-600">
+                    <p className="mt-2 text-sm text-slate-600">
                       Conversation avec {activeConversation.garageName}
                     </p>
                   </div>
@@ -377,22 +376,22 @@ export default function MessagesClient({
                   <div className="flex flex-wrap gap-3 text-sm text-slate-600">
                     <div className="inline-flex items-center gap-2">
                       <Mail className="h-4 w-4 text-slate-400" />
-                      <span className="text-3d-soft">{activeConversation.garageName}</span>
+                      <span>{activeConversation.garageName}</span>
                     </div>
 
                     {activeConversation.buyerPhone ? (
                       <div className="inline-flex items-center gap-2">
                         <Phone className="h-4 w-4 text-slate-400" />
-                        <span className="text-3d-soft">{activeConversation.buyerPhone}</span>
+                        <span>{activeConversation.buyerPhone}</span>
                       </div>
                     ) : null}
                   </div>
                 </div>
               </div>
 
-              <div className="flex-1 space-y-4 overflow-y-auto px-6 py-6">
+              <div className="flex-1 space-y-4 overflow-y-auto px-6 py-6 bg-white">
                 {activeConversation.messages.length ? (
-                  activeConversation.messages.map((message, index) => {
+                  activeConversation.messages.map((message) => {
                     const mine = message.senderType === "buyer";
                     const garageInitials = getInitials(activeConversation.garageName) || "V";
                     const buyerInitials = getInitials(activeConversation.buyerName) || "A";
@@ -400,8 +399,7 @@ export default function MessagesClient({
                     return (
                       <div
                         key={message.id}
-                        className={`${mine ? "flex justify-end" : "flex justify-start"} animate-fade-up`}
-                        style={{ animationDelay: `${0.03 + index * 0.02}s` }}
+                        className={mine ? "flex justify-end" : "flex justify-start"}
                       >
                         <div
                           className={`flex max-w-[78%] items-end gap-3 ${
@@ -437,8 +435,8 @@ export default function MessagesClient({
                             <div
                               className={
                                 mine
-                                  ? "text-3d-button rounded-2xl rounded-tr-md bg-[#171311] px-4 py-3 text-sm leading-6 text-white"
-                                  : "text-3d-soft rounded-2xl rounded-tl-md bg-[#f5f3ef] px-4 py-3 text-sm leading-6 text-[#171311]"
+                                  ? "rounded-2xl rounded-tr-md bg-orange-500 px-4 py-3 text-sm leading-6 text-white"
+                                  : "rounded-2xl rounded-tl-md bg-slate-100 px-4 py-3 text-sm leading-6 text-slate-900"
                               }
                             >
                               {message.content}
@@ -455,18 +453,18 @@ export default function MessagesClient({
                 )}
               </div>
 
-              <div className="border-t border-[#ece7e0] px-6 py-5">
+              <div className="border-t border-slate-200 px-6 py-5">
                 <div className="flex flex-col gap-3">
                   <textarea
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     rows={4}
-                    className="text-3d-soft w-full resize-none rounded-2xl border border-[#e4ddd4] bg-white px-4 py-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                    className="w-full resize-none rounded-md border border-slate-300 bg-white px-4 py-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                     placeholder="Écrire un message..."
                   />
 
                   {errorMessage ? (
-                    <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                       {errorMessage}
                     </div>
                   ) : null}
@@ -476,7 +474,7 @@ export default function MessagesClient({
                       type="button"
                       onClick={sendMessage}
                       disabled={sending}
-                      className="text-3d-button inline-flex items-center gap-2 rounded-full bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex h-11 items-center gap-2 rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <Send className="h-4 w-4" />
                       {sending ? "Envoi..." : "Envoyer"}
@@ -488,10 +486,10 @@ export default function MessagesClient({
           ) : (
             <div className="grid h-full place-items-center px-6 py-20">
               <div className="max-w-md text-center">
-                <h2 className="text-3d-title text-xl font-semibold text-black">
+                <h2 className="text-[22px] font-semibold text-slate-900">
                   Sélectionnez une conversation
                 </h2>
-                <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+                <p className="mt-2 text-sm leading-7 text-slate-600">
                   Choisissez un échange dans la colonne de gauche pour afficher les messages
                   et écrire au vendeur.
                 </p>

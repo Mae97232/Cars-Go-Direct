@@ -47,7 +47,9 @@ export default function InscriptionPro() {
           });
 
         if (loginError || !loginData.user) {
-          setErrorMessage("Ce compte existe déjà, mais le mot de passe est incorrect.");
+          setErrorMessage(
+            "Ce compte existe déjà, mais le mot de passe est incorrect."
+          );
           setLoading(false);
           return;
         }
@@ -71,7 +73,9 @@ export default function InscriptionPro() {
             .eq("id", loginData.user.id);
 
           if (upgradeError) {
-            setErrorMessage("Impossible de convertir ce compte en compte professionnel.");
+            setErrorMessage(
+              "Impossible de convertir ce compte en compte professionnel."
+            );
             setLoading(false);
             return;
           }
@@ -102,13 +106,15 @@ export default function InscriptionPro() {
       });
 
       if (upsertError) {
-        setErrorMessage("Compte créé, mais impossible d’initialiser le profil professionnel.");
+        setErrorMessage(
+          "Compte créé, mais impossible d’initialiser le profil professionnel."
+        );
         setLoading(false);
         return;
       }
     }
 
-    setSuccessMessage("Compte créé. Redirection...");
+    setSuccessMessage("Compte créé. Redirection vers la vérification...");
     router.push("/pro/onboarding");
   }
 
@@ -130,65 +136,106 @@ export default function InscriptionPro() {
     }
   }
 
- return (
- 
-    <div className="mx-auto max-w-xl">
-      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-8">
-        <h1 className="text-3d-hero text-xl font-bold tracking-tight text-black sm:text-2xl">
+  return (
+    <div className="mx-auto max-w-xl bg-white text-slate-900">
+      <div className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:p-8">
+        <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+          <span className="inline-flex rounded-full bg-orange-50 px-2.5 py-1 font-medium text-orange-600">
+            Espace professionnel
+          </span>
+          <span>Inscription sécurisée</span>
+          <span>•</span>
+          <span>Vérification SIRET obligatoire</span>
+        </div>
+
+        <h1 className="text-[26px] font-semibold tracking-tight text-slate-900 sm:text-[30px]">
           Créer un compte professionnel
         </h1>
 
-        <p className="text-3d-soft mt-2 text-sm text-slate-600">
-          Créez votre accès pro, puis finalisez votre compte avec la vérification SIRET.
+        <p className="mt-2 text-sm text-slate-600">
+          Créez votre accès pro en quelques secondes. Juste après, vous devrez
+          compléter votre profil et renseigner votre <strong>SIRET</strong> pour
+          vérifier votre activité.
         </p>
+
+        <div className="mt-4 rounded-md border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-700">
+          Après cette étape, vous serez redirigé vers la vérification de votre
+          entreprise : nom du garage, SIRET, coordonnées et informations
+          professionnelles.
+        </div>
 
         <div className="mt-6">
           <AuthProviders mode="signup" onGoogle={signupGoogle} loading={loading} />
         </div>
 
-        {errorMessage && (
-          <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        {errorMessage ? (
+          <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {errorMessage}
           </div>
-        )}
+        ) : null}
 
-        {successMessage && (
-          <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+        {successMessage ? (
+          <div className="mt-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
             {successMessage}
           </div>
-        )}
+        ) : null}
 
         <form onSubmit={signup} className="mt-5 grid gap-3">
-          <input
-            name="email"
-            required
-            type="email"
-            placeholder="Email professionnel"
-            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-black focus:ring-4 focus:ring-black/5"
-          />
+          <div>
+            <label
+              htmlFor="email"
+              className="mb-1.5 block text-[12px] font-medium text-slate-700"
+            >
+              Email professionnel
+            </label>
+            <input
+              id="email"
+              name="email"
+              required
+              type="email"
+              placeholder="garage@email.com"
+              className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+            />
+          </div>
 
-          <input
-            name="password"
-            required
-            type="password"
-            placeholder="Mot de passe"
-            className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm outline-none transition focus:border-black focus:ring-4 focus:ring-black/5"
-          />
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-1.5 block text-[12px] font-medium text-slate-700"
+            >
+              Mot de passe
+            </label>
+            <input
+              id="password"
+              name="password"
+              required
+              type="password"
+              placeholder="Votre mot de passe"
+              className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+            />
+          </div>
 
           <button
             disabled={loading}
-            className="text-3d-button mt-2 inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c] disabled:opacity-60"
+            className="mt-2 inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:opacity-60"
           >
             {loading ? "Création..." : "Créer mon accès pro"}
           </button>
 
+          <p className="mt-1 text-center text-xs text-slate-500">
+            Étape suivante : vérification du garage et du SIRET.
+          </p>
+
           <div className="mt-3 text-center text-sm text-slate-600">
-            <Link href="/pro/connexion" className="font-medium text-black hover:underline">
+            <Link
+              href="/pro/connexion"
+              className="font-medium text-orange-600 hover:underline"
+            >
               Déjà un compte ? Se connecter
             </Link>
           </div>
         </form>
       </div>
     </div>
-);
+  );
 }

@@ -182,13 +182,13 @@ export default function CompteFavorisPage() {
   }, [supabase]);
 
   return (
-    <div className="mx-auto max-w-6xl">
-      <div className="animate-fade-up flex flex-wrap items-center gap-2 text-sm text-slate-500">
+    <div className="mx-auto max-w-6xl bg-white text-slate-900">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
         {isAuthenticated ? (
           <>
             <Link
               href="/compte"
-              className="text-3d-soft font-medium text-[#171311] hover:underline"
+              className="font-medium text-slate-700 hover:text-orange-600 hover:underline"
             >
               Mon compte
             </Link>
@@ -196,21 +196,21 @@ export default function CompteFavorisPage() {
           </>
         ) : null}
 
-        <span className="text-3d-soft">Favoris</span>
+        <span>Favoris</span>
       </div>
 
-      <section className="mt-5 border-b border-[#ece7e0] pb-6">
+      <section className="mt-5 border-b border-slate-200 pb-6">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
-            <p className="text-3d-soft text-sm text-slate-500">
+          <div>
+            <p className="text-sm text-slate-500">
               {isAuthenticated ? "Compte particulier" : "Visiteur"}
             </p>
 
-            <h1 className="text-3d-hero mt-1 text-3xl font-bold tracking-tight text-black">
+            <h1 className="mt-1 text-[26px] font-semibold text-slate-900 sm:text-[30px]">
               Mes favoris
             </h1>
 
-            <p className="text-3d-soft mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-600">
               {isAuthenticated
                 ? "Retrouvez les annonces que vous avez enregistrées."
                 : "Retrouvez les annonces enregistrées sur cet appareil."}
@@ -219,8 +219,7 @@ export default function CompteFavorisPage() {
 
           <Link
             href="/annonces"
-            className="text-3d-soft animate-fade-up inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
-            style={{ animationDelay: "0.12s" }}
+            className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
           >
             Voir les annonces
           </Link>
@@ -229,13 +228,13 @@ export default function CompteFavorisPage() {
 
       {!isAuthenticated ? (
         <section className="pt-6">
-          <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-[#faf7f2] p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+          <div className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-3d-title text-lg font-semibold text-black">
+                <p className="text-lg font-semibold text-slate-900">
                   Sauvegardez vos favoris sur tous vos appareils
                 </p>
-                <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+                <p className="mt-2 text-sm leading-7 text-slate-600">
                   Créez un compte gratuit pour conserver vos annonces favorites,
                   les retrouver plus tard et ne rien perdre.
                 </p>
@@ -244,14 +243,14 @@ export default function CompteFavorisPage() {
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/inscription"
-                  className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
+                  className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600"
                 >
                   Créer un compte
                 </Link>
 
                 <Link
                   href="/connexion"
-                  className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2]"
+                  className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600"
                 >
                   Se connecter
                 </Link>
@@ -263,33 +262,31 @@ export default function CompteFavorisPage() {
 
       <section className="py-8">
         {loading ? (
-          <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-10 text-center shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-            <p className="text-3d-soft text-sm text-slate-600">
-              Chargement des favoris...
-            </p>
+          <div className="border border-slate-200 bg-white p-10 text-center shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <p className="text-sm text-slate-600">Chargement des favoris...</p>
           </div>
         ) : errorMessage ? (
-          <div className="animate-fade-up rounded-[28px] border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+          <div className="border border-red-200 bg-red-50 p-6 text-sm text-red-700">
             {errorMessage}
           </div>
         ) : favoriteCount === 0 ? (
-          <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-10 text-center shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#f5f3ef]">
-              <Heart className="h-6 w-6 text-[#171311]" />
+          <div className="border border-slate-200 bg-white p-10 text-center shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100">
+              <Heart className="h-6 w-6 text-slate-700" />
             </div>
 
-            <h2 className="text-3d-title mt-5 text-xl font-semibold text-black">
+            <h2 className="mt-5 text-[22px] font-semibold text-slate-900">
               Aucun favori pour le moment
             </h2>
 
-            <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+            <p className="mt-2 text-sm leading-7 text-slate-600">
               Ajoutez des annonces à vos favoris pour les retrouver rapidement ici.
             </p>
 
             <div className="mt-6">
               <Link
                 href="/annonces"
-                className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f0d0c]"
+                className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-medium text-white transition hover:bg-orange-600"
               >
                 Parcourir les annonces
               </Link>
@@ -297,7 +294,7 @@ export default function CompteFavorisPage() {
           </div>
         ) : (
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {items.map((item, index) => {
+            {items.map((item) => {
               const photo =
                 Array.isArray(item.photos) && item.photos.length > 0
                   ? item.photos[0]
@@ -312,10 +309,9 @@ export default function CompteFavorisPage() {
                 <Link
                   key={item.id}
                   href={`/annonces/${item.id}`}
-                  className="animate-fade-up group overflow-hidden rounded-[28px] border border-[#e7e2db] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:border-[#d4ccc2] hover:shadow-[0_18px_40px_rgba(0,0,0,0.06)]"
-                  style={{ animationDelay: `${0.06 + index * 0.04}s` }}
+                  className="group overflow-hidden border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:bg-slate-50"
                 >
-                  <div className="overflow-hidden bg-slate-100">
+                  <div className="overflow-hidden border-b border-slate-200 bg-slate-100">
                     {photo ? (
                       <img
                         src={photo}
@@ -323,7 +319,7 @@ export default function CompteFavorisPage() {
                         className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                       />
                     ) : (
-                      <div className="text-3d-soft grid aspect-[4/3] place-items-center text-sm text-slate-500">
+                      <div className="grid aspect-[4/3] place-items-center text-sm text-slate-500">
                         Photo indisponible
                       </div>
                     )}
@@ -332,39 +328,31 @@ export default function CompteFavorisPage() {
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-3d-title line-clamp-2 text-lg font-semibold text-black">
+                        <p className="line-clamp-2 text-lg font-semibold text-slate-900">
                           {item.title ?? "Annonce véhicule"}
                         </p>
-                        <p className="text-3d-soft mt-2 text-sm text-slate-500">
+                        <p className="mt-2 text-sm text-slate-500">
                           {locationText}
                         </p>
                       </div>
 
-                      <span className="text-3d-soft inline-flex rounded-full border border-[#f0d8dd] bg-[#fff5f6] px-3 py-1 text-xs font-semibold text-[#8b3a47]">
+                      <span className="inline-flex rounded-full bg-orange-50 px-2.5 py-1 text-[11px] font-medium text-orange-600">
                         Favori
                       </span>
                     </div>
 
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      <span className="text-3d-soft rounded-full bg-[#f5f3ef] px-3 py-1.5 text-xs font-medium text-[#171311]">
-                        {item.year || "—"}
-                      </span>
-                      <span className="text-3d-soft rounded-full bg-[#f5f3ef] px-3 py-1.5 text-xs font-medium text-[#171311]">
-                        {formatKm(item.mileage)}
-                      </span>
-                      <span className="text-3d-soft rounded-full bg-[#f5f3ef] px-3 py-1.5 text-xs font-medium text-[#171311]">
-                        {item.fuel || "—"}
-                      </span>
-                      <span className="text-3d-soft rounded-full bg-[#f5f3ef] px-3 py-1.5 text-xs font-medium text-[#171311]">
-                        {item.type || "—"}
-                      </span>
+                    <div className="mt-4 flex flex-wrap gap-2 text-sm text-slate-600">
+                      <span>{item.year || "—"}</span>
+                      <span>{formatKm(item.mileage)}</span>
+                      <span>{item.fuel || "—"}</span>
+                      <span>{item.type || "—"}</span>
                     </div>
 
                     <div className="mt-5 flex items-end justify-between gap-3">
-                      <p className="text-3d-title text-xl font-semibold tracking-tight text-black">
+                      <p className="text-xl font-bold text-orange-600">
                         {formatPrice(item.price)}
                       </p>
-                      <span className="text-3d-title text-sm font-medium text-[#171311]">
+                      <span className="text-sm font-medium text-slate-700 group-hover:text-orange-600">
                         Voir l’annonce
                       </span>
                     </div>

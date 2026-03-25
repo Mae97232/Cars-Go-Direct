@@ -120,109 +120,103 @@ export default function SecurityClient({
   const isLoading = loadingUpdate || loadingReset;
 
   return (
-    <div className="space-y-8">
-      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-        <div className="border-b border-[#ece7e0] pb-5">
-          <h1 className="text-3d-hero text-[28px] font-semibold tracking-tight text-black">
+    <div className="space-y-8 bg-white text-slate-900">
+      <div className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <div className="border-b border-slate-200 pb-5">
+          <h1 className="text-[26px] font-semibold text-slate-900 sm:text-[30px]">
             Connexion et sécurité
           </h1>
-          <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+          <p className="mt-2 text-sm leading-7 text-slate-600">
             Gérez les informations de sécurité de votre compte professionnel.
           </p>
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <div className="animate-fade-up rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] p-4">
-            <p className="text-3d-soft text-xs uppercase tracking-wide text-slate-500">
+          <div className="border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <p className="text-xs uppercase tracking-wide text-slate-500">
               Adresse email
             </p>
-            <p className="text-3d-title mt-2 text-sm font-medium text-black">{email}</p>
+            <p className="mt-2 text-sm font-medium text-slate-900">{email}</p>
           </div>
 
-          <div
-            className="animate-fade-up rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] p-4"
-            style={{ animationDelay: "0.05s" }}
-          >
-            <p className="text-3d-soft text-xs uppercase tracking-wide text-slate-500">
+          <div className="border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <p className="text-xs uppercase tracking-wide text-slate-500">
               Méthode de connexion
             </p>
-            <p className="text-3d-title mt-2 text-sm font-medium text-black">{provider}</p>
+            <p className="mt-2 text-sm font-medium text-slate-900">{provider}</p>
           </div>
 
-          <div
-            className="animate-fade-up rounded-2xl border border-[#e4ddd4] bg-[#faf7f2] p-4"
-            style={{ animationDelay: "0.1s" }}
-          >
-            <p className="text-3d-soft text-xs uppercase tracking-wide text-slate-500">
+          <div className="border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            <p className="text-xs uppercase tracking-wide text-slate-500">
               Dernière connexion
             </p>
-            <p className="text-3d-title mt-2 text-sm font-medium text-black">
+            <p className="mt-2 text-sm font-medium text-slate-900">
               {lastLoginFormatted}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="animate-fade-up rounded-[28px] border border-[#e4ddd4] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-        <div className="border-b border-[#ece7e0] pb-5">
-          <h2 className="text-3d-title text-xl font-semibold tracking-tight text-black">
+      <div className="border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        <div className="border-b border-slate-200 pb-5">
+          <h2 className="text-[22px] font-semibold text-slate-900">
             Modifier le mot de passe
           </h2>
-          <p className="text-3d-soft mt-2 text-sm leading-7 text-slate-600">
+          <p className="mt-2 text-sm leading-7 text-slate-600">
             Utilisez un mot de passe fort pour sécuriser votre espace professionnel.
           </p>
         </div>
 
         <form onSubmit={handleChangePassword} className="mt-6 space-y-5">
           <div className="grid gap-5 md:grid-cols-2">
-            <div className="animate-fade-up md:col-span-2" style={{ animationDelay: "0.04s" }}>
-              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-800">
+            <div className="md:col-span-2">
+              <label className="mb-2 block text-sm font-medium text-slate-800">
                 Mot de passe actuel
               </label>
               <input
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                 placeholder="Entrez votre mot de passe actuel"
               />
             </div>
 
-            <div className="animate-fade-up" style={{ animationDelay: "0.08s" }}>
-              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-800">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-800">
                 Nouveau mot de passe
               </label>
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                 placeholder="Nouveau mot de passe"
               />
             </div>
 
-            <div className="animate-fade-up" style={{ animationDelay: "0.12s" }}>
-              <label className="text-3d-soft mb-2 block text-sm font-medium text-slate-800">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-800">
                 Confirmer le nouveau mot de passe
               </label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="text-3d-soft w-full rounded-2xl border border-[#e4ddd4] bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#c8bbaa] focus:ring-4 focus:ring-[#f1ece4]"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                 placeholder="Confirmez le mot de passe"
               />
             </div>
           </div>
 
           {errorMessage ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {errorMessage}
             </div>
           ) : null}
 
           {successMessage ? (
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            <div className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
               {successMessage}
             </div>
           ) : null}
@@ -231,7 +225,7 @@ export default function SecurityClient({
             <button
               type="submit"
               disabled={isLoading}
-              className="text-3d-button inline-flex items-center justify-center rounded-2xl bg-[#171311] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f0d0c] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loadingUpdate ? "Mise à jour..." : "Mettre à jour le mot de passe"}
             </button>
@@ -240,7 +234,7 @@ export default function SecurityClient({
               type="button"
               onClick={handleSendResetEmail}
               disabled={isLoading}
-              className="text-3d-soft inline-flex items-center justify-center rounded-2xl border border-[#e4ddd4] bg-white px-5 py-3 text-sm font-medium text-[#171311] transition hover:bg-[#f7f5f2] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loadingReset ? "Envoi..." : "Envoyer un email de réinitialisation"}
             </button>
