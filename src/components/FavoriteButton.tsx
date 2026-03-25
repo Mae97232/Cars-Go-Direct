@@ -13,7 +13,8 @@ function getGuestFavorites(): string[] {
   if (typeof window === "undefined") return [];
 
   try {
-    return JSON.parse(localStorage.getItem("favorites") || "[]");
+    const parsed = JSON.parse(localStorage.getItem("favorites") || "[]");
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
@@ -41,10 +42,12 @@ export default function FavoriteButton({
     async function initFavoriteState() {
       try {
         const {
-          data: { user },
-        } = await supabase.auth.getUser();
+          data: { session },
+        } = await supabase.auth.getSession();
 
         if (!mounted) return;
+
+        const user = session?.user ?? null;
 
         if (user) {
           setIsAuthenticated(true);
@@ -78,8 +81,10 @@ export default function FavoriteButton({
 
     try {
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      const user = session?.user ?? null;
 
       if (!user) {
         const guestFavorites = getGuestFavorites();
@@ -88,14 +93,12 @@ export default function FavoriteButton({
           const next = guestFavorites.filter((id) => id !== listingId);
           setGuestFavorites(next);
           setIsFavorite(false);
-          setInfoMessage("Favori temporaire retiré de cet appareil.");
+          setInfoMessage("Retiré des favoris sur cet appareil.");
         } else {
-          const next = [...guestFavorites, listingId];
+          const next = [...new Set([...guestFavorites, listingId])];
           setGuestFavorites(next);
           setIsFavorite(true);
-          setInfoMessage(
-            "Favori temporaire enregistré sur cet appareil. Créez un compte pour le sauvegarder définitivement."
-          );
+          setInfoMessage("Ajouté en favori sur cet appareil.");
         }
 
         setIsAuthenticated(false);
@@ -146,14 +149,12 @@ export default function FavoriteButton({
           const next = guestFavorites.filter((id) => id !== listingId);
           setGuestFavorites(next);
           setIsFavorite(false);
-          setInfoMessage("Favori temporaire retiré de cet appareil.");
+          setInfoMessage("Retiré des favoris sur cet appareil.");
         } else {
-          const next = [...guestFavorites, listingId];
+          const next = [...new Set([...guestFavorites, listingId])];
           setGuestFavorites(next);
           setIsFavorite(true);
-          setInfoMessage(
-            "Favori temporaire enregistré sur cet appareil. Créez un compte pour le sauvegarder définitivement."
-          );
+          setInfoMessage("Ajouté en favori sur cet appareil.");
         }
 
         setIsAuthenticated(false);
@@ -166,15 +167,15 @@ export default function FavoriteButton({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="flex max-w-full flex-col items-start gap-2">
       <button
         type="button"
         onClick={toggleFavorite}
         disabled={loading}
         className={
           isFavorite
-            ? "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-md border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-medium text-orange-600 transition hover:bg-orange-100 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-            : "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            ? "inline-flex min-h-[46px] items-center justify-center gap-2 rounded-md border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-medium text-orange-600 transition hover:bg-orange-100 disabled:cursor-not-allowed disabled:opacity-60"
+            : "inline-flex min-h-[46px] items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
         }
         aria-pressed={isFavorite}
         aria-label={
@@ -186,7 +187,7 @@ export default function FavoriteButton({
         <Heart
           className={`h-4 w-4 shrink-0 ${isFavorite ? "fill-current" : ""}`}
         />
-        <span className="truncate">
+        <span className="whitespace-nowrap">
           {loading
             ? "Chargement..."
             : isFavorite
@@ -196,20 +197,26 @@ export default function FavoriteButton({
       </button>
 
       {!loading && isAuthenticated === false && !infoMessage ? (
-        <p className="text-xs text-slate-500 sm:text-[13px]">
-          Les favoris sont enregistrés temporairement sur cet appareil.
+        <p className="max-w-[320px] text-xs leading-5 text-slate-500 sm:text-[13px]">
+          Enregistré temporairement sur cet appareil.
         </p>
       ) : null}
 
       {infoMessage ? (
-        <div className="rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-xs text-orange-700 sm:text-[13px]">
+        <div className="max-w-[320px] rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-xs leading-5 text-orange-700 sm:text-[13px]">
           {infoMessage}
         </div>
       ) : null}
 
       {errorMessage ? (
-        <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 sm:text-[13px]">
+        <div className="max-w-[320px] rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs leading-5 text-red-700 sm:text-[13px]">
           {errorMessage}
+        </div>
+      ) : null}
+
+      {isAuthenticated === false && isFavorite ? (
+        <div className="max-w-[320px] text-xs leading-5 text-slate-500 sm:text-[13px]">
+          Créez un compte pour retrouver ce favori partout.
         </div>
       ) : null}
     </div>

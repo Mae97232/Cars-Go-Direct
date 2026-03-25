@@ -35,10 +35,17 @@ function getGuestFavorites(): string[] {
   if (typeof window === "undefined") return [];
 
   try {
-    return JSON.parse(localStorage.getItem("favorites") || "[]");
+    const raw = localStorage.getItem("favorites");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
+}
+
+function clearGuestFavorites() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem("favorites");
 }
 
 export default function CompteFavorisPage() {
@@ -54,23 +61,65 @@ export default function CompteFavorisPage() {
   useEffect(() => {
     let mounted = true;
 
+    async function mergeGuestFavoritesToAccount(userId: string) {
+      const guestIds = getGuestFavorites();
+
+      if (guestIds.length === 0) {
+        return;
+      }
+
+      const uniqueGuestIds = [...new Set(guestIds)];
+
+      const { data: existingFavorites, error: existingError } = await supabase
+        .from("favorites")
+        .select("listing_id")
+        .eq("user_id", userId)
+        .in("listing_id", uniqueGuestIds);
+
+      if (existingError) {
+        throw new Error("Impossible de vérifier les favoris existants.");
+      }
+
+      const existingIds = new Set(
+        (existingFavorites ?? []).map((fav) => fav.listing_id)
+      );
+
+      const missingIds = uniqueGuestIds.filter((id) => !existingIds.has(id));
+
+      if (missingIds.length > 0) {
+        const rowsToInsert = missingIds.map((listingId) => ({
+          user_id: userId,
+          listing_id: listingId,
+        }));
+
+        const { error: insertError } = await supabase
+          .from("favorites")
+          .insert(rowsToInsert);
+
+        if (insertError) {
+          throw new Error("Impossible de transférer les favoris du visiteur.");
+        }
+      }
+
+      clearGuestFavorites();
+    }
+
     async function loadFavorites() {
       setLoading(true);
       setErrorMessage("");
 
       try {
         const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
+          data: { session },
+        } = await supabase.auth.getSession();
 
-        if (userError) {
-          throw new Error("Impossible de vérifier la session utilisateur.");
-        }
+        const user = session?.user ?? null;
 
         if (user) {
           if (!mounted) return;
           setIsAuthenticated(true);
+
+          await mergeGuestFavoritesToAccount(user.id);
 
           const { data: favorites, error } = await supabase
             .from("favorites")
@@ -109,7 +158,7 @@ export default function CompteFavorisPage() {
                   ? fav.listings[0]
                   : fav.listings;
 
-                return listing ? listing : null;
+                return listing ?? null;
               })
               .filter(Boolean) ?? [];
 
