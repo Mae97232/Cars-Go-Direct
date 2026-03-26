@@ -70,11 +70,27 @@ export default function CompteFavorisPage() {
 
       const uniqueGuestIds = [...new Set(guestIds)];
 
+      const { data: validListings, error: validListingsError } = await supabase
+        .from("listings")
+        .select("id")
+        .in("id", uniqueGuestIds);
+
+      if (validListingsError) {
+        throw new Error("Impossible de vérifier les favoris temporaires.");
+      }
+
+      const validIds = (validListings ?? []).map((listing) => listing.id);
+
+      if (validIds.length === 0) {
+        clearGuestFavorites();
+        return;
+      }
+
       const { data: existingFavorites, error: existingError } = await supabase
         .from("favorites")
         .select("listing_id")
         .eq("user_id", userId)
-        .in("listing_id", uniqueGuestIds);
+        .in("listing_id", validIds);
 
       if (existingError) {
         throw new Error("Impossible de vérifier les favoris existants.");
@@ -84,7 +100,7 @@ export default function CompteFavorisPage() {
         (existingFavorites ?? []).map((fav) => fav.listing_id)
       );
 
-      const missingIds = uniqueGuestIds.filter((id) => !existingIds.has(id));
+      const missingIds = validIds.filter((id) => !existingIds.has(id));
 
       if (missingIds.length > 0) {
         const rowsToInsert = missingIds.map((listingId) => ({
@@ -94,10 +110,14 @@ export default function CompteFavorisPage() {
 
         const { error: insertError } = await supabase
           .from("favorites")
-          .insert(rowsToInsert);
+          .upsert(rowsToInsert, {
+            onConflict: "user_id,listing_id",
+          });
 
         if (insertError) {
-          throw new Error("Impossible de transférer les favoris du visiteur.");
+          throw new Error(
+            `Impossible de transférer les favoris du visiteur : ${insertError.message}`
+          );
         }
       }
 
