@@ -403,14 +403,7 @@ export default function HomePageClient({
     setShowSuggestions(false);
   }
 
-  const quickSearches = [
-    "Audi A3",
-    "Audi A4",
-    "BMW Série 3",
-    "Mercedes Classe C",
-    "Volkswagen Golf",
-    "Peugeot 308",
-  ];
+  const quickSearches: string[] = [];
 
   const popularBrands = ALL_BRAND_NAMES.slice(0, 12);
 
@@ -440,12 +433,11 @@ export default function HomePageClient({
             </div>
 
             <h1 className="text-[26px] font-semibold text-slate-900 sm:text-[30px]">
-              Trouvez votre véhicule sans perdre de temps
+              TROUVEZ VOTRE VÉHICULE RAPIDEMENT
             </h1>
 
             <p className="mt-2 max-w-2xl text-sm text-slate-600">
-              Utilitaires, véhicules de tourisme et 2 roues publiés par des professionnels.
-              Recherchez rapidement par modèle, marque ou type.
+              Véhicule de tourisme, utilitaire ou 2 roues
             </p>
 
             <div className="mt-5 border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
@@ -494,18 +486,20 @@ export default function HomePageClient({
                 ) : null}
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                {quickSearches.map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => goSearch(s)}
-                    className={chipClass}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
+              {quickSearches.length > 0 ? (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {quickSearches.map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => goSearch(s)}
+                      className={chipClass}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
 
               <div className="mt-3 flex flex-wrap gap-2">
                 {chips.map((c) => {
@@ -545,7 +539,7 @@ export default function HomePageClient({
                 Espace professionnel
               </p>
               <p className="mt-2 text-sm text-slate-600">
-                Déposez vos véhicules et gérez vos contacts depuis votre espace pro.
+                Consultez vos annonces depuis votre espace.
               </p>
             </div>
 
