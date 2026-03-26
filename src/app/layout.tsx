@@ -1,6 +1,12 @@
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Cars Go Direct",
+  description: "Marketplace auto pro",
+};
 
 export default function RootLayout({
   children,
