@@ -28,12 +28,6 @@ function getInitial(name: string, email: string) {
   return source.charAt(0).toUpperCase();
 }
 
-function maskIban(value: string) {
-  if (!value) return "";
-  if (value.length <= 8) return value;
-  return `${value.slice(0, 4)} **** **** **** ${value.slice(-4)}`;
-}
-
 function displayValue(value: string) {
   return value && value.trim() !== "" ? value : "Non renseigné";
 }
@@ -55,7 +49,6 @@ export default function AccountSettingsForm({
   const [birthdate, setBirthdate] = useState(initialProfile.birthdate || "");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(initialProfile.avatarUrl);
 
-  const [iban, setIban] = useState(initialPrivateSettings.iban || "");
   const [notificationsMessages, setNotificationsMessages] = useState(
     initialPrivateSettings.notificationsMessages
   );
@@ -127,7 +120,6 @@ export default function AccountSettingsForm({
           phone,
           city,
           birthdate: birthdateLocked ? undefined : birthdate,
-          iban,
           notificationsMessages,
           notificationsEmails,
         }),
@@ -362,56 +354,6 @@ export default function AccountSettingsForm({
         <section>
           <div className="border-b border-slate-200 pb-4">
             <h2 className="text-[22px] font-semibold text-slate-900">
-              Moyens de paiement
-            </h2>
-            <p className="mt-1 text-sm text-slate-600">
-              Vos informations bancaires restent privées.
-            </p>
-          </div>
-
-          <div className="grid gap-8 py-6 lg:grid-cols-2">
-            <div>
-              <h3 className="text-base font-semibold text-slate-900">IBAN</h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Cet IBAN n’est jamais affiché publiquement.
-              </p>
-
-              <div className="mt-4">
-                <label className="mb-2 block text-sm font-medium text-slate-700">
-                  IBAN
-                </label>
-                <input
-                  value={iban}
-                  onChange={(e) => setIban(e.target.value)}
-                  placeholder="FR76..."
-                  className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
-                />
-                <p className="mt-2 text-xs text-slate-500">
-                  {iban
-                    ? `Aperçu masqué : ${maskIban(iban)}`
-                    : "Aucun IBAN renseigné pour le moment."}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-base font-semibold text-slate-900">
-                Carte bancaire
-              </h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Vous n’avez pas de carte bancaire enregistrée.
-              </p>
-
-              <div className="mt-4 rounded-md border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-500">
-                Aucun moyen de paiement par carte enregistré pour le moment.
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <div className="border-b border-slate-200 pb-4">
-            <h2 className="text-[22px] font-semibold text-slate-900">
               Notifications
             </h2>
             <p className="mt-1 text-sm text-slate-600">
@@ -493,17 +435,15 @@ export default function AccountSettingsForm({
           </div>
         </section>
 
-        <section className="border border-red-200 bg-red-50 p-6">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <section className="border border-slate-200 bg-slate-50 p-5">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
-              <h2 className="text-xl font-semibold text-red-700">
+              <h2 className="text-lg font-semibold text-slate-900">
                 Supprimer mon compte
               </h2>
-              <p className="mt-2 text-sm leading-6 text-red-700/90">
-                Cette action est définitive. Votre profil, vos messages, vos favoris,
-                vos paramètres privés et toutes les données liées à votre compte seront
-                supprimés. Vous pourrez recréer un compte plus tard avec la même adresse
-                email.
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Cette action est définitive. Votre profil, vos messages, vos favoris
+                et toutes les données liées à votre compte seront supprimés.
               </p>
             </div>
 
@@ -511,11 +451,11 @@ export default function AccountSettingsForm({
               type="button"
               onClick={handleDeleteAccount}
               disabled={deletingAccount}
-              className="inline-flex h-11 items-center justify-center rounded-md bg-red-600 px-5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {deletingAccount
-                ? "Suppression en cours..."
-                : "Supprimer définitivement mon compte"}
+                ? "Suppression..."
+                : "Supprimer mon compte"}
             </button>
           </div>
         </section>

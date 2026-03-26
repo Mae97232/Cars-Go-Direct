@@ -46,8 +46,6 @@ export async function PUT(req: Request) {
       : undefined;
   const normalizedBirthdate =
     "birthdate" in body ? normalizeDate(body.birthdate) : undefined;
-  const normalizedIban =
-    "iban" in body ? normalizeText(body.iban) : undefined;
 
   const { data: existingProfile, error: existingProfileError } = await supabase
     .from("profiles")
@@ -74,8 +72,6 @@ export async function PUT(req: Request) {
   if ("city" in body) profileUpdates.city = normalizedCity;
   if ("address" in body) profileUpdates.address = normalizedAddress;
   if ("gender" in body) profileUpdates.gender = normalizedGender;
-
-  if ("iban" in body) profileUpdates.iban = normalizedIban;
 
   if ("notificationsMessages" in body) {
     profileUpdates.notifications_messages = Boolean(body.notificationsMessages);
@@ -125,7 +121,6 @@ export async function PUT(req: Request) {
         address: normalizedAddress ?? "",
         gender: normalizedGender ?? "unspecified",
         birthdate: normalizedBirthdate ?? null,
-        iban: normalizedIban ?? "",
         notifications_messages:
           "notificationsMessages" in body
             ? Boolean(body.notificationsMessages)
@@ -149,10 +144,7 @@ export async function PUT(req: Request) {
     finalProfile = insertedProfile;
   }
 
-  const fullName = [
-    finalProfile?.first_name,
-    finalProfile?.last_name,
-  ]
+  const fullName = [finalProfile?.first_name, finalProfile?.last_name]
     .filter((value) => typeof value === "string" && value.trim() !== "")
     .join(" ")
     .trim();
