@@ -34,40 +34,8 @@ function maskIban(value: string) {
   return `${value.slice(0, 4)} **** **** **** ${value.slice(-4)}`;
 }
 
-function formatGender(value: string) {
-  switch (value) {
-    case "male":
-      return "Masculin";
-    case "female":
-      return "Féminin";
-    case "unspecified":
-      return "Non renseigné";
-    default:
-      return value || "Non renseigné";
-  }
-}
-
 function displayValue(value: string) {
   return value && value.trim() !== "" ? value : "Non renseigné";
-}
-
-function ReadOnlyField({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div>
-      <label className="mb-2 block text-sm font-medium text-slate-700">
-        {label}
-      </label>
-      <div className="flex min-h-[52px] items-center rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-        {displayValue(value)}
-      </div>
-    </div>
-  );
 }
 
 export default function AccountSettingsForm({
@@ -78,6 +46,10 @@ export default function AccountSettingsForm({
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const [firstName, setFirstName] = useState(initialProfile.firstName || "");
+  const [lastName, setLastName] = useState(initialProfile.lastName || "");
+  const [gender, setGender] = useState(initialProfile.gender || "unspecified");
+  const [address, setAddress] = useState(initialProfile.address || "");
   const [phone, setPhone] = useState(initialProfile.phone || "");
   const [city, setCity] = useState(initialProfile.city || "");
   const [birthdate, setBirthdate] = useState(initialProfile.birthdate || "");
@@ -97,7 +69,7 @@ export default function AccountSettingsForm({
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const fullName = `${initialProfile.firstName} ${initialProfile.lastName}`.trim();
+  const fullName = `${firstName} ${lastName}`.trim();
   const initial = getInitial(fullName, userEmail);
   const birthdateLocked = !!initialProfile.birthdate;
 
@@ -126,7 +98,7 @@ export default function AccountSettingsForm({
 
       setAvatarUrl(data.avatarUrl);
       setSuccessMessage("Photo de profil mise à jour.");
-      window.location.href = "/compte";
+      router.refresh();
     } catch {
       setErrorMessage("Erreur réseau pendant l’envoi de la photo.");
     } finally {
@@ -148,6 +120,10 @@ export default function AccountSettingsForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          firstName,
+          lastName,
+          gender,
+          address,
           phone,
           city,
           birthdate: birthdateLocked ? undefined : birthdate,
@@ -165,7 +141,7 @@ export default function AccountSettingsForm({
       }
 
       setSuccessMessage("Paramètres enregistrés avec succès.");
-      window.location.href = "/compte";
+      router.refresh();
     } catch {
       setErrorMessage("Erreur réseau.");
     } finally {
@@ -196,9 +172,7 @@ export default function AccountSettingsForm({
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMessage(
-          data?.reason || "Impossible de supprimer le compte."
-        );
+        setErrorMessage(data?.reason || "Impossible de supprimer le compte.");
         return;
       }
 
@@ -268,16 +242,62 @@ export default function AccountSettingsForm({
               Informations de compte
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              Vous pouvez modifier votre téléphone et votre ville. La date de naissance
+              Vous pouvez compléter ou modifier vos informations personnelles. La date de naissance
               peut être renseignée une seule fois.
             </p>
           </div>
 
           <div className="grid gap-x-8 gap-y-5 py-6 sm:grid-cols-2">
-            <ReadOnlyField label="Civilité" value={formatGender(initialProfile.gender)} />
-            <ReadOnlyField label="Nom" value={initialProfile.lastName} />
-            <ReadOnlyField label="Prénom" value={initialProfile.firstName} />
-            <ReadOnlyField label="Adresse" value={initialProfile.address} />
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Civilité
+              </label>
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+              >
+                <option value="unspecified">Non renseigné</option>
+                <option value="male">Masculin</option>
+                <option value="female">Féminin</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Nom
+              </label>
+              <input
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Votre nom"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Prénom
+              </label>
+              <input
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Votre prénom"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Adresse
+              </label>
+              <input
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Votre adresse"
+                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+              />
+            </div>
 
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">
