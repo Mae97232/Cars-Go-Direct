@@ -16,122 +16,154 @@ export default function InscriptionPro() {
 
   async function signup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (loading) return;
+
     setLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
 
-    const formData = new FormData(e.currentTarget);
+    try {
+      const formData = new FormData(e.currentTarget);
 
-    const email = String(formData.get("email") ?? "").trim();
-    const password = String(formData.get("password") ?? "");
+      const email = String(formData.get("email") ?? "").trim();
+      const password = String(formData.get("password") ?? "");
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/pro/callback`,
-        data: {
-          signup_role: "pro",
-        },
-      },
-    });
-
-    if (error) {
-      const message = error.message?.toLowerCase() || "";
-
-      if (message.includes("already registered")) {
-        const { data: loginData, error: loginError } =
-          await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
-
-        if (loginError || !loginData.user) {
-          setErrorMessage(
-            "Ce compte existe déjà, mais le mot de passe est incorrect."
-          );
-          setLoading(false);
-          return;
-        }
-
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("role, onboarding_completed")
-          .eq("id", loginData.user.id)
-          .single();
-
-        if (profileError) {
-          setErrorMessage("Impossible de reprendre votre inscription.");
-          setLoading(false);
-          return;
-        }
-
-        if (profile?.role !== "pro") {
-          const { error: upgradeError } = await supabase
-            .from("profiles")
-            .update({ role: "pro" })
-            .eq("id", loginData.user.id);
-
-          if (upgradeError) {
-            setErrorMessage(
-              "Impossible de convertir ce compte en compte professionnel."
-            );
-            setLoading(false);
-            return;
-          }
-        }
-
-        if (!profile?.onboarding_completed) {
-          router.push("/pro/onboarding");
-          return;
-        }
-
-        router.push("/pro/dashboard");
-        return;
-      }
-
-      setErrorMessage(error.message || "Impossible de créer le compte.");
-      setLoading(false);
-      return;
-    }
-
-    const userId = data.user?.id;
-
-    if (userId) {
-      const { error: upsertError } = await supabase.from("profiles").upsert({
-        id: userId,
+      const { data, error } = await supabase.auth.signUp({
         email,
-        role: "pro",
-        onboarding_completed: false,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/pro/callback?next=pro-signup`,
+          data: {
+            signup_role: "pro",
+          },
+        },
       });
 
-      if (upsertError) {
-        setErrorMessage(
-          "Compte créé, mais impossible d’initialiser le profil professionnel."
-        );
-        setLoading(false);
+      if (error) {
+        const message = error.message?.toLowerCase() || "";
+
+        if (message.includes("already registered")) {
+          const { data: loginData, error: loginError } =
+            await supabase.auth.signInWithPassword({
+              email,
+              password,
+            });
+
+          if (loginError || !loginData.user) {
+            setErrorMessage(
+              "Ce compte existe déjà, mais le mot de passe est incorrect."
+            );
+            return;
+          }
+
+          const { data: profile, error: profileError } = await supabase
+            .from("profiles")
+            .select("role, onboarding_completed")
+            .eq("id", loginData.user.id)
+            .maybeSingle();
+
+          if (profileError) {
+            setErrorMessage("Impossible de reprendre votre inscription.");
+            return;
+          }
+
+          if (!profile) {
+            const { error: createProfileError } = await supabase
+              .from("profiles")
+              .upsert({
+                id: loginData.user.id,
+                email,
+                role: "pro",
+                onboarding_completed: false,
+              });
+
+            if (createProfileError) {
+              setErrorMessage(
+                "Impossible d’initialiser le profil professionnel."
+              );
+              return;
+            }
+
+            router.replace("/pro/onboarding");
+            return;
+          }
+
+          if (profile.role !== "pro") {
+            const { error: upgradeError } = await supabase
+              .from("profiles")
+              .update({ role: "pro" })
+              .eq("id", loginData.user.id);
+
+            if (upgradeError) {
+              setErrorMessage(
+                "Impossible de convertir ce compte en compte professionnel."
+              );
+              return;
+            }
+          }
+
+          if (!profile.onboarding_completed) {
+            router.replace("/pro/onboarding");
+            return;
+          }
+
+          router.replace("/pro/dashboard");
+          return;
+        }
+
+        setErrorMessage(error.message || "Impossible de créer le compte.");
         return;
       }
-    }
 
-    setSuccessMessage("Compte créé. Redirection vers la vérification...");
-    router.push("/pro/onboarding");
+      const userId = data.user?.id;
+
+      if (userId) {
+        const { error: upsertError } = await supabase.from("profiles").upsert({
+          id: userId,
+          email,
+          role: "pro",
+          onboarding_completed: false,
+        });
+
+        if (upsertError) {
+          setErrorMessage(
+            "Compte créé, mais impossible d’initialiser le profil professionnel."
+          );
+          return;
+        }
+      }
+
+      setSuccessMessage("Compte créé. Redirection vers la vérification...");
+      router.replace("/pro/onboarding");
+    } catch {
+      setErrorMessage("Une erreur inattendue est survenue.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function signupGoogle() {
+    if (loading) return;
+
     setLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/pro/callback`,
-      },
-    });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/pro/callback?next=pro-signup`,
+        },
+      });
 
-    if (error) {
-      setErrorMessage(error.message || "Impossible de continuer avec Google.");
+      if (error) {
+        setErrorMessage(error.message || "Impossible de continuer avec Google.");
+        setLoading(false);
+      }
+    } catch {
+      setErrorMessage("Impossible de continuer avec Google.");
       setLoading(false);
     }
   }
@@ -193,6 +225,7 @@ export default function InscriptionPro() {
               name="email"
               required
               type="email"
+              autoComplete="email"
               placeholder="garage@email.com"
               className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
@@ -210,12 +243,14 @@ export default function InscriptionPro() {
               name="password"
               required
               type="password"
+              autoComplete="new-password"
               placeholder="Votre mot de passe"
               className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
             />
           </div>
 
           <button
+            type="submit"
             disabled={loading}
             className="mt-2 inline-flex h-11 items-center justify-center rounded-md bg-orange-500 px-5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:opacity-60"
           >

@@ -179,7 +179,7 @@ export default function ConnexionPro() {
               className="text-slate-600 hover:text-orange-600 hover:underline"
               onClick={resetPassword}
             >
-              Mot de passe oublié
+              Mot de passe oublié ?
             </button>
 
             <Link

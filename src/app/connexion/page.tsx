@@ -112,9 +112,18 @@ export default function ConnexionParticulierPage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
-                  Mot de passe
-                </label>
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Mot de passe
+                  </label>
+
+                  <Link
+                    href="/mot-de-passe-oublie"
+                    className="text-sm font-medium text-orange-600 hover:underline"
+                  >
+                    Mot de passe oublié ?
+                  </Link>
+                </div>
 
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
