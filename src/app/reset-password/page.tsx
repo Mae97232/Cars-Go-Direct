@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const supabase = createClient();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -31,13 +31,12 @@ export default function ResetPasswordPage() {
           const { error } = await supabase.auth.exchangeCodeForSession(code);
 
           if (error) {
-            if (mounted) {
-              setErrorMessage(
-                "Le lien de réinitialisation est invalide ou a expiré."
-              );
-              setHasRecoverySession(false);
-              setCheckingSession(false);
-            }
+            if (!mounted) return;
+            setErrorMessage(
+              "Le lien de réinitialisation est invalide ou a expiré."
+            );
+            setHasRecoverySession(false);
+            setCheckingSession(false);
             return;
           }
         }
@@ -190,5 +189,21 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-white px-4">
+          <div className="rounded-xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+            Chargement...
+          </div>
+        </div>
+      }
+    >
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
