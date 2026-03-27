@@ -1,23 +1,83 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ResetPasswordPage() {
   const supabase = createClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
+  const [hasRecoverySession, setHasRecoverySession] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function initRecoverySession() {
+      setCheckingSession(true);
+      setErrorMessage("");
+
+      try {
+        const code = searchParams.get("code");
+
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+          if (error) {
+            if (mounted) {
+              setErrorMessage(
+                "Le lien de réinitialisation est invalide ou a expiré."
+              );
+              setHasRecoverySession(false);
+              setCheckingSession(false);
+            }
+            return;
+          }
+        }
+
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!mounted) return;
+
+        if (!session) {
+          setErrorMessage(
+            "Session de réinitialisation introuvable. Veuillez redemander un nouveau lien."
+          );
+          setHasRecoverySession(false);
+          setCheckingSession(false);
+          return;
+        }
+
+        setHasRecoverySession(true);
+        setCheckingSession(false);
+      } catch {
+        if (!mounted) return;
+        setErrorMessage("Impossible de vérifier le lien de réinitialisation.");
+        setHasRecoverySession(false);
+        setCheckingSession(false);
+      }
+    }
+
+    initRecoverySession();
+
+    return () => {
+      mounted = false;
+    };
+  }, [searchParams, supabase]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (loading) return;
+    if (loading || checkingSession || !hasRecoverySession) return;
 
     setLoading(true);
     setErrorMessage("");
@@ -40,7 +100,9 @@ export default function ResetPasswordPage() {
     });
 
     if (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(
+        error.message || "Impossible de mettre à jour le mot de passe."
+      );
       setLoading(false);
       return;
     }
@@ -48,17 +110,15 @@ export default function ResetPasswordPage() {
     setSuccessMessage("Votre mot de passe a été réinitialisé avec succès.");
 
     setTimeout(() => {
-      router.push("/pro/dashboard/securite");
-    }, 1200);
+      router.replace("/pro/connexion");
+    }, 1500);
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white to-slate-50 px-4">
       <div className="w-full max-w-md">
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)]">
-
-          {/* Icône */}
-          <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-orange-50 text-orange-600 text-lg">
+          <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-orange-50 text-lg text-orange-600">
             🔒
           </div>
 
@@ -71,7 +131,6 @@ export default function ResetPasswordPage() {
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-
             <div>
               <label className="mb-1.5 block text-xs font-medium text-slate-700">
                 Nouveau mot de passe
@@ -81,7 +140,8 @@ export default function ResetPasswordPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
-                className="h-11 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+                disabled={checkingSession || !hasRecoverySession || loading}
+                className="h-11 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 disabled:cursor-not-allowed disabled:bg-slate-50"
               />
             </div>
 
@@ -94,30 +154,38 @@ export default function ResetPasswordPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 autoComplete="new-password"
-                className="h-11 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
+                disabled={checkingSession || !hasRecoverySession || loading}
+                className="h-11 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 disabled:cursor-not-allowed disabled:bg-slate-50"
               />
             </div>
 
-            {errorMessage && (
+            {checkingSession ? (
+              <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                Vérification du lien de réinitialisation...
+              </div>
+            ) : null}
+
+            {errorMessage ? (
               <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                 {errorMessage}
               </div>
-            )}
+            ) : null}
 
-            {successMessage && (
+            {successMessage ? (
               <div className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
                 {successMessage}
               </div>
-            )}
+            ) : null}
 
             <button
               type="submit"
-              disabled={loading}
-              className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-md bg-orange-500 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:opacity-60"
+              disabled={loading || checkingSession || !hasRecoverySession}
+              className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-md bg-orange-500 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Enregistrement..." : "Enregistrer le nouveau mot de passe"}
+              {loading
+                ? "Enregistrement..."
+                : "Enregistrer le nouveau mot de passe"}
             </button>
-
           </form>
         </div>
       </div>
