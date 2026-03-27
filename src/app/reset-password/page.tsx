@@ -23,6 +23,7 @@ function ResetPasswordContent() {
     async function initRecoverySession() {
       setCheckingSession(true);
       setErrorMessage("");
+      setSuccessMessage("");
 
       try {
         const code = searchParams.get("code");
@@ -192,17 +193,19 @@ function ResetPasswordContent() {
   );
 }
 
+function ResetPasswordFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-white px-4">
+      <div className="rounded-xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+        Chargement...
+      </div>
+    </div>
+  );
+}
+
 export default function ResetPasswordPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center bg-white px-4">
-          <div className="rounded-xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
-            Chargement...
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<ResetPasswordFallback />}>
       <ResetPasswordContent />
     </Suspense>
   );

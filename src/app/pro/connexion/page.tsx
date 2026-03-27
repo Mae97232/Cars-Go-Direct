@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function ConnexionPro() {
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showResetModal, setShowResetModal] = useState(false);
@@ -109,30 +110,41 @@ export default function ConnexionPro() {
     }
   }
 
-  async function handleResetPassword() {
+  async function handleResetPassword(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (resetLoading) return;
+
     if (!resetEmail.trim()) {
       setErrorMessage("Veuillez entrer votre email.");
       return;
     }
 
+    setResetLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
 
-    const { error } = await supabase.auth.resetPasswordForEmail(
-      resetEmail.trim(),
-      {
-        redirectTo: `${window.location.origin}/reset-password`,
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        resetEmail.trim(),
+        {
+          redirectTo: `${window.location.origin}/reset-password`,
+        }
+      );
+
+      if (error) {
+        setErrorMessage("Impossible d’envoyer l’email de réinitialisation.");
+        return;
       }
-    );
 
-    if (error) {
+      setSuccessMessage("Email de réinitialisation envoyé.");
+      setShowResetModal(false);
+      setResetEmail("");
+    } catch {
       setErrorMessage("Impossible d’envoyer l’email de réinitialisation.");
-      return;
+    } finally {
+      setResetLoading(false);
     }
-
-    setSuccessMessage("Email de réinitialisation envoyé.");
-    setShowResetModal(false);
-    setResetEmail("");
   }
 
   return (
@@ -218,7 +230,7 @@ export default function ConnexionPro() {
         </div>
       </div>
 
-      {showResetModal && (
+      {showResetModal ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
           <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
             <h2 className="text-xl font-semibold text-slate-900">
@@ -229,42 +241,44 @@ export default function ConnexionPro() {
               Entrez votre email pour recevoir un lien de réinitialisation.
             </p>
 
-            <div className="mt-5">
+            <form onSubmit={handleResetPassword} className="mt-5">
               <label className="mb-1.5 block text-xs font-medium text-slate-700">
                 Email
               </label>
+
               <input
                 type="email"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
                 placeholder="votre@email.com"
+                autoComplete="email"
                 className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
               />
-            </div>
 
-            <div className="mt-6 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowResetModal(false);
-                  setResetEmail("");
-                }}
-                className="inline-flex h-10 items-center justify-center rounded-md border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-              >
-                Annuler
-              </button>
+              <div className="mt-6 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowResetModal(false);
+                    setResetEmail("");
+                  }}
+                  className="inline-flex h-10 items-center justify-center rounded-md border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                >
+                  Annuler
+                </button>
 
-              <button
-                type="button"
-                onClick={handleResetPassword}
-                className="inline-flex h-10 items-center justify-center rounded-md bg-orange-500 px-4 text-sm font-medium text-white transition hover:bg-orange-600"
-              >
-                Envoyer le lien
-              </button>
-            </div>
+                <button
+                  type="submit"
+                  disabled={resetLoading}
+                  className="inline-flex h-10 items-center justify-center rounded-md bg-orange-500 px-4 text-sm font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {resetLoading ? "Envoi..." : "Envoyer le lien"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      )}
+      ) : null}
     </>
   );
 }
