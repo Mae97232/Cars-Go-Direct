@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 
+type AccountKind = "pro" | "particulier";
+
 function ResetPasswordContent() {
   const supabase = createClient();
   const router = useRouter();
@@ -17,6 +19,7 @@ function ResetPasswordContent() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [accountKind, setAccountKind] = useState<AccountKind>("particulier");
 
   useEffect(() => {
     let mounted = true;
@@ -52,9 +55,20 @@ function ResetPasswordContent() {
           return;
         }
 
-        // 🔥 important : on sait quel compte est modifié
         setUserEmail(user.email ?? "");
 
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role, account_type")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (!mounted) return;
+
+        const isPro =
+          profile?.role === "pro" || profile?.account_type === "pro";
+
+        setAccountKind(isPro ? "pro" : "particulier");
         setHasRecoverySession(true);
         setCheckingSession(false);
       } catch {
@@ -105,13 +119,17 @@ function ResetPasswordContent() {
       return;
     }
 
-    // 🔥 CRUCIAL : on déconnecte après reset
     await supabase.auth.signOut();
 
     setSuccessMessage("Votre mot de passe a été réinitialisé avec succès.");
 
     setTimeout(() => {
-      router.replace("/pro/connexion");
+      if (accountKind === "pro") {
+        router.replace("/pro/connexion");
+        return;
+      }
+
+      router.replace("/connexion");
     }, 1500);
   }
 
@@ -120,7 +138,7 @@ function ResetPasswordContent() {
       <div className="w-full max-w-md">
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)]">
           <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-orange-50 text-lg text-orange-600">
-            🔒
+            
           </div>
 
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
@@ -131,12 +149,11 @@ function ResetPasswordContent() {
             Entrez votre nouveau mot de passe pour sécuriser votre compte.
           </p>
 
-          {/* 🔥 affichage du compte */}
-          {userEmail && (
+          {userEmail ? (
             <p className="mt-2 text-xs text-slate-500">
               Compte : <strong>{userEmail}</strong>
             </p>
-          )}
+          ) : null}
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
@@ -167,23 +184,23 @@ function ResetPasswordContent() {
               />
             </div>
 
-            {checkingSession && (
+            {checkingSession ? (
               <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
                 Vérification du lien de réinitialisation...
               </div>
-            )}
+            ) : null}
 
-            {errorMessage && (
+            {errorMessage ? (
               <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                 {errorMessage}
               </div>
-            )}
+            ) : null}
 
-            {successMessage && (
+            {successMessage ? (
               <div className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
                 {successMessage}
               </div>
-            )}
+            ) : null}
 
             <button
               type="submit"
