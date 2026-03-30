@@ -16,39 +16,34 @@ function ResetPasswordContent() {
   const [hasRecoverySession, setHasRecoverySession] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     let mounted = true;
 
-    async function initRecoverySession() {
+    async function checkSession() {
       setCheckingSession(true);
       setErrorMessage("");
       setSuccessMessage("");
 
       try {
-        const code = searchParams.get("code");
+        const error = searchParams.get("error");
 
-        if (code) {
-          const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-          if (error) {
-            if (!mounted) return;
-            setErrorMessage(
-              "Le lien de réinitialisation est invalide ou a expiré."
-            );
-            setHasRecoverySession(false);
-            setCheckingSession(false);
-            return;
-          }
+        if (error === "invalid_or_expired") {
+          setErrorMessage("Le lien de réinitialisation est invalide ou a expiré.");
+          setHasRecoverySession(false);
+          setCheckingSession(false);
+          return;
         }
 
         const {
-          data: { session },
-        } = await supabase.auth.getSession();
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
 
         if (!mounted) return;
 
-        if (!session) {
+        if (userError || !user) {
           setErrorMessage(
             "Session de réinitialisation introuvable. Veuillez redemander un nouveau lien."
           );
@@ -56,6 +51,9 @@ function ResetPasswordContent() {
           setCheckingSession(false);
           return;
         }
+
+        // 🔥 important : on sait quel compte est modifié
+        setUserEmail(user.email ?? "");
 
         setHasRecoverySession(true);
         setCheckingSession(false);
@@ -67,7 +65,7 @@ function ResetPasswordContent() {
       }
     }
 
-    initRecoverySession();
+    checkSession();
 
     return () => {
       mounted = false;
@@ -107,6 +105,9 @@ function ResetPasswordContent() {
       return;
     }
 
+    // 🔥 CRUCIAL : on déconnecte après reset
+    await supabase.auth.signOut();
+
     setSuccessMessage("Votre mot de passe a été réinitialisé avec succès.");
 
     setTimeout(() => {
@@ -129,6 +130,13 @@ function ResetPasswordContent() {
           <p className="mt-2 text-sm text-slate-600">
             Entrez votre nouveau mot de passe pour sécuriser votre compte.
           </p>
+
+          {/* 🔥 affichage du compte */}
+          {userEmail && (
+            <p className="mt-2 text-xs text-slate-500">
+              Compte : <strong>{userEmail}</strong>
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
@@ -159,23 +167,23 @@ function ResetPasswordContent() {
               />
             </div>
 
-            {checkingSession ? (
+            {checkingSession && (
               <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
                 Vérification du lien de réinitialisation...
               </div>
-            ) : null}
+            )}
 
-            {errorMessage ? (
+            {errorMessage && (
               <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                 {errorMessage}
               </div>
-            ) : null}
+            )}
 
-            {successMessage ? (
+            {successMessage && (
               <div className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
                 {successMessage}
               </div>
-            ) : null}
+            )}
 
             <button
               type="submit"

@@ -4,11 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const origin = requestUrl.origin;
+  const code = requestUrl.searchParams.get("code");
 
-  const token_hash = requestUrl.searchParams.get("token_hash");
-  const type = requestUrl.searchParams.get("type");
-
-  if (!token_hash || type !== "recovery") {
+  if (!code) {
     return NextResponse.redirect(
       `${origin}/reset-password?error=invalid_or_expired`
     );
@@ -16,10 +14,7 @@ export async function GET(request: Request) {
 
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.verifyOtp({
-    token_hash,
-    type: "recovery",
-  });
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
     return NextResponse.redirect(
