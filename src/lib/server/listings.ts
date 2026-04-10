@@ -16,8 +16,6 @@ export async function getListings() {
       city,
       department,
       status,
-      views,
-      contacts,
       created_at,
       pro_accounts (
         id,
