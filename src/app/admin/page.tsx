@@ -2,38 +2,30 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth-guard";
 import { getProAccounts } from "@/lib/server/pro-accounts";
 import { getListings } from "@/lib/server/listings";
+import { getAllUsersForAdmin } from "@/lib/server/admin-users";
+import { getAdsForAdmin } from "@/lib/server/admin-ads";
+import { getAdminLogs } from "@/lib/server/admin-logs";
 import AdminProActions from "@/components/AdminProActions";
 import AdminListingActions from "@/components/Adminlistingactions";
-
-const payments = [
-  {
-    id: "pay_1",
-    garage: "Garage Normandie Auto",
-    listing: "Volkswagen Golf 6",
-    amount: 7,
-    status: "Payé",
-    createdAt: "2026-03-01",
-  },
-  {
-    id: "pay_2",
-    garage: "Rouen Utilitaires",
-    listing: "Renault Master L2H2",
-    amount: 7,
-    status: "En attente",
-    createdAt: "2026-03-03",
-  },
-  {
-    id: "pay_3",
-    garage: "Caen Véhicules Pro",
-    listing: "Peugeot Partner",
-    amount: 7,
-    status: "Échoué",
-    createdAt: "2026-03-05",
-  },
-];
+import AdminUserActions from "@/components/AdminUserActions";
+import AdminAdActions from "@/components/AdminAdActions";
 
 function formatPriceEUR(value: number) {
   return value.toLocaleString("fr-FR") + " €";
+}
+
+function formatDate(value?: string | null) {
+  if (!value) return "—";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleDateString("fr-FR");
+}
+
+function formatDateTime(value?: string | null) {
+  if (!value) return "—";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleString("fr-FR");
 }
 
 function badgeClass(status: string) {
@@ -43,20 +35,29 @@ function badgeClass(status: string) {
     case "Publiée":
     case "published":
     case "Payé":
-      return "bg-green-50 text-green-700 border-green-200";
+    case "active":
+    case "Actif":
+    case "Active":
+      return "border-emerald-200 bg-emerald-50 text-emerald-700";
     case "En attente":
     case "pending":
     case "manual_review":
-      return "bg-amber-50 text-amber-700 border-amber-200";
+    case "paused":
+    case "Pause":
+    case "En pause":
+      return "border-amber-200 bg-amber-50 text-amber-700";
     case "Refusé":
     case "rejected":
     case "Échoué":
-      return "bg-red-50 text-red-700 border-red-200";
+    case "archived":
+    case "Suspendu":
+    case "Archivée":
+      return "border-red-200 bg-red-50 text-red-700";
     case "Brouillon":
     case "draft":
-      return "bg-slate-50 text-slate-700 border-slate-200";
+      return "border-slate-200 bg-slate-50 text-slate-600";
     default:
-      return "bg-slate-50 text-slate-700 border-slate-200";
+      return "border-slate-200 bg-slate-50 text-slate-600";
   }
 }
 
@@ -90,11 +91,72 @@ function formatListingStatus(status: string) {
   }
 }
 
+function formatAdStatus(status: string) {
+  switch (status) {
+    case "active":
+      return "Active";
+    case "paused":
+      return "En pause";
+    case "archived":
+      return "Archivée";
+    case "draft":
+      return "Brouillon";
+    default:
+      return status;
+  }
+}
+
+function StatBlock({
+  label,
+  value,
+}: {
+  label: string;
+  value: number | string;
+}) {
+  return (
+    <div className="border-b border-[#ececec] py-3">
+      <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
+        {label}
+      </p>
+      <p className="mt-1 text-[20px] font-semibold tracking-tight text-black">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function SectionTitle({
+  title,
+  text,
+  action,
+}: {
+  title: string;
+  text?: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-3 border-b border-[#ececec] pb-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h2 className="text-[15px] font-semibold tracking-tight text-black">
+          {title}
+        </h2>
+        {text ? <p className="mt-1 text-[12px] text-slate-500">{text}</p> : null}
+      </div>
+      {action ? <div>{action}</div> : null}
+    </div>
+  );
+}
+
 export default async function AdminPage() {
   await requireAdmin();
 
-  const pros = await getProAccounts();
-  const listings = await getListings();
+  const [pros, listings, users, ads, adminLogs] = await Promise.all([
+    getProAccounts(),
+    getListings(),
+    getAllUsersForAdmin(),
+    getAdsForAdmin(),
+    getAdminLogs(),
+  ]);
 
   const totalPros = pros.length;
   const pendingPros = pros.filter(
@@ -104,108 +166,212 @@ export default async function AdminPage() {
   ).length;
 
   const pendingListings = listings.filter((l: any) => l.status === "pending").length;
+  const publishedListings = listings.filter((l: any) => l.status === "published").length;
+  const draftListings = listings.filter((l: any) => l.status === "draft").length;
 
-  const paidPayments = payments.filter((p) => p.status === "Payé").length;
-  const totalRevenue = payments
-    .filter((p) => p.status === "Payé")
-    .reduce((sum, p) => sum + p.amount, 0);
+  const totalUsers = users.length;
+  const totalBuyers = users.filter((u: any) => u.kind === "Particulier").length;
+  const totalAdmins = users.filter((u: any) => u.is_admin).length;
+  const suspendedUsers = users.filter((u: any) => u.is_suspended).length;
+  const activeAds = ads.filter((ad: any) => ad.status === "active").length;
 
   return (
-    <div className="grid gap-6">
-      <section className="card p-6 sm:p-7">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <p className="text-sm text-slate-500">Administration</p>
-            <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight">
+    <div className="mx-auto w-full max-w-[1500px] bg-white px-4 py-6 text-[13px] text-slate-700 sm:px-6 sm:py-8 lg:px-8">
+      <section className="border-b border-[#ececec] pb-8">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
+              Administration
+            </p>
+            <h1 className="mt-2 text-[28px] font-semibold tracking-[-0.03em] text-black sm:text-[34px]">
               Tableau de bord admin
             </h1>
-            <p className="mt-2 text-sm text-slate-600">
-              Gérez les comptes professionnels, les annonces et les paiements de la
-              plateforme.
+            <p className="mt-3 max-w-2xl text-[13px] leading-6 text-slate-500">
+              Gérez les utilisateurs, les comptes professionnels, les annonces,
+              les publicités et l’historique de la plateforme dans une interface
+              plus sobre, plus plate et plus claire.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Link href="/annonces" className="btn btn-secondary">
+            <Link
+              href="/annonces"
+              className="inline-flex h-10 items-center justify-center border border-[#e5e7eb] bg-white px-4 text-[12px] font-medium text-slate-700 transition hover:border-black hover:text-black"
+            >
               Voir la plateforme
             </Link>
-            <Link href="/pro/dashboard" className="btn btn-secondary">
+            <Link
+              href="/pro/dashboard"
+              className="inline-flex h-10 items-center justify-center border border-[#e5e7eb] bg-white px-4 text-[12px] font-medium text-slate-700 transition hover:border-black hover:text-black"
+            >
               Espace pro
+            </Link>
+            <Link
+              href="/admin/publicites/nouvelle"
+              className="inline-flex h-10 items-center justify-center border border-black bg-black px-4 text-[12px] font-medium text-white transition hover:opacity-90"
+            >
+              Nouvelle publicité
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <div className="card p-5">
-          <p className="text-sm text-slate-500">Comptes pros</p>
-          <p className="mt-2 text-2xl font-extrabold">{totalPros}</p>
+      <section className="grid gap-x-10 gap-y-1 border-b border-[#ececec] py-8 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+        <StatBlock label="Utilisateurs" value={totalUsers} />
+        <StatBlock label="Particuliers" value={totalBuyers} />
+        <StatBlock label="Comptes pros" value={totalPros} />
+        <StatBlock label="Pros en attente" value={pendingPros} />
+        <StatBlock label="Annonces à modérer" value={pendingListings} />
+        <StatBlock label="Annonces publiées" value={publishedListings} />
+        <StatBlock label="Brouillons" value={draftListings} />
+        <StatBlock label="Admins" value={totalAdmins} />
+        <StatBlock label="Comptes suspendus" value={suspendedUsers} />
+        <StatBlock label="Pubs actives" value={activeAds} />
+      </section>
+
+      <section className="py-8">
+        <SectionTitle
+          title="Utilisateurs"
+          text="Gestion des particuliers, professionnels et administrateurs."
+        />
+
+        <div className="mt-5 hidden overflow-x-auto lg:block">
+          <table className="w-full min-w-[980px] border-collapse text-left">
+            <thead>
+              <tr className="border-b border-[#ececec] text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                <th className="py-3 pr-4 font-medium">Email</th>
+                <th className="py-3 pr-4 font-medium">Type</th>
+                <th className="py-3 pr-4 font-medium">Garage</th>
+                <th className="py-3 pr-4 font-medium">Statut</th>
+                <th className="py-3 pr-4 font-medium">Admin</th>
+                <th className="py-3 pr-4 font-medium">Inscrit le</th>
+                <th className="py-3 text-right font-medium">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((item: any) => (
+                <tr key={item.id} className="border-b border-[#f1f1f1] align-top">
+                  <td className="py-4 pr-4 text-[13px] font-medium text-black">
+                    {item.email}
+                  </td>
+                  <td className="py-4 pr-4 text-[12px] text-slate-600">{item.kind}</td>
+                  <td className="py-4 pr-4 text-[12px] text-slate-600">
+                    {item.garage_name ?? "—"}
+                  </td>
+                  <td className="py-4 pr-4">
+                    <span
+                      className={`inline-flex items-center border px-2.5 py-1 text-[11px] font-medium ${badgeClass(
+                        item.is_suspended ? "Suspendu" : "Actif"
+                      )}`}
+                    >
+                      {item.is_suspended ? "Suspendu" : "Actif"}
+                    </span>
+                  </td>
+                  <td className="py-4 pr-4 text-[12px] text-slate-600">
+                    {item.is_admin ? "Oui" : "Non"}
+                  </td>
+                  <td className="py-4 pr-4 text-[12px] text-slate-600">
+                    {formatDate(item.created_at)}
+                  </td>
+                  <td className="py-4 text-right">
+                    <div className="flex justify-end gap-2">
+                      <AdminUserActions
+                        userId={item.id}
+                        isSuspended={item.is_suspended}
+                        isAdmin={item.is_admin}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        <div className="card p-5">
-          <p className="text-sm text-slate-500">Pros en attente</p>
-          <p className="mt-2 text-2xl font-extrabold">{pendingPros}</p>
-        </div>
+        <div className="mt-5 grid gap-0 lg:hidden">
+          {users.map((item: any) => (
+            <div key={item.id} className="border-b border-[#ececec] py-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="truncate text-[13px] font-medium text-black">
+                    {item.email}
+                  </h3>
+                  <p className="mt-1 text-[12px] text-slate-500">{item.kind}</p>
+                </div>
+                <span
+                  className={`inline-flex items-center border px-2.5 py-1 text-[11px] font-medium ${badgeClass(
+                    item.is_suspended ? "Suspendu" : "Actif"
+                  )}`}
+                >
+                  {item.is_suspended ? "Suspendu" : "Actif"}
+                </span>
+              </div>
 
-        <div className="card p-5">
-          <p className="text-sm text-slate-500">Annonces à modérer</p>
-          <p className="mt-2 text-2xl font-extrabold">{pendingListings}</p>
-        </div>
+              <div className="mt-3 grid gap-1 text-[12px] text-slate-600">
+                <p>Garage : {item.garage_name ?? "—"}</p>
+                <p>Admin : {item.is_admin ? "Oui" : "Non"}</p>
+                <p>Inscrit le : {formatDate(item.created_at)}</p>
+              </div>
 
-        <div className="card p-5">
-          <p className="text-sm text-slate-500">Paiements validés</p>
-          <p className="mt-2 text-2xl font-extrabold">{paidPayments}</p>
-        </div>
-
-        <div className="card p-5">
-          <p className="text-sm text-slate-500">Revenus</p>
-          <p className="mt-2 text-2xl font-extrabold">{formatPriceEUR(totalRevenue)}</p>
+              <div className="mt-4">
+                <AdminUserActions
+                  userId={item.id}
+                  isSuspended={item.is_suspended}
+                  isAdmin={item.is_admin}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="card overflow-hidden">
-        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-6 py-4">
-          <div>
-            <h2 className="text-lg font-bold tracking-tight">Comptes professionnels</h2>
-            <p className="text-sm text-slate-600">Validation des garages et contrôle SIRET.</p>
-          </div>
-        </div>
+      <section className="border-t border-[#ececec] py-8">
+        <SectionTitle
+          title="Comptes professionnels"
+          text="Validation des garages, contrôle SIRET et suivi du statut."
+        />
 
-        <div className="hidden lg:block overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="border-b border-slate-200 bg-slate-50/70 text-slate-600">
-              <tr>
-                <th className="px-5 py-4 text-left font-semibold">Garage</th>
-                <th className="px-5 py-4 text-left font-semibold">Email</th>
-                <th className="px-5 py-4 text-left font-semibold">SIRET</th>
-                <th className="px-5 py-4 text-left font-semibold">Ville</th>
-                <th className="px-5 py-4 text-left font-semibold">Statut</th>
-                <th className="px-5 py-4 text-left font-semibold">Créé le</th>
-                <th className="px-5 py-4 text-right font-semibold">Actions</th>
+        <div className="mt-5 hidden overflow-x-auto lg:block">
+          <table className="w-full min-w-[980px] border-collapse text-left">
+            <thead>
+              <tr className="border-b border-[#ececec] text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                <th className="py-3 pr-4 font-medium">Garage</th>
+                <th className="py-3 pr-4 font-medium">Email</th>
+                <th className="py-3 pr-4 font-medium">SIRET</th>
+                <th className="py-3 pr-4 font-medium">Ville</th>
+                <th className="py-3 pr-4 font-medium">Statut</th>
+                <th className="py-3 pr-4 font-medium">Créé le</th>
+                <th className="py-3 text-right font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
               {pros.map((item: any) => (
-                <tr key={item.id} className="border-b border-slate-200 last:border-0">
-                  <td className="px-5 py-4 font-semibold text-slate-900">
+                <tr key={item.id} className="border-b border-[#f1f1f1] align-top">
+                  <td className="py-4 pr-4 text-[13px] font-medium text-black">
                     {item.garage_name}
                   </td>
-                  <td className="px-5 py-4">{item.profiles?.email ?? "—"}</td>
-                  <td className="px-5 py-4">{item.siret}</td>
-                  <td className="px-5 py-4">{item.city ?? "—"}</td>
-                  <td className="px-5 py-4">
+                  <td className="py-4 pr-4 text-[12px] text-slate-600">
+                    {item.profiles?.email ?? "—"}
+                  </td>
+                  <td className="py-4 pr-4 text-[12px] text-slate-600">
+                    {item.siret}
+                  </td>
+                  <td className="py-4 pr-4 text-[12px] text-slate-600">
+                    {item.city ?? "—"}
+                  </td>
+                  <td className="py-4 pr-4">
                     <span
-                      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass(
+                      className={`inline-flex items-center border px-2.5 py-1 text-[11px] font-medium ${badgeClass(
                         item.verification_status
                       )}`}
                     >
                       {formatVerificationStatus(item.verification_status)}
                     </span>
                   </td>
-                  <td className="px-5 py-4">
-                    {new Date(item.created_at).toLocaleDateString("fr-FR")}
+                  <td className="py-4 pr-4 text-[12px] text-slate-600">
+                    {formatDate(item.created_at)}
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="py-4 text-right">
                     <div className="flex justify-end gap-2">
                       <AdminProActions proId={item.id} />
                     </div>
@@ -216,16 +382,20 @@ export default async function AdminPage() {
           </table>
         </div>
 
-        <div className="grid gap-4 p-4 lg:hidden">
+        <div className="mt-5 grid gap-0 lg:hidden">
           {pros.map((item: any) => (
-            <div key={item.id} className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div key={item.id} className="border-b border-[#ececec] py-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h3 className="font-semibold">{item.garage_name}</h3>
-                  <p className="mt-1 text-sm text-slate-600">{item.city ?? "—"}</p>
+                  <h3 className="text-[13px] font-medium text-black">
+                    {item.garage_name}
+                  </h3>
+                  <p className="mt-1 text-[12px] text-slate-500">
+                    {item.city ?? "—"}
+                  </p>
                 </div>
                 <span
-                  className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass(
+                  className={`inline-flex items-center border px-2.5 py-1 text-[11px] font-medium ${badgeClass(
                     item.verification_status
                   )}`}
                 >
@@ -233,17 +403,10 @@ export default async function AdminPage() {
                 </span>
               </div>
 
-              <div className="mt-4 grid gap-2 text-sm">
-                <p>
-                  <span className="text-slate-500">Email :</span> {item.profiles?.email ?? "—"}
-                </p>
-                <p>
-                  <span className="text-slate-500">SIRET :</span> {item.siret}
-                </p>
-                <p>
-                  <span className="text-slate-500">Créé le :</span>{" "}
-                  {new Date(item.created_at).toLocaleDateString("fr-FR")}
-                </p>
+              <div className="mt-3 grid gap-1 text-[12px] text-slate-600">
+                <p>Email : {item.profiles?.email ?? "—"}</p>
+                <p>SIRET : {item.siret}</p>
+                <p>Créé le : {formatDate(item.created_at)}</p>
               </div>
 
               <div className="mt-4">
@@ -254,92 +417,146 @@ export default async function AdminPage() {
         </div>
       </section>
 
-      <section className="card overflow-hidden">
-        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-6 py-4">
-          <div>
-            <h2 className="text-lg font-bold tracking-tight">Annonces</h2>
-            <p className="text-sm text-slate-600">Modération et suivi des annonces publiées.</p>
-          </div>
-        </div>
+      <section className="border-t border-[#ececec] py-8">
+        <SectionTitle
+          title="Annonces"
+          text="Modération et suivi des annonces publiées sur la plateforme."
+        />
 
-        <div className="grid gap-4 p-4">
+        <div className="mt-4">
           {listings.length ? (
-            listings.map((item: any) => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 lg:flex-row lg:items-center lg:justify-between"
-              >
-                <div className="min-w-0">
-                  <h3 className="font-semibold">{item.title}</h3>
-                  <p className="mt-1 text-sm text-slate-600">
-                    {item.pro_accounts?.garage_name ?? "Garage inconnu"} • {item.city} •{" "}
-                    {formatPriceEUR(item.price)}
-                  </p>
-                  <div className="mt-2">
-                    <span
-                      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass(
-                        item.status
-                      )}`}
+            <div className="grid gap-0">
+              {listings.map((item: any) => (
+                <div
+                  key={item.id}
+                  className="flex flex-col gap-4 border-b border-[#ececec] py-4 lg:flex-row lg:items-center lg:justify-between"
+                >
+                  <div className="min-w-0">
+                    <h3 className="truncate text-[13px] font-medium text-black">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 text-[12px] text-slate-500">
+                      {item.pro_accounts?.garage_name ?? "Garage inconnu"} •{" "}
+                      {item.city} • {formatPriceEUR(item.price ?? 0)}
+                    </p>
+                    <div className="mt-2">
+                      <span
+                        className={`inline-flex items-center border px-2.5 py-1 text-[11px] font-medium ${badgeClass(
+                          item.status
+                        )}`}
+                      >
+                        {formatListingStatus(item.status)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <Link
+                      href={`/annonces/${item.id}`}
+                      className="inline-flex h-9 items-center justify-center border border-[#e5e7eb] bg-white px-4 text-[12px] font-medium text-slate-700 transition hover:border-black hover:text-black"
                     >
-                      {formatListingStatus(item.status)}
-                    </span>
+                      Voir
+                    </Link>
+                    <AdminListingActions listingId={item.id} />
                   </div>
                 </div>
-
-                <div className="flex flex-wrap gap-2">
-                  <Link href={`/annonces/${item.id}`} className="btn btn-secondary !px-4 !py-2">
-                    Voir
-                  </Link>
-                  <AdminListingActions listingId={item.id} />
-                </div>
-              </div>
-            ))
+              ))}
+            </div>
           ) : (
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-500">
+            <div className="border-b border-[#ececec] py-4 text-[12px] text-slate-500">
               Aucune annonce pour le moment.
             </div>
           )}
         </div>
       </section>
 
-      <section className="card overflow-hidden">
-        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-6 py-4">
-          <div>
-            <h2 className="text-lg font-bold tracking-tight">Paiements</h2>
-            <p className="text-sm text-slate-600">
-              Suivi des paiements liés à la publication des annonces.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid gap-4 p-4">
-          {payments.map((item) => (
-            <div
-              key={item.id}
-              className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 lg:flex-row lg:items-center lg:justify-between"
+      <section className="border-t border-[#ececec] py-8">
+        <SectionTitle
+          title="Publicités"
+          text="Gestion des campagnes publicitaires du site."
+          action={
+            <Link
+              href="/admin/publicites/nouvelle"
+              className="inline-flex h-9 items-center justify-center border border-black bg-black px-4 text-[12px] font-medium text-white transition hover:opacity-90"
             >
-              <div>
-                <h3 className="font-semibold">{item.listing}</h3>
-                <p className="mt-1 text-sm text-slate-600">
-                  {item.garage} • {formatPriceEUR(item.amount)} • {item.createdAt}
-                </p>
-              </div>
+              Nouvelle publicité
+            </Link>
+          }
+        />
 
-              <div className="flex items-center gap-2">
-                <span
-                  className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass(
-                    item.status
-                  )}`}
+        <div className="mt-4">
+          {ads.length ? (
+            <div className="grid gap-0">
+              {ads.map((item: any) => (
+                <div
+                  key={item.id}
+                  className="flex flex-col gap-4 border-b border-[#ececec] py-4 lg:flex-row lg:items-center lg:justify-between"
                 >
-                  {item.status}
-                </span>
+                  <div className="min-w-0">
+                    <h3 className="truncate text-[13px] font-medium text-black">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 text-[12px] text-slate-500">
+                      Placement : {item.placement} • Statut :{" "}
+                      {formatAdStatus(item.status)}
+                    </p>
+                    {item.link_url ? (
+                      <p className="mt-1 truncate text-[11px] text-slate-400">
+                        Lien : {item.link_url}
+                      </p>
+                    ) : null}
+                  </div>
 
-                <button className="btn btn-secondary !px-4 !py-2">
-                  Détails
-                </button>
-              </div>
+                  <AdminAdActions adId={item.id} status={item.status} />
+                </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div className="border-b border-[#ececec] py-4 text-[12px] text-slate-500">
+              Aucune publicité pour le moment.
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="border-t border-[#ececec] py-8">
+        <SectionTitle
+          title="Paiements"
+          text="Aucune donnée réelle affichée tant qu’aucune table de paiements n’est reliée à l’administration."
+        />
+
+        <div className="mt-4 border-b border-[#ececec] py-4 text-[12px] text-slate-500">
+          Aucun paiement réel n’est affiché pour le moment.
+        </div>
+      </section>
+
+      <section className="border-t border-[#ececec] py-8">
+        <SectionTitle
+          title="Historique admin"
+          text="Dernières actions effectuées dans le back-office."
+        />
+
+        <div className="mt-4">
+          {adminLogs.length ? (
+            <div className="grid gap-0">
+              {adminLogs.map((item: any) => (
+                <div key={item.id} className="border-b border-[#ececec] py-4">
+                  <p className="text-[13px] font-medium text-black">{item.action}</p>
+                  <p className="mt-1 text-[12px] text-slate-500">
+                    Cible : {item.target_type}
+                    {item.target_id ? ` • ${item.target_id}` : ""}
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-400">
+                    {formatDateTime(item.created_at)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="border-b border-[#ececec] py-4 text-[12px] text-slate-500">
+              Aucun log admin pour le moment.
+            </div>
+          )}
         </div>
       </section>
     </div>

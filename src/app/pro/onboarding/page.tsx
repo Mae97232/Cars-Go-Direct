@@ -28,7 +28,6 @@ export default function ProOnboardingPage() {
   const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [city, setCity] = useState("");
-  const [website, setWebsite] = useState("");
   const [email, setEmail] = useState("");
 
   const [company, setCompany] = useState<VerifiedCompany | null>(null);
@@ -42,15 +41,6 @@ export default function ProOnboardingPage() {
 
   function normalizeSiret(value: string) {
     return value.replace(/\D/g, "");
-  }
-
-  function normalizeWebsite(value: string) {
-    const trimmed = value.trim();
-    if (!trimmed) return "";
-    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
-      return trimmed;
-    }
-    return `https://${trimmed}`;
   }
 
   useEffect(() => {
@@ -105,7 +95,7 @@ export default function ProOnboardingPage() {
       const { data: proAccount } = await supabase
         .from("pro_accounts")
         .select(
-          "id, garage_name, siret, legal_name, city, ape_code, verification_status, phone, email, website, address, zip_code"
+          "id, garage_name, siret, legal_name, city, ape_code, verification_status, phone, email, address, zip_code"
         )
         .eq("profile_id", user.id)
         .maybeSingle();
@@ -120,10 +110,6 @@ export default function ProOnboardingPage() {
 
       if (proAccount?.email) {
         setEmail(proAccount.email);
-      }
-
-      if (proAccount?.website) {
-        setWebsite(proAccount.website);
       }
 
       if (proAccount?.address) {
@@ -253,7 +239,6 @@ export default function ProOnboardingPage() {
     setErrorMessage("");
 
     const cleanSiret = normalizeSiret(siret);
-    const normalizedWebsite = normalizeWebsite(website);
 
     const {
       data: { user },
@@ -304,7 +289,6 @@ export default function ProOnboardingPage() {
         verification_status: "approved",
         phone: phone.trim(),
         email: email.trim() || user.email || null,
-        website: normalizedWebsite || null,
         address: finalAddress,
         zip_code: finalZipCode,
       },
@@ -361,15 +345,15 @@ export default function ProOnboardingPage() {
           </h1>
 
           <p className="mt-2 text-sm text-slate-600">
-            Complétez les informations de votre garage. Le <strong>SIRET</strong> est
-            obligatoire pour vérifier votre activité. Ces informations nous serviront
-            aussi plus tard à relier votre garage à sa fiche Google.
+            Complétez les informations de votre garage. Le <strong>SIRET</strong>{" "}
+            est obligatoire pour vérifier votre activité. Ces informations nous
+            serviront aussi plus tard à relier votre garage à sa fiche Google.
           </p>
 
           <div className="mt-4 rounded-md border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-700">
             Après validation du SIRET, votre compte pro sera activé. Nom, ville,
-            adresse, téléphone et site web permettront ensuite d’identifier plus
-            facilement votre établissement.
+            adresse et téléphone permettront ensuite d’identifier plus facilement
+            votre établissement.
           </div>
 
           {errorMessage ? (
@@ -564,23 +548,6 @@ export default function ProOnboardingPage() {
                   className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                 />
               </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="website"
-                className="mb-1.5 block text-[12px] font-medium text-slate-700"
-              >
-                Site web
-              </label>
-              <input
-                id="website"
-                type="text"
-                placeholder="www.mon-garage.fr"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
-                className="h-12 w-full rounded-md border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
-              />
             </div>
 
             <button

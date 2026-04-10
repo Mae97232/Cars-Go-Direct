@@ -6,7 +6,6 @@ import {
   CarFront,
   Clock3,
   Eye,
-  Globe,
   Mail,
   MapPin,
   Phone,
@@ -29,7 +28,6 @@ type GarageData = {
   siret?: string | null;
   phone?: string | null;
   email?: string | null;
-  website?: string | null;
   address?: string | null;
   zip_code?: string | null;
   opening_hours?: string | null;
@@ -64,12 +62,6 @@ function getInitial(name: string | null | undefined) {
   return (name || "G").trim().charAt(0).toUpperCase();
 }
 
-function formatWebsite(url: string) {
-  if (!url) return "";
-  if (url.startsWith("http://") || url.startsWith("https://")) return url;
-  return `https://${url}`;
-}
-
 export default async function GaragePublicPage({ params }: GaragePageProps) {
   const { id } = await params;
   const supabase = await createClient();
@@ -77,7 +69,7 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
   const { data: garage, error: garageError } = await supabase
     .from("pro_accounts")
     .select(
-      "id, garage_name, city, verification_status, profile_id, siret, phone, email, website, address, zip_code, opening_hours, description"
+      "id, garage_name, city, verification_status, profile_id, siret, phone, email, address, zip_code, opening_hours, description"
     )
     .eq("id", id)
     .maybeSingle();
@@ -122,7 +114,6 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
   const fullAddress = [typedGarage.address, typedGarage.zip_code, displayCity]
     .filter(Boolean)
     .join(", ");
-  const websiteUrl = typedGarage.website ? formatWebsite(typedGarage.website) : "";
   const publishedListings = (listings || []) as ListingData[];
 
   return (
@@ -348,20 +339,6 @@ export default async function GaragePublicPage({ params }: GaragePageProps) {
                         className="break-all hover:text-orange-600"
                       >
                         {typedGarage.email}
-                      </a>
-                    </div>
-                  ) : null}
-
-                  {websiteUrl ? (
-                    <div className="flex items-start gap-3">
-                      <Globe className="mt-0.5 h-4 w-4 text-slate-400" />
-                      <a
-                        href={websiteUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="break-all hover:text-orange-600"
-                      >
-                        {typedGarage.website}
                       </a>
                     </div>
                   ) : null}

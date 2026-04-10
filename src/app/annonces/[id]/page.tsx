@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getListingById } from "@/lib/server/listing-detail";
 import ContactSellerCard from "@/components/ContactSellerCard";
 import FavoriteButton from "@/components/FavoriteButton";
+import ListingGallery from "@/components/ListingGallery";
 
 type ProAccount = {
   id?: string | number;
@@ -469,8 +470,6 @@ export default async function AnnonceDetailPage({
   const garageInitials = getInitials(garageName) || "G";
 
   const photos = getValidPhotos(item.photos);
-  const mainPhoto = photos[0] || null;
-  const sidePhotos = photos.slice(1, 5);
 
   const locationText =
     item.city && item.department
@@ -637,85 +636,12 @@ export default async function AnnonceDetailPage({
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
           <main className="min-w-0 space-y-5 sm:space-y-6">
-            <section className="animate-fade-up overflow-hidden rounded-md border border-slate-200 bg-white p-3 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
-              <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_320px]">
-                <div className="relative overflow-hidden rounded-md bg-slate-100">
-                  {mainPhoto ? (
-                    <img
-                      src={mainPhoto}
-                      alt={item.title || "Photo principale"}
-                      className="aspect-[16/10] h-full w-full object-cover sm:aspect-[16/9]"
-                    />
-                  ) : (
-                    <div className="grid aspect-[16/10] place-items-center text-sm text-slate-500 sm:aspect-[16/9]">
-                      Photo principale indisponible
-                    </div>
-                  )}
-
-                  <div className="absolute left-3 top-3 flex flex-wrap gap-2 sm:left-4 sm:top-4">
-                    <span className="rounded-full bg-orange-500 px-3 py-1 text-[12px] font-semibold text-white shadow-sm">
-                      À la une
-                    </span>
-                    <span className="rounded-full bg-white px-3 py-1 text-[12px] font-medium text-slate-900">
-                      {photos.length > 0
-                        ? `${photos.length} photo${photos.length > 1 ? "s" : ""}`
-                        : "Galerie"}
-                    </span>
-                  </div>
-
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-4">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex flex-wrap gap-2">
-                        <span className="rounded-full bg-white px-3 py-1 text-[12px] font-medium text-slate-900">
-                          Professionnel
-                        </span>
-                        {item.vat_recoverable ? (
-                          <span className="rounded-full bg-white px-3 py-1 text-[12px] font-medium text-slate-900">
-                            TVA récupérable
-                          </span>
-                        ) : null}
-                      </div>
-
-                      <div className="hidden text-[12px] text-white/90 sm:block">
-                        {locationText}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 lg:grid-cols-2">
-                  {sidePhotos.length > 0 ? (
-                    sidePhotos.map((photo, index) => (
-                      <div
-                        key={`${photo}-${index}`}
-                        className="overflow-hidden rounded-md bg-slate-100"
-                      >
-                        <img
-                          src={photo}
-                          alt={`${item.title || "Annonce"} photo ${index + 2}`}
-                          className="aspect-[4/3] h-full w-full object-cover"
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <>
-                      <div className="grid aspect-[4/3] place-items-center rounded-md bg-slate-100 text-sm text-slate-500">
-                        Photo
-                      </div>
-                      <div className="grid aspect-[4/3] place-items-center rounded-md bg-slate-100 text-sm text-slate-500">
-                        Photo
-                      </div>
-                      <div className="grid aspect-[4/3] place-items-center rounded-md bg-slate-100 text-sm text-slate-500">
-                        Photo
-                      </div>
-                      <div className="grid aspect-[4/3] place-items-center rounded-md bg-slate-100 text-sm text-slate-500">
-                        Photo
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </section>
+            <ListingGallery
+              photos={photos}
+              title={item.title || "Annonce véhicule"}
+              locationText={locationText}
+              showVat={Boolean(item.vat_recoverable)}
+            />
 
             <section
               className="animate-fade-up rounded-md border border-slate-200 bg-white p-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)] sm:p-5 lg:p-6"
